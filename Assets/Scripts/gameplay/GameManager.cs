@@ -1,51 +1,68 @@
-﻿/*
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections;
+﻿using UnityEngine;
 
-public class Game : MonoBehaviour {
-//	public static LevelPack PACK;
-	public static int LEVEL;
-	public static string LEVELNAME;
-	public static Vector3 STARTPOS;
-	public static int CRISTALLS;
-	[SerializeField] PlayerMoveControll hopmon;
-	[SerializeField] GameCamera gCamera;
+public class GameManager : MonoBehaviour {
+    public static int cristallCount;
+    public static int number = 43;
 
-	void Start () {
-		try{
-			LoadLevel.Load(PACK, PACK._levelName[LEVEL]);
-		}
-		catch(System.NullReferenceException){
-			LevelPack pk = new LevelPack("Custom");
-			LoadLevel.Load(pk, pk._levelName[0]);			
-		}
-		hopmon.enabled = true;
-		gCamera.SendMessage("Start");
-		CRISTALLS = GameObject.FindGameObjectsWithTag ("Cristall").Length;
-		print(STARTPOS);
-	}
-	
-	void Update () {
-		if (Input.GetKeyDown(KeyCode.P)){
-			if (LEVEL < PACK._levelName.Count - 1){
-				LEVEL++;
-			}
-			else{
-				LEVEL = 0;
-			}
-			print(PACK._levelName[LEVEL]);
-			if (transform.childCount > 0){
-				foreach (Transform child in transform){
-					Destroy(child.gameObject);
-				}
-			}
-			hopmon.enabled = false;
-			SendMessage("Start");
-		}
-		if (Input.GetKeyDown(KeyCode.Escape)){
-			SceneManager.LoadScene(0);
-		}
-	}
+    public LevelManager levelManager;
+    public UIManager uiManager;
+
+    private GameObject player;
+    private GameCamera mainCamera;
+    private Level level;
+
+    void Start() {
+        levelManager.SetDictionary();
+        player = Instantiate(levelManager.GetPrefabByName("Hopmon", true), Vector3.zero, Quaternion.identity);
+        NewGame();
+        mainCamera = Camera.main.GetComponent<GameCamera>();
+        mainCamera.target = player.transform;
+        player.GetComponent<PlayerMoveControll>().camera = mainCamera;
+    }
+
+    private void InitGame() {
+
+    }
+
+    private void Restart() {
+    }
+
+    private void NewGame() {
+        level = LoadLevel(number);
+        player.transform.position = level.start + Vector3.up / 10f;
+        player.transform.rotation = Quaternion.identity;
+        cristallCount = 0;
+    }
+
+    public void DebugPrevLevel() {
+        UnLoadMap();
+        if (number > 1)
+            number--;
+        NewGame();
+
+    }
+
+    public void DebugNextLevel() {
+        UnLoadMap();
+        if (number < 45)
+            number++;
+        NewGame();
+    }
+
+    private void UnLoadMap() {
+        foreach (Transform child in levelManager.level) {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private Level LoadLevel(int number) {
+        levelManager.LoadMap(number);
+        return new Level(levelManager.jsonLevel);
+    }
+
+    private void Win() {
+    }
+
+    private void Loose() {
+    }
 }
-*/

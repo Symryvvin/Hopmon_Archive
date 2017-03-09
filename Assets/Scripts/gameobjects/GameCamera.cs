@@ -2,9 +2,7 @@
 using System.Collections;
 
 public class GameCamera : MonoBehaviour {
-    [SerializeField] Transform _target;
-
-    [SerializeField] private Vector3 target;
+    public  Transform target;
 
     enum Move {
         Stop,
@@ -28,7 +26,7 @@ public class GameCamera : MonoBehaviour {
 
 
     void Start() {
-        targerPos = _target.transform.position;
+        targerPos = target.transform.position;
         transform.position = new Vector3(targerPos.x, targerPos.y + _hight, targerPos.z - _dist);
         _offset = targerPos - transform.position;
         transform.LookAt(targerPos);
@@ -39,7 +37,7 @@ public class GameCamera : MonoBehaviour {
 
 
     void LateUpdate() {
-        targerPos = _target.transform.position;
+        targerPos = target.transform.position;
         switch ((int) transform.eulerAngles.y) {
             case 0:
                 transform.position = new Vector3(targerPos.x, targerPos.y + _hight, targerPos.z - _dist);

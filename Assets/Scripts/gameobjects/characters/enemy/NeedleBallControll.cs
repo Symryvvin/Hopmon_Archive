@@ -18,35 +18,6 @@ public class NeedleBallControll : EnemyMove {
         transform.rotation = Quaternion.Euler(Vector3.zero);
     }
 
-    protected new string GetSchemaPart(Ray forward, Ray onGround, string litera) {
-        if (!NextBlock(forward) && NextGround(onGround)) {
-            return "";
-        }
-        return litera;
-    }
-
-    protected bool NextGround(Ray ray) {
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1.05F)) {
-            var layer = hit.collider.gameObject.layer;
-            if (layer == groundLayer) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected bool NextBlock(Ray ray) {
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1.0F)) {
-            var layer = hit.collider.gameObject.layer;
-            if (layer == blockLayer || hit.collider.gameObject.name.Contains("IvisibleWall")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     protected override Vector3 Direction(string s) {
         Vector3 next = Vector3.zero;
         if (s.Equals("")) {

@@ -5,7 +5,6 @@ public class PlayerMoveControll : MonoBehaviour {
     private Player player;
     private Transform playerTransform;
     private Rigidbody rigidbody;
-    private Vector3 start;
     private float moveSpeed = 2.5f;
     private Animator animator;
     public AudioClip jump;
@@ -36,8 +35,6 @@ public class PlayerMoveControll : MonoBehaviour {
     }
 
     void OnEnable() {
-        start = GameObject.Find("MapManager").GetComponent<LevelLoader>().start;
-
         moveState = MoveState.STAND;
         //  playerTransform.position = start;
     }
