@@ -4,12 +4,12 @@ public class CubeMove : EnemyMove {
     private Transform mesh;
     public float rotateSpeed;
 
-    protected void Start() {
+    protected new void Start() {
         base.Start();
         mesh = transform.FindChild("Mesh");
     }
 
-    void Update() {
+    new void Update() {
         base.Update();
         switch (direction) {
             case MoveDirection.FORWARD:

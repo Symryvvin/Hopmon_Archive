@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 
     public LevelManager levelManager;                           // LevelManager wich use GameManager
     public UIManager uiManager;                                 // UIManager in future
-    public GameCamera mainCamera;                               // main game camera
+    public GameCamera mainCamera;                               // main game gameCamera
 
     private Transform playerTransform;                          // Transform of player gameobject
     private Player player;                                      // main player script
@@ -21,14 +21,14 @@ public class GameManager : MonoBehaviour {
     /// Initialize all object first time.
     /// Fill dictionary for levelManager.
     /// Instantiale player.
-    /// Set camera for palyer and set target for camera
+    /// Set gameCamera for palyer and set target for gameCamera
     /// </summary>
     private void InitGame() {
         levelManager.SetDictionary();
         var hopmon = Instantiate(levelManager.GetPrefabByName("Hopmon", true), Vector3.zero, Quaternion.identity);
         player = hopmon.GetComponent<Player>();
         mainCamera.target = hopmon.transform;
-        hopmon.GetComponent<PlayerMoveControll>().camera = mainCamera;
+        hopmon.GetComponent<PlayerMoveControll>().gameCamera = mainCamera;
     }
 
     /// <summary>

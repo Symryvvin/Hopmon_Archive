@@ -2,41 +2,23 @@ using System.Collections;
 using UnityEngine;
 
 public class PlayerMoveControll : MonoBehaviour {
+    public AudioClip jump;
+    public GameCamera gameCamera;
+
     private Player player;
     private Transform playerTransform;
-    private Rigidbody rigidbody;
+    private Rigidbody playerRigidbody;
     private float moveSpeed = 2.5f;
-    private Animator animator;
-    public AudioClip jump;
-    AudioSource player_jump;
-
-
-    [SerializeField] bool boost;
-
-
-    // Камера
-    public GameCamera camera;
-
-
     private MoveState moveState;
+    private bool boost;
+    private Animator animator;
 
     void Start() {
-        playerTransform = transform;
-        // playerTransform.position = start;
-        player = GetComponent<Player>();
-        rigidbody = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
-        //	player_jump = GetComponent<AudioSource> ();
-    }
-
-
-    void OnDisable() {
-        transform.eulerAngles = Vector3.zero;
-    }
-
-    void OnEnable() {
         moveState = MoveState.STAND;
-        //  playerTransform.position = start;
+        playerTransform = transform;
+        playerRigidbody = GetComponent<Rigidbody>();
+        player = GetComponent<Player>();
+        animator = GetComponent<Animator>();
     }
 
     void Alive() {
@@ -63,35 +45,23 @@ public class PlayerMoveControll : MonoBehaviour {
     }
 
     private bool NextGround() {
-        bool ground = false;
-        Ray ray = new Ray(transform.position + transform.forward + transform.up, -transform.up);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1.05F)) {
-            var layer = hit.collider.gameObject.layer;
-            if (layer == LayerMask.NameToLayer("GroundLayer")) {
-                ground = true;
-            }
-        }
-        return ground;
+        var ray = new Ray(transform.position + transform.forward + transform.up, -transform.up);
+        return Physics.Raycast(ray, 1.05F, 1 << 9);
     }
 
     private bool NextBlock() {
-        bool block = false;
         Ray ray = new Ray(transform.position + transform.up / 2, transform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1.0F)) {
-            var layer = hit.collider.gameObject.layer;
-            if (layer == LayerMask.NameToLayer("BlockLayer")) {
-                block = true;
-            }
+        if (Physics.Raycast(ray, out hit, 1.0F, 1 << 8)) {
+            return !hit.collider.name.Contains("InvisibleWall");
         }
-        return block;
+        return false;
     }
 
     void Idle() {
         float horizontal = (int) Input.GetAxisRaw("Horizontal");
         float vertical = (int) Input.GetAxisRaw("Vertical");
-        switch (camera.point) {
+        switch (gameCamera.point) {
             case CameraPoint.NORTH:
                 Controll(vertical, horizontal);
                 break;
@@ -134,8 +104,8 @@ public class PlayerMoveControll : MonoBehaviour {
         moveState = MoveState.WALK;
         float distance = (playerTransform.position - position).sqrMagnitude;
         while (distance > float.Epsilon) {
-            var moveTo = Vector3.MoveTowards(rigidbody.position, position, (boost ? 5f : moveSpeed) * Time.deltaTime);
-            rigidbody.MovePosition(moveTo);
+            var moveTo = Vector3.MoveTowards(playerRigidbody.position, position, (boost ? 5f : moveSpeed) * Time.deltaTime);
+            playerRigidbody.MovePosition(moveTo);
             distance = (playerTransform.position - position).sqrMagnitude;
             yield return null;
         }
@@ -183,7 +153,7 @@ public class PlayerMoveControll : MonoBehaviour {
     }
 
     private bool Boost(Vector3 end) {
-        Move((int)end.x, (int)end.z);
+        Move((int) end.x, (int) end.z);
         return true;
     }
 

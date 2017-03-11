@@ -1,51 +1,41 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class EnemyMove : MonoBehaviour {
     public Transform moveDummy;
-
-    protected Rigidbody rigidbody;
-
-    protected LayerMask blockLayer;
-    protected LayerMask enemyLayer;
-    protected LayerMask groundLayer;
-    [SerializeField] private float moveSpeed;
-    protected Vector3 end;
-
-    public bool movement;
-
-
-    protected readonly List<Vector3> moves = new List<Vector3>();
-
+    public MoveState moveState;
     public MoveDirection direction;
-
     public string schema;
 
+    protected Vector3 end;
+    protected readonly List<Vector3> moves = new List<Vector3>();
 
-    protected virtual void Start() {
+    private Rigidbody enemyRigidbody;
+    private LayerMask blockLayer;
+    private LayerMask groundLayer;
+    [SerializeField] private float moveSpeed;
+
+    protected void Start() {
+        moveState = MoveState.STAND;
         direction = MoveDirection.STOP;
-        // Инициализация слоев
-        blockLayer = LayerMask.NameToLayer("BlockLayer");
-        enemyLayer = LayerMask.NameToLayer("EnemyLayer");
-        groundLayer = LayerMask.NameToLayer("GroundLayer");
-        // Инициализация ridigBody
-        rigidbody = GetComponent<Rigidbody>();
+        blockLayer = 1 << LayerMask.NameToLayer("BlockLayer") | 1 << LayerMask.NameToLayer("EnemyLayer");
+        groundLayer = 1 << LayerMask.NameToLayer("GroundLayer");
+        enemyRigidbody = GetComponent<Rigidbody>();
     }
 
     protected void Update() {
-        if (!movement) {
-            CalculateMoveDirection();
-        }
-        else {
-            CurrentDirection();
+        switch (moveState) {
+            case MoveState.STAND:
+                CalculateMoveDirection();
+                break;
+            case MoveState.WALK:
+                CurrentDirection();
+                break;
         }
     }
 
     protected void CalculateMoveDirection() {
-        // Rays
         Ray forwardRay = new Ray(moveDummy.position + moveDummy.up / 2, moveDummy.forward);
         Ray backRay = new Ray(moveDummy.position + moveDummy.up / 2, -moveDummy.forward);
         Ray rightRay = new Ray(moveDummy.position + moveDummy.up / 2, moveDummy.right);
@@ -61,25 +51,7 @@ public class EnemyMove : MonoBehaviour {
                  GetSchemaPart(leftRay, leftFloorRay, "L") +
                  GetSchemaPart(rightRay, rightFloorRay, "R");
 
-/*        schema = GetSchemaPart(forwardRay, "F") +
-                 GetSchemaPart(backRay, "B") +
-                 GetSchemaPart(leftRay, "L") +
-                 GetSchemaPart(rightRay, "R");*/
-
         Move(Direction(schema));
-    }
-
-    protected string GetSchemaPart(Ray castRay, string litera) {
-        RaycastHit hit;
-        bool cast = Physics.Raycast(castRay, out hit, 1.0f);
-        if (cast) {
-            LayerMask hitLayer = hit.collider.gameObject.layer;
-            if (hitLayer == blockLayer || hit.collider.name.Contains("InvisibleWall")) {
-                return litera;
-            }
-            return "";
-        }
-        return "";
     }
 
     protected string GetSchemaPart(Ray forward, Ray onGround, string litera) {
@@ -90,25 +62,11 @@ public class EnemyMove : MonoBehaviour {
     }
 
     protected bool NextGround(Ray ray) {
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1.05F)) {
-            var layer = hit.collider.gameObject.layer;
-            if (layer == groundLayer) {
-                return true;
-            }
-        }
-        return false;
+        return Physics.Raycast(ray, 1.05F, groundLayer);
     }
 
     protected bool NextBlock(Ray ray) {
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1.0F)) {
-            var layer = hit.collider.gameObject.layer;
-            if (layer == blockLayer || hit.collider.gameObject.name.Contains("IvisibleWall")) {
-                return true;
-            }
-        }
-        return false;
+        return Physics.Raycast(ray, 1.0F, blockLayer);
     }
 
     protected Vector3 RandomMove(string m) {
@@ -120,9 +78,7 @@ public class EnemyMove : MonoBehaviour {
             moves.Add(Vector3.left);
         if (m.Contains("R"))
             moves.Add(Vector3.right);
-        var end = moves[Random.Range(0, moves.Count)];
-        moves.Clear();
-        return end;
+        return moves[Random.Range(0, moves.Count)];
     }
 
     protected virtual Vector3 Direction(string s) {
@@ -313,7 +269,7 @@ public class EnemyMove : MonoBehaviour {
         }
         else if (s.Equals("FBLR")) {
         }
-
+        moves.Clear();
         return next;
     }
 
@@ -335,13 +291,12 @@ public class EnemyMove : MonoBehaviour {
 
     protected IEnumerator MoveTo(Vector3 position) {
         float distance = (moveDummy.position - position).sqrMagnitude;
-        while (distance > float.Epsilon)
-        {
-            transform.position = Vector3.MoveTowards(rigidbody.position, position, moveSpeed * Time.deltaTime);
-            movement = true;
+        while (distance > float.Epsilon) {
+            transform.position = Vector3.MoveTowards(enemyRigidbody.position, position, moveSpeed * Time.deltaTime);
+            moveState = MoveState.WALK;
             distance = (moveDummy.position - position).sqrMagnitude;
             yield return null;
         }
-        movement = false;
+        moveState = MoveState.STAND;
     }
 }

@@ -3,7 +3,7 @@
 public class GhostMove : EnemyMove {
     private Transform mesh;
 
-    protected void Start() {
+    protected new void Start() {
         base.Start();
         mesh = transform.FindChild("Mesh");
     }

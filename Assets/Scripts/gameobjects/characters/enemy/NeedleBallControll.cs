@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 public class NeedleBallControll : EnemyMove {
-    private int yAngle;
-    private Transform mesh;
     public float rotateSpeed;
 
-    protected override void Start() {
+    private int yAngle;
+    private Transform mesh;
+
+    protected new void Start() {
         base.Start();
         mesh = transform.FindChild("Mesh");
         yAngle = (int) transform.rotation.eulerAngles.y;
@@ -19,7 +20,7 @@ public class NeedleBallControll : EnemyMove {
     }
 
     protected override Vector3 Direction(string s) {
-        Vector3 next = Vector3.zero;
+        var next = Vector3.zero;
         if (s.Equals("")) {
             switch (direction) {
                 case MoveDirection.FORWARD:
@@ -176,7 +177,7 @@ public class NeedleBallControll : EnemyMove {
         return next;
     }
 
-    void Update() {
+    new void Update() {
         base.Update();
         switch (direction) {
             case MoveDirection.FORWARD:
