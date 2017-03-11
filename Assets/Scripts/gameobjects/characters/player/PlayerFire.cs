@@ -3,29 +3,37 @@ using UnityEngine;
 
 public class PlayerFire : MonoBehaviour {
     private Player player;
-    private bool isReloaded;
     public int percentReload;
     [SerializeField] private float reloadTime;
     [SerializeField] private AudioClip fireSound;
     [SerializeField] private AudioClip fireReady;
     [SerializeField] private Transform missle;
+    private ReloadState reloadState;
 
     void Start() {
         player = GetComponent<Player>();
-        StartCoroutine(Reload(reloadTime));
+        Reload();
     }
 
-    IEnumerator Reload(float time) {
-        while (!isReloaded) {
+    private IEnumerator Reload(float time) {
+        while (reloadState == ReloadState.RELOAD) {
             if (time > 0) {
                 time -= Time.deltaTime;
                 percentReload = Mathf.RoundToInt(100f - time * 100f / reloadTime);
-                isReloaded = percentReload == 100;
             }
-            if (isReloaded)
+            if (percentReload == 100) {
                 AudioSource.PlayClipAtPoint(fireReady, transform.position);
+                yield return new WaitForSeconds(0.2f);
+                reloadState = ReloadState.READY;
+            }
             yield return null;
         }
+    }
+
+    public void Reload() {
+        StopAllCoroutines();
+        reloadState = ReloadState.RELOAD;
+        StartCoroutine(Reload(reloadTime));
     }
 
     void Update() {
@@ -34,13 +42,15 @@ public class PlayerFire : MonoBehaviour {
         }
     }
 
-    void Fire() {
-        if (FirePressed() && isReloaded) {
-            Instantiate(missle, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
-            AudioSource.PlayClipAtPoint(fireSound, transform.position);
-            isReloaded = false;
-            StartCoroutine(Reload(reloadTime));
-        }
+    private void Fire() {
+        if (!FirePressed() || !IsReloaded()) return;
+        Instantiate(missle, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
+        AudioSource.PlayClipAtPoint(fireSound, transform.position);
+        Reload();
+    }
+
+    private bool IsReloaded() {
+        return reloadState == ReloadState.READY;
     }
 
     private bool FirePressed() {

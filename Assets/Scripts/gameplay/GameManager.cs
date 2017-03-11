@@ -1,63 +1,110 @@
 ﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    public static int cristallCount;
-    public static int number = 1;
+    private static int cristalCount;                            // static count of cristals on current level
+    public static int number = 1;                               // static number of current level
 
-    public LevelManager levelManager;
-    public UIManager uiManager;
+    public LevelManager levelManager;                           // LevelManager wich use GameManager
+    public UIManager uiManager;                                 // UIManager in future
+    public GameCamera mainCamera;                               // main game camera
 
-    private GameObject player;
-    private GameCamera mainCamera;
-    private Level level;
+    private Transform playerTransform;                          // Transform of player gameobject
+    private Player player;                                      // main player script
+    private Level level;                                        // current level data
 
     void Start() {
-        levelManager.SetDictionary();
-        player = Instantiate(levelManager.GetPrefabByName("Hopmon", true), Vector3.zero, Quaternion.identity);
-        mainCamera = Camera.main.GetComponent<GameCamera>();
-        mainCamera.target = player.transform;
-        player.GetComponent<PlayerMoveControll>().camera = mainCamera;
-        NewGame();
+        InitGame();
+        Restart();
     }
 
+    /// <summary>
+    /// Initialize all object first time.
+    /// Fill dictionary for levelManager.
+    /// Instantiale player.
+    /// Set camera for palyer and set target for camera
+    /// </summary>
     private void InitGame() {
-
+        levelManager.SetDictionary();
+        var hopmon = Instantiate(levelManager.GetPrefabByName("Hopmon", true), Vector3.zero, Quaternion.identity);
+        player = hopmon.GetComponent<Player>();
+        mainCamera.target = hopmon.transform;
+        hopmon.GetComponent<PlayerMoveControll>().camera = mainCamera;
     }
 
+    /// <summary>
+    /// Restart current level (same as new level)
+    /// </summary>
     private void Restart() {
+        LoadLevel(number);
+        ResetPlayer();
+        cristalCount = level.cristals;
     }
 
-    private void NewGame() {
-        LoadLevel(number);
+    /// <summary>
+    /// Reset player transform and reloading fire
+    /// </summary>
+    private void ResetPlayer() {
         player.transform.position = level.start + Vector3.up / 10f;
         player.transform.rotation = Quaternion.identity;
-        cristallCount = 0;
-        print(level.width + " x " + level.length);
+        player.GetComponent<PlayerFire>().Reload();
     }
 
+    /// <summary>
+    /// Loadl new level and destroy current level
+    /// </summary>
+    /// <param name="number">number of level</param>
+    private void LoadLevel(int number) {
+        levelManager.UnLoadLevelMap();
+        level = levelManager.LoadLevelMap(number);
+    }
+
+    /// <summary>
+    /// Debug method for previous level button
+    /// </summary>
     public void DebugPrevLevel() {
         levelManager.UnLoadLevelMap();
         if (number > 1)
             number--;
-        NewGame();
-
+        Restart();
     }
 
+    /// <summary>
+    /// Debug method for next level button
+    /// </summary>
     public void DebugNextLevel() {
         levelManager.UnLoadLevelMap();
         if (number < 45)
             number++;
-        NewGame();
+        Restart();
     }
 
+    void Update() {
+        CheckPLayerState();
+    }
 
-    private void LoadLevel(int number) {
-       level = levelManager.LoadLevelMap(number);
+    private void CheckPLayerState() {
+        if (player.liveState == LiveState.DEAD) {
+            Loose();
+        }
+    }
+
+    /// <summary>
+    /// Decrement cristall count when player bring cristal to warpzone
+    /// </summary>
+    public void DecrementCristal() {
+        cristalCount--;
+        Win();
     }
 
     private void Win() {
+        if (cristalCount == 0) {
+            DebugNextLevel(); // temp call of method "go to next level"
+            //TODO: make action for win and go no next level
+        }
     }
 
     private void Loose() {
+        //TODO: make action for loose
+
     }
 }
