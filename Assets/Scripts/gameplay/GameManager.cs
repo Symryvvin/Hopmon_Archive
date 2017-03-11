@@ -2,7 +2,7 @@
 
 public class GameManager : MonoBehaviour {
     public static int cristallCount;
-    public static int number = 43;
+    public static int number = 1;
 
     public LevelManager levelManager;
     public UIManager uiManager;
@@ -14,10 +14,10 @@ public class GameManager : MonoBehaviour {
     void Start() {
         levelManager.SetDictionary();
         player = Instantiate(levelManager.GetPrefabByName("Hopmon", true), Vector3.zero, Quaternion.identity);
-        NewGame();
         mainCamera = Camera.main.GetComponent<GameCamera>();
         mainCamera.target = player.transform;
         player.GetComponent<PlayerMoveControll>().camera = mainCamera;
+        NewGame();
     }
 
     private void InitGame() {
@@ -28,14 +28,15 @@ public class GameManager : MonoBehaviour {
     }
 
     private void NewGame() {
-        level = LoadLevel(number);
+        LoadLevel(number);
         player.transform.position = level.start + Vector3.up / 10f;
         player.transform.rotation = Quaternion.identity;
         cristallCount = 0;
+        print(level.width + " x " + level.length);
     }
 
     public void DebugPrevLevel() {
-        UnLoadMap();
+        levelManager.UnLoadLevelMap();
         if (number > 1)
             number--;
         NewGame();
@@ -43,21 +44,15 @@ public class GameManager : MonoBehaviour {
     }
 
     public void DebugNextLevel() {
-        UnLoadMap();
+        levelManager.UnLoadLevelMap();
         if (number < 45)
             number++;
         NewGame();
     }
 
-    private void UnLoadMap() {
-        foreach (Transform child in levelManager.level) {
-            Destroy(child.gameObject);
-        }
-    }
 
-    private Level LoadLevel(int number) {
-        levelManager.LoadMap(number);
-        return new Level(levelManager.jsonLevel);
+    private void LoadLevel(int number) {
+       level = levelManager.LoadLevelMap(number);
     }
 
     private void Win() {
