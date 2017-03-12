@@ -1,50 +1,78 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Collector : MonoBehaviour {
-    private PlayerMoveControll controll;
-    private Transform playerBody;
+    private GameManager gameManager; // GameManager instance
+    private PlayerMoveControll controll; // PlayerMove instance
+    private Transform playerBody; // transform of Hopmon "body" mesh
 
-    public AudioClip pickCristall;
-    public AudioClip releaseCristall;
+    private readonly List<Transform> cristals = new List<Transform>(); // list of cristall which was collected
 
-    private readonly List<Transform> cristalls = new List<Transform>();
-
+    /// <summary>
+    /// Initialise all components on Start
+    /// </summary>
     void Start() {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         controll = GetComponent<PlayerMoveControll>();
         playerBody = transform.FindChild("body").transform;
     }
 
+    /// <summary>
+    /// Picking cristal. Add to list "cristals" and set parent of player body mesh. Also change player speed
+    /// </summary>
+    /// <param name="cristalTransform">transform of picked cristal</param>
     void PickCristall(Transform cristalTransform) {
-        cristalls.Add(cristalTransform);
+        cristals.Add(cristalTransform);
         cristalTransform.SetParent(playerBody);
         cristalTransform.position = new Vector3(playerBody.position.x,
-            playerBody.position.y + cristalls.Count - (cristalls.Count - 1.5f) * 0.6f, playerBody.position.z);
+            playerBody.position.y + cristals.Count - (cristals.Count - 0.8f) * 0.6f, playerBody.position.z);
         cristalTransform.GetComponent<Cristal>().Collect();
-        controll.ChangeSpeed(cristalls.Count);
+        controll.ChangeSpeed(cristals.Count);
     }
 
-    void OnTriggerEnter(Collider collider) {
-        if (collider.CompareTag("Collectible")) {
-            AudioSource.PlayClipAtPoint(pickCristall, transform.position);
-            PickCristall(collider.transform);
+    /// <summary>
+    /// Enter triggers
+    /// </summary>
+    /// <param name="col">collider of enter object</param>
+    void OnTriggerEnter(Collider col) {
+        if (col.CompareTag("Collectible")) {
+            PickCristall(col.transform);
+        }
+        if (col.CompareTag("WarpZone")) {
+            StartCoroutine(ReleaseCristals());
         }
     }
 
-    void OnTriggerStay(Collider collider) {
-        if (collider.CompareTag("WarpZone")) {
-            //StartCourutine
-            foreach (var cristal in cristalls) {
-                cristal.GetComponent<Cristal>().Release();
+    /// <summary>
+    /// Coroutine which start when trigger tag is WarpZone. Wait 0.83 seconds, set last cristal state "RELEASE",
+    /// decrement count of cristall in Game Manager. Also change player speed
+    /// </summary>
+    /// <returns>IEnumerator</returns>
+    private IEnumerator ReleaseCristals() {
+        while (true) {
+            if (cristals.Count != 0) {
+                print(cristals.Count);
+                yield return new WaitForSeconds(0.83f);
+                var cristal = cristals[cristals.Count - 1];
+                if (cristal != null) {
+                    cristal.GetComponent<Cristal>().Release();
+                    cristals.Remove(cristal);
+                    gameManager.DecrementCristal();
+                    controll.ChangeSpeed(cristals.Count);
+                }
             }
-            controll.ChangeSpeed(cristalls.Count);
+            yield return null;
         }
     }
 
-    void OnTriggerExit(Collider collider) {
-        if (collider.CompareTag("WarpZone")) {
-            //StopCourutine
+    /// <summary>
+    /// Stop all coroutines in this csript if player exit from triggers
+    /// </summary>
+    /// <param name="col">collider of exit object</param>
+    void OnTriggerExit(Collider col) {
+        if (col.CompareTag("WarpZone")) {
+            StopAllCoroutines();
         }
     }
-
 }

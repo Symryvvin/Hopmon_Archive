@@ -1,32 +1,29 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.ComponentModel;
 
 public class Cristal : MonoBehaviour, ICollectible {
-    public AudioClip pick;
-    public AudioClip release;
+    public AudioClip pick; // sound of pick cristal
+    public AudioClip release; // sound of release cristal
 
     private enum State {
-        free,
-        collected,
-        released
-    }
-    [SerializeField]
-    private State state;
+        FREE,
+        COLLECTED,
+        RELEASE
+    } // cristal states
 
-    void Start() {
-        state = State.free;
-    }
+    [SerializeField] private State state; // initial state
 
+    /// <summary>
+    /// For each frame do something depending in the cristal state
+    /// </summary>
     void Update() {
         switch (state) {
-            case State.free:
+            case State.FREE:
                 transform.Rotate(Vector3.up * 45f * Time.deltaTime);
                 break;
-            case State.collected:
+            case State.COLLECTED:
                 // nothing
                 break;
-            case State.released:
+            case State.RELEASE:
                 if (transform.parent != null) {
                     transform.SetParent(null);
                     GetComponent<Collider>().enabled = false;
@@ -38,13 +35,19 @@ public class Cristal : MonoBehaviour, ICollectible {
         }
     }
 
+    /// <summary>
+    /// Call if cristal was collected
+    /// </summary>
     public void Collect() {
-        //	AudioSource.PlayClipAtPoint(pick, transform.position);
-        state = State.collected;
+        AudioSource.PlayClipAtPoint(pick, transform.position);
+        state = State.COLLECTED;
     }
 
+    /// <summary>
+    /// Call if cristall was released
+    /// </summary>
     public void Release() {
-        //	AudioSource.PlayClipAtPoint(release, transform.position);
-        state = State.released;
+        AudioSource.PlayClipAtPoint(release, transform.position);
+        state = State.RELEASE;
     }
 }
