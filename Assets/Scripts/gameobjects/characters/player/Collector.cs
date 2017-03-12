@@ -52,7 +52,6 @@ public class Collector : MonoBehaviour {
     private IEnumerator ReleaseCristals() {
         while (true) {
             if (cristals.Count != 0) {
-                print(cristals.Count);
                 yield return new WaitForSeconds(0.83f);
                 var cristal = cristals[cristals.Count - 1];
                 if (cristal != null) {

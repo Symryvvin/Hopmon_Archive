@@ -21,7 +21,7 @@ public abstract class AbstractCannonMissle : MonoBehaviour {
 
     void OnCollisionEnter(Collision col) {
         LayerMask colLayer = col.gameObject.layer;
-        if (colLayer == block) {
+        if (colLayer == block && col.gameObject.transform != transform.parent) {
             Destroy(gameObject);
         }
     }

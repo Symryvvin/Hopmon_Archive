@@ -26,16 +26,16 @@ public class PlayerMissle : MonoBehaviour {
                 enemy.Hit(damage);
             }
         }
-        if (col.CompareTag(GATE)) {
-            var gate = col.GetComponent<Gate>();
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.CompareTag(GATE)) {
+            var gate = collision.gameObject.GetComponent<Gate>();
             if (gate) {
                 Destroy(gameObject);
                 gate.Hit(damage);
             }
         }
-    }
-
-    void OnCollisionEnter(Collision collision) {
         Destroy(gameObject);
     }
 }

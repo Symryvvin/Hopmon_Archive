@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Gate : MonoBehaviour, IDestructable {
+    public AudioClip hit;
 
     public void Hit(int damage) {
+        AudioSource.PlayClipAtPoint(hit, transform.position);
         Dead();
     }
 

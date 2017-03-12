@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CannonUp : MonoBehaviour, IShootable {
+    public AudioClip shoot;
     public bool debug;
 
     public Transform missle;
@@ -23,7 +24,6 @@ public class CannonUp : MonoBehaviour, IShootable {
 
     void Start() {
         EvaluateAllWaypoints();
-        var cannon = transform.position;
         missleStart = transform.position + up;
         StartCoroutine(Shoot());
     }
@@ -67,6 +67,8 @@ public class CannonUp : MonoBehaviour, IShootable {
 
     private void InstanceMissle() {
         missleInstance = Instantiate(missle, missleStart, transform.rotation);
+        missleInstance.SetParent(transform);
+        AudioSource.PlayClipAtPoint(shoot, transform.position);
         var script = missleInstance.GetComponent<CannonUpMissle>();
         int randomIndex = Random.Range(0, waypointsLists.Count);
         script.waypoints = new List<Vector3>(waypointsLists[randomIndex]);

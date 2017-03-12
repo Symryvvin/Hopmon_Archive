@@ -15,14 +15,13 @@ public class Cannon : MonoBehaviour, IShootable {
 
     public IEnumerator Shoot() {
         while (true) {
-            instanceMissle();
-
+            InstanceMissle();
             AudioSource.PlayClipAtPoint(shoot, missleStart);
             yield return new WaitForSeconds(firerate);
         }
     }
 
-    private void instanceMissle() {
-        Instantiate(missle, missleStart, transform.rotation);
+    private void InstanceMissle() {
+        Instantiate(missle, missleStart, transform.rotation).SetParent(transform);
     }
 }
