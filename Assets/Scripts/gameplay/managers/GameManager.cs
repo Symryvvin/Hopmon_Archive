@@ -2,19 +2,34 @@
 
 public class GameManager : MonoBehaviour {
     private static int cristalCount;                            // static count of cristals on current level
-    public static int number = 1;                               // static number of current level
-
-    public LevelManager levelManager;                           // LevelManager wich use GameManager
-    public UIManager uiManager;                                 // UIManager in future
-    public GameCamera mainCamera;                               // main game gameCamera
-
-    private Transform playerTransform;                          // Transform of player gameobject
+    public int number = 1;                               // static number of current level
+    private LevelManager levelManager;                           // LevelManager wich use GameManager
+    private UIManager uiManager;                                 // UIManager in future
     private Player player;                                      // main player script
     private Level level;                                        // current level data
 
+    private static GameManager gameManager;
+
+    public static GameManager instance {
+        get {
+            if (gameManager == null) {
+                gameManager = FindObjectOfType(typeof(GameManager)) as GameManager;
+                if (gameManager != null) {
+                    gameManager.InitGame();
+                }
+                else {
+                    Debug.LogError("No LevelManager on Scene");
+                }
+            }
+            return gameManager;
+        }
+    }
+
+    /// <summary>
+    /// Game start point
+    /// </summary>
     void Start() {
-        InitGame();
-        Restart();
+        gameManager = instance;
     }
 
     /// <summary>
@@ -24,36 +39,34 @@ public class GameManager : MonoBehaviour {
     /// Set gameCamera for palyer and set target for gameCamera
     /// </summary>
     private void InitGame() {
-        levelManager.SetDictionary();
-        var hopmon = Instantiate(levelManager.GetPrefabByName("Hopmon", true), Vector3.zero, Quaternion.identity);
-        player = hopmon.GetComponent<Player>();
-        mainCamera.target = hopmon.transform;
-        hopmon.GetComponent<PlayerMoveControll>().gameCamera = mainCamera;
+        levelManager = LevelManager.instance;
+        gameManager.Restart();
     }
 
     /// <summary>
     /// Restart current level (same as new level)
     /// </summary>
     private void Restart() {
-        LoadLevel(number);
-        ResetPlayer();
+        LoadLevel();
+        InitPlayer();
         cristalCount = level.cristals;
     }
 
     /// <summary>
-    /// Reset player transform and reloading fire
+    /// Instance player if null and reset player prefences
     /// </summary>
-    private void ResetPlayer() {
-        player.transform.position = level.start + Vector3.up / 10f;
-        player.transform.rotation = Quaternion.identity;
-        player.GetComponent<PlayerFire>().Reload();
+    private void InitPlayer() {
+        if (player == null) {
+            player = levelManager.GetPlayerInstance().GetComponent<Player>();
+        }
+        player.ResetPlayer(level.start);
     }
 
     /// <summary>
     /// Loadl new level and destroy current level
     /// </summary>
     /// <param name="number">number of level</param>
-    private void LoadLevel(int number) {
+    private void LoadLevel() {
         levelManager.UnLoadLevelMap();
         level = levelManager.LoadLevelMap(number);
     }

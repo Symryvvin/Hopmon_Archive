@@ -4,23 +4,48 @@ using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// A singletone class of LevelManager. Load leve from file. Create object of type Level for using by GameManager
+/// A singletone class of LevelManager. Load level from file. Create object of type Level for using by GameManager
 /// </summary>
 public class LevelManager : MonoBehaviour {
-    public PrefabList prefabList;                              // data asset file
-    public Transform level;                                    // transform of empty GameObject (parent for level parts)
-    private World world;                                       // word type of level
-    public Dictionary<string, PrefabItem> namedItemList;       // dicrionary of prefabs, key = name + world
-    public JsonLevelStruct jsonLevelStruct;                    // sctrut object of json file
+    public PrefabList prefabList; // data asset file
+    public Transform level; // transform of empty GameObject (parent for level parts)
+    private Dictionary<string, PrefabItem> namedItemList; // dicrionary of prefabs, key = name + world
+    private JsonLevelStruct jsonLevelStruct; // sctrut object of json file
+    private World world; // word type of level
+
+    private static LevelManager levelManager;
+
+    public static LevelManager instance {
+        get {
+            if (levelManager == null) {
+                levelManager = FindObjectOfType(typeof(LevelManager)) as LevelManager;
+                if (levelManager != null) {
+                    levelManager.SetDictionary();
+                }
+                else {
+                    Debug.LogError("No LevelManager on Scene");
+                }
+            }
+            return levelManager;
+        }
+    }
 
     /// <summary>
     /// Set dictionary of prefabs, getting from data asset prefabList
     /// </summary>
-    public void SetDictionary() {
+    private void SetDictionary() {
         namedItemList = new Dictionary<string, PrefabItem>();
         foreach (var item in prefabList.itemList) {
             namedItemList.Add(item.name + item.world, item);
         }
+    }
+
+    /// <summary>
+    /// Get instanse of player
+    /// </summary>
+    /// <returns>Hopmon gameObject</returns>
+    public GameObject GetPlayerInstance() {
+        return Instantiate(GetPrefabByName("Hopmon", true));
     }
 
     /// <summary>
@@ -75,7 +100,7 @@ public class LevelManager : MonoBehaviour {
     /// <param name="name">name of prefab</param>
     /// <param name="common">world type of prefab</param>
     /// <returns>prefab GameObject</returns>
-    public GameObject GetPrefabByName(string name, bool common) {
+    private GameObject GetPrefabByName(string name, bool common) {
         string key = common ? name + "COMMON" : name + world;
         return namedItemList[key].prefab;
     }
@@ -88,6 +113,4 @@ public class LevelManager : MonoBehaviour {
             Destroy(child.gameObject);
         }
     }
-
-
 }
