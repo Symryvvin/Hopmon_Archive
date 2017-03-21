@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6ad00fc77140cc4bbde625cf909d4d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  missle: {fileID: 4440144859612584, guid: 23f874f313c678146822a36f6902efc8, type: 2}
+  shell: {fileID: 4440144859612584, guid: 23f874f313c678146822a36f6902efc8, type: 2}
   firerate: 4.5
-  shoot: {fileID: 8300000, guid: 79bf38c71e008474299f7ce424eca318, type: 3}
+  shotSound: {fileID: 8300000, guid: b88a1325c29203e41a920b44bc9f2b95, type: 3}
+  poolAmount: 1

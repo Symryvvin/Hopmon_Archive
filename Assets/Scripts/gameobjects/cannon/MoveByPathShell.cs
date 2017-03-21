@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class CannonUpMissle : AbstractCannonMissle {
+public class MoveByPathShell : AbstractShell {
     public float speed;
     public List<Vector3> waypoints;
-    private int currentPoint = 0;
+    private int currentPoint;
 
     protected override void Init() {
         transform.position = waypoints[0];

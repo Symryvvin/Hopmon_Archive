@@ -1,9 +1,6 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Linq;
+﻿using UnityEngine;
 
-public class CannonMissle : AbstractCannonMissle {
+public class Shell : AbstractShell {
     public float speed;
 
     protected override void Move() {

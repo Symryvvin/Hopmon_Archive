@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class AbstractCannonMissle : MonoBehaviour {
+public abstract class AbstractShell : MonoBehaviour {
     private LayerMask block;
 
     void Start() {

@@ -212,9 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56a183ba2da9b142addb59e1a04739e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelManager: {fileID: 1106193102}
-  uiManager: {fileID: 0}
-  mainCamera: {fileID: 2037375587}
+  number: 44
 --- !u!4 &293652729
 Transform:
   m_ObjectHideFlags: 0
@@ -396,12 +394,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabList: {fileID: 11400000, guid: 14a9c2312cbe0ad40a97035fbf9ea8f6, type: 2}
   level: {fileID: 1183051590}
-  jsonLevelStruct:
-    name: 
-    number: 0
-    world: 
-    start: {x: 0, y: 0, z: 0}
-    parts: []
 --- !u!4 &1106193103
 Transform:
   m_ObjectHideFlags: 0
