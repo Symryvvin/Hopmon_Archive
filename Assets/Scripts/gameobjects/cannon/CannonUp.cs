@@ -35,22 +35,17 @@ public class CannonUp : AbstractCannon {
         foreach (var path in waypointsLists) {
             path.EvaluateAllWaypoints();
         }
-        startPoint = p1;
+        startPoint = p0;
+        Init();
         InvokeRepeating("Shoot", 0f, firerate);
     }
 
-
     public override void Shoot() {
-            InstanceMissle();
-    }
-
-    private void InstanceMissle() {
-        var missleInstance = Instantiate(shell, startPoint, transform.rotation);
-        missleInstance.SetParent(transform);
-        AudioSource.PlayClipAtPoint(shotSound, transform.position);
-        var script = missleInstance.GetComponent<MoveByPathShell>();
-        int randomIndex = Random.Range(0, waypointsLists.Count);
-        script.waypoints = new List<Vector3>(waypointsLists[randomIndex]);
+        ActivateShell();
+        foreach (var o in pool) {
+            o.GetComponent<MoveByPathShell>().waypoints = waypointsLists[Random.Range(0, waypointsLists.Count)];
+        }
+        AudioSource.PlayClipAtPoint(shotSound, startPoint);
     }
 
     public void OnDrawGizmos() {

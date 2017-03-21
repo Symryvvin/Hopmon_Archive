@@ -8,11 +8,20 @@ public abstract class AbstractShell : MonoBehaviour {
         Init();
     }
 
+    void OnEnable() {
+        Invoke("Destroy", 6f);
+    }
+
+    protected void Destroy() {
+        gameObject.SetActive(false);
+    }
+
+    protected void OnDisable() {
+        CancelInvoke();
+    }
+
     void Update() {
-        if (gameObject != null) {
-            Move();
-            Destroy(gameObject, 6f);
-        }
+         Move();
     }
 
     protected abstract void Move();
@@ -22,7 +31,7 @@ public abstract class AbstractShell : MonoBehaviour {
     void OnCollisionEnter(Collision col) {
         LayerMask colLayer = col.gameObject.layer;
         if (colLayer == block && col.gameObject.transform != transform.parent) {
-            Destroy(gameObject);
+            Destroy();
         }
     }
 }

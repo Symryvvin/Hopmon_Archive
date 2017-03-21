@@ -3,15 +3,12 @@
 public class Cannon : AbstractCannon {
     void Start() {
         startPoint = transform.position + transform.up / 2;
+        Init();
         InvokeRepeating("Shoot", 0f, firerate);
     }
 
     public override void Shoot() {
-            InstanceMissle();
+            ActivateShell();
             AudioSource.PlayClipAtPoint(shotSound, startPoint);
-    }
-
-    private void InstanceMissle() {
-        Instantiate(shell, startPoint, transform.rotation).SetParent(transform);
     }
 }
