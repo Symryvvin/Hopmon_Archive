@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Collector : MonoBehaviour {
-    private GameManager gameManager; // GameManager instance
     private PlayerMoveControll controll; // PlayerMove instance
     private Transform playerBody; // transform of Hopmon "body" mesh
 
@@ -12,8 +11,7 @@ public class Collector : MonoBehaviour {
     /// <summary>
     /// Initialise all components on Start
     /// </summary>
-    void Start() {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    public void Init() {
         controll = GetComponent<PlayerMoveControll>();
         playerBody = transform.FindChild("body").transform;
     }
@@ -57,11 +55,18 @@ public class Collector : MonoBehaviour {
                 if (cristal != null) {
                     cristal.GetComponent<Cristal>().Release();
                     cristals.Remove(cristal);
-                    gameManager.DecrementCristal();
+                    EventManager.TriggerEvent("warpCristall");
                     controll.ChangeSpeed(cristals.Count);
                 }
             }
             yield return null;
+        }
+    }
+
+    public void ClearCollectedCristals() {
+        cristals.Clear();
+        foreach (Transform c in playerBody) {
+            Destroy(c.gameObject);
         }
     }
 
