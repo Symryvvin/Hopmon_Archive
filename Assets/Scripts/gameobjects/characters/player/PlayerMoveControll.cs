@@ -32,12 +32,6 @@ public class PlayerMoveControll : MonoBehaviour {
     }
 
     void Dead() {
-        transform.Rotate(Vector3.left * 1600F * Time.deltaTime);
-        Transform _transform = transform;
-        if (_transform.position.y < 3f) {
-            _transform.position += new Vector3(0, 1f * Time.deltaTime, 0);
-            Destroy(gameObject, 2f);
-        }
     }
 
     private bool CheckMove() {
