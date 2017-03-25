@@ -34,12 +34,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4409822484243754}
-  - component: {fileID: 114968687095967392}
   - component: {fileID: 54562113673636964}
   - component: {fileID: 114611257040638592}
+  - component: {fileID: 135112976413883980}
   m_Layer: 0
   m_Name: NeedleBall
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -270,16 +270,15 @@ MonoBehaviour:
   schema: 
   moveSpeed: 2.5
   rotateSpeed: 130
---- !u!114 &114968687095967392
-MonoBehaviour:
+--- !u!135 &135112976413883980
+SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1105065747348968}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0d8ce14464bcab48914f8d1fa8df09d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  all_points:
-  - {x: 0, y: 0, z: 0}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
