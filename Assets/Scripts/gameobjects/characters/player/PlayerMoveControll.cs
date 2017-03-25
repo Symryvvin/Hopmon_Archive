@@ -9,7 +9,7 @@ public class PlayerMoveControll : MonoBehaviour {
     private Transform playerTransform;
     private Rigidbody playerRigidbody;
     private float moveSpeed = 2.5f;
-    private MoveState moveState;
+    [SerializeField] private MoveState moveState;
     private bool boost;
     private Animator animator;
 
@@ -32,6 +32,8 @@ public class PlayerMoveControll : MonoBehaviour {
     }
 
     void Dead() {
+        StopAllMoves();
+        StopAllCoroutines();
     }
 
     private bool CheckMove() {
@@ -98,11 +100,16 @@ public class PlayerMoveControll : MonoBehaviour {
         moveState = MoveState.WALK;
         float distance = (playerTransform.position - position).sqrMagnitude;
         while (distance > float.Epsilon) {
-            var moveTo = Vector3.MoveTowards(playerRigidbody.position, position, (boost ? 5f : moveSpeed) * Time.deltaTime);
+            var moveTo = Vector3.MoveTowards(playerRigidbody.position, position,
+                (boost ? 5f : moveSpeed) * Time.deltaTime);
             playerRigidbody.MovePosition(moveTo);
             distance = (playerTransform.position - position).sqrMagnitude;
             yield return null;
         }
+        StopAllMoves();
+    }
+
+    private void StopAllMoves() {
         moveState = MoveState.STAND;
         boost = false;
         animator.SetBool("Walk", false);
