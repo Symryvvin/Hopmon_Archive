@@ -4,8 +4,8 @@ using UnityEngine;
 public class Shell : MonoBehaviour, Ipoolable {
     public MovePath path;
     [HideInInspector] public float speed;
-    [SerializeField] private int index;
-    private LayerMask block;
+    private int index;
+    private int block;
 
     void Start() {
         block = LayerMask.NameToLayer("BlockLayer");
@@ -46,7 +46,7 @@ public class Shell : MonoBehaviour, Ipoolable {
     }
 
     void OnCollisionEnter(Collision col) {
-        LayerMask colLayer = col.gameObject.layer;
+        int colLayer = col.gameObject.layer;
         if (colLayer == block && col.gameObject.transform != transform.parent) {
             Destroy();
         }
