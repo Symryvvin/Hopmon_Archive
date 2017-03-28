@@ -20,7 +20,8 @@ public class PlayerShell : Shell {
         }
     }
 
-    void OnCollisionEnter(Collision col) {
+    new void OnCollisionEnter(Collision col) {
+        base.OnCollisionEnter(col);
         if (col.gameObject.CompareTag(GATE)) {
             HitDestructableObject(col.gameObject);
         }

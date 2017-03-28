@@ -45,7 +45,7 @@ public class Shell : MonoBehaviour, IPoolable {
         }
     }
 
-    void OnCollisionEnter(Collision col) {
+    protected void OnCollisionEnter(Collision col) {
         int colLayer = col.gameObject.layer;
         if (colLayer == block && col.gameObject.transform != transform.parent) {
             Destroy();
