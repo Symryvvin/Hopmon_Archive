@@ -2,9 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 public class PlayerMoveControll : MonoBehaviour {
-    public AudioClip jump;
-    public GameCamera gameCamera;
-
+    private GameCamera gameCamera;
     private Player player;
     private Transform playerTransform;
     private Rigidbody playerRigidbody;
@@ -12,13 +10,17 @@ public class PlayerMoveControll : MonoBehaviour {
     [SerializeField] private MoveState moveState;
     private bool boost;
     private Animator animator;
+    private AudioSource audioSource;
 
     void Start() {
-        moveState = MoveState.STAND;
-        playerTransform = transform;
+        gameCamera = Camera.main.GetComponent<GameCamera>();
         playerRigidbody = GetComponent<Rigidbody>();
         player = GetComponent<Player>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        gameCamera.target = transform;
+        moveState = MoveState.STAND;
+        playerTransform = transform;
     }
 
     void Alive() {
@@ -79,6 +81,7 @@ public class PlayerMoveControll : MonoBehaviour {
         }
         if (h != 0 || v != 0) {
             if (Move((int) h, (int) v)) {
+                audioSource.Play();
                 animator.SetBool("Walk", true);
                 animator.SetBool("Idle", false);
             }

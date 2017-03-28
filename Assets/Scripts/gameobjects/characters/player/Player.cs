@@ -2,18 +2,11 @@
 
 public class Player : MonoBehaviour {
     public LiveState liveState;
-
     private Collector collector;
-    private GameCamera gameCamera;
 
     public void Init() {
         collector = GetComponent<Collector>();
         collector.Init();
-        gameCamera = FindObjectOfType(typeof(GameCamera)) as GameCamera;
-        if (gameCamera != null) {
-            gameCamera.target = transform;
-            GetComponent<PlayerMoveControll>().gameCamera = gameCamera;
-        }
     }
 
     public void ResetPlayer(Vector3 startPoint) {
