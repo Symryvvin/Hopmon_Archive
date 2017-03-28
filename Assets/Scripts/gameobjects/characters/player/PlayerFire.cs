@@ -2,16 +2,22 @@
 using UnityEngine;
 
 public class PlayerFire : MonoBehaviour {
-    private Player player;
+    public float speed;
+    public AudioClip fireReady;
     public int percentReload;
-    [SerializeField] private float reloadTime;
-    [SerializeField] private AudioClip fireSound;
-    [SerializeField] private AudioClip fireReady;
-    [SerializeField] private Transform missle;
+    public GameObject shellPrefab;
+    public float reloadTime;
+
+    private Player player;
+    private GameObject shellInstance;
+    private PlayerShell shell;
     private ReloadState reloadState;
 
     void Start() {
         player = GetComponent<Player>();
+        shellInstance = Instantiate(shellPrefab);
+        shellInstance.SetActive(false);
+        shell = shellInstance.GetComponent<PlayerShell>();
         Reload();
     }
 
@@ -21,7 +27,7 @@ public class PlayerFire : MonoBehaviour {
                 time -= Time.deltaTime;
                 percentReload = Mathf.RoundToInt(100f - time * 100f / reloadTime);
             }
-            if (percentReload == 100) {
+            if (percentReload >= 100) {
                 AudioSource.PlayClipAtPoint(fireReady, transform.position);
                 yield return new WaitForSeconds(0.2f);
                 reloadState = ReloadState.READY;
@@ -44,8 +50,10 @@ public class PlayerFire : MonoBehaviour {
 
     private void Fire() {
         if (!FirePressed() || !IsReloaded()) return;
-        Instantiate(missle, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
-        AudioSource.PlayClipAtPoint(fireSound, transform.position);
+        shell.speed = speed;
+        var start = transform.position + transform.up / 2;
+        shell.path = new LinePath(2, start, start + transform.forward * 30f).EvaluateWaypoints();
+        shellInstance.SetActive(true);
         Reload();
     }
 
@@ -54,6 +62,6 @@ public class PlayerFire : MonoBehaviour {
     }
 
     private bool FirePressed() {
-        return Input.GetAxis("Fire") == 1;
+        return Input.GetButton("Fire");
     }
 }

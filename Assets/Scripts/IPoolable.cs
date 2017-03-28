@@ -1,4 +1,4 @@
-﻿public interface Ipoolable {
+﻿public interface IPoolable {
     void OnEnable();
 
     void Destroy();

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Shell : MonoBehaviour, Ipoolable {
+public class Shell : MonoBehaviour, IPoolable {
     public MovePath path;
     [HideInInspector] public float speed;
     private int index;
