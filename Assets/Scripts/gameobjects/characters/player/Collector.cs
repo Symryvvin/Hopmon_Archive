@@ -44,7 +44,7 @@ public class Collector : MonoBehaviour {
 
     /// <summary>
     /// Coroutine which start when trigger tag is WarpZone. Wait 0.83 seconds, set last cristal state "RELEASE",
-    /// decrement count of cristall in Game Manager. Also change player speed
+    /// decrement count of cristall in Game manager. Also change player speed
     /// </summary>
     /// <returns>IEnumerator</returns>
     private IEnumerator ReleaseCristals() {

@@ -6,38 +6,28 @@ using UnityEngine;
 /// <summary>
 /// A singletone class of LevelManager. Load level from file. Create object of type Level for using by GameManager
 /// </summary>
-public class LevelManager : MonoBehaviour {
+public class LevelManager : SingletonManager<LevelManager>, IManager {
+    public ManagerStatus status {
+        get { return managerStatus; }
+    }
+
     public PrefabList prefabList; // data asset file
     public Transform level; // transform of empty GameObject (parent for level parts)
     private Dictionary<string, PrefabItem> namedItemList; // dicrionary of prefabs, key = name + world
     private JsonLevelStruct jsonLevelStruct; // sctrut object of json file
     private World world; // word type of level
-
-    private static LevelManager levelManager;
-
-    public static LevelManager instance {
-        get {
-            if (levelManager == null) {
-                levelManager = FindObjectOfType(typeof(LevelManager)) as LevelManager;
-                if (levelManager != null) {
-                    levelManager.SetDictionary();
-                }
-                else {
-                    Debug.LogError("No LevelManager on Scene");
-                }
-            }
-            return levelManager;
-        }
-    }
+    private World lastWorld;
+    private bool firstLoad;
 
     /// <summary>
     /// Set dictionary of prefabs, getting from data asset prefabList
     /// </summary>
-    private void SetDictionary() {
+    protected override void Init() {
         namedItemList = new Dictionary<string, PrefabItem>();
         foreach (var item in prefabList.itemList) {
             namedItemList.Add(item.name + item.world, item);
         }
+        firstLoad = false;
     }
 
     /// <summary>
@@ -59,10 +49,29 @@ public class LevelManager : MonoBehaviour {
         // very important to naming array "object" like in json file
         jsonLevelStruct.parts = JsonUtility.FromJson<LevelObjectWrapper>(json).objects;
         world = (World) Enum.Parse(typeof(World), jsonLevelStruct.world);
+        if (lastWorld != world || !firstLoad) {
+            firstLoad = true;
+            lastWorld = world;
+            ChangeMusic();
+        }
         foreach (var jsonLevelObject in jsonLevelStruct.parts) {
             GenerateLevelObject(jsonLevelObject);
         }
         return new Level(jsonLevelStruct);
+    }
+
+    private void ChangeMusic() {
+            switch (world) {
+                case World.TEMPLE:
+                    EventManager.TriggerEvent("templeMusic");
+                    break;
+                case World.JUNGLE:
+                    EventManager.TriggerEvent("jungleMusic");
+                    break;
+                case World.SPACE:
+                    EventManager.TriggerEvent("spaceMusic");
+                    break;
+            }
     }
 
     /// <summary>

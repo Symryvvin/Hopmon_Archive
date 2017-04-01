@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class GameCamera : MonoBehaviour {
-    public  Transform target;
+    public Transform target;
 
     enum Move {
         Stop,
@@ -25,7 +25,7 @@ public class GameCamera : MonoBehaviour {
     public CameraPoint point;
 
 
-    void Start() {
+    public void Init() {
         targerPos = target.transform.position;
         transform.position = new Vector3(targerPos.x, targerPos.y + _hight, targerPos.z - _dist);
         _offset = targerPos - transform.position;
@@ -37,28 +37,31 @@ public class GameCamera : MonoBehaviour {
 
 
     void LateUpdate() {
-        targerPos = target.transform.position;
-        switch ((int) transform.eulerAngles.y) {
-            case 0:
-                transform.position = new Vector3(targerPos.x, targerPos.y + _hight, targerPos.z - _dist);
-                point = CameraPoint.NORTH;
-                break;
-            case 90:
-                transform.position = new Vector3(targerPos.x - _dist, targerPos.y + _hight, targerPos.z);
-                point = CameraPoint.WEST;
-                break;
-            case 180:
-                transform.position = new Vector3(targerPos.x, targerPos.y + _hight, targerPos.z + _dist);
-                point = CameraPoint.SOUTH;
-                break;
-            case 270:
-                transform.position = new Vector3(targerPos.x + _dist, targerPos.y + _hight, targerPos.z);
-                point = CameraPoint.EAST;
-                break;
+        if (target != null) {
+            targerPos = target.transform.position;
+            switch ((int) transform.eulerAngles.y) {
+                case 0:
+                    transform.position = new Vector3(targerPos.x, targerPos.y + _hight, targerPos.z - _dist);
+                    point = CameraPoint.NORTH;
+                    break;
+                case 90:
+                    transform.position = new Vector3(targerPos.x - _dist, targerPos.y + _hight, targerPos.z);
+                    point = CameraPoint.WEST;
+                    break;
+                case 180:
+                    transform.position = new Vector3(targerPos.x, targerPos.y + _hight, targerPos.z + _dist);
+                    point = CameraPoint.SOUTH;
+                    break;
+                case 270:
+                    transform.position = new Vector3(targerPos.x + _dist, targerPos.y + _hight, targerPos.z);
+                    point = CameraPoint.EAST;
+                    break;
+            }
         }
 
 
-        if (Input.GetKeyDown(KeyCode.T) && moving == Move.Stop) {
+        if
+            (Input.GetKeyDown(KeyCode.T) && moving == Move.Stop) {
             moving = Move.Left;
         }
         if (Input.GetKeyDown(KeyCode.R) && moving == Move.Stop) {

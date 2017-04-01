@@ -12,13 +12,14 @@ public class PlayerMoveControll : MonoBehaviour {
     private Animator animator;
     private AudioSource audioSource;
 
-    void Start() {
+    void Awake() {
         gameCamera = Camera.main.GetComponent<GameCamera>();
         playerRigidbody = GetComponent<Rigidbody>();
         player = GetComponent<Player>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         gameCamera.target = transform;
+        gameCamera.Init();
         moveState = MoveState.STAND;
         playerTransform = transform;
     }

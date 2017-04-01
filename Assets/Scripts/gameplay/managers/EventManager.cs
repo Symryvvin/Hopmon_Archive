@@ -1,28 +1,14 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
 
-public class EventManager : MonoBehaviour {
-    private Dictionary<string, UnityEvent> events;
-
-    private static EventManager eventManager;
-
-    public static EventManager instance {
-        get {
-            if (eventManager == null) {
-                eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
-                if (eventManager != null) {
-                    eventManager.Init();
-                }
-                else {
-                    Debug.LogError("No EventManager on Scene");
-                }
-            }
-            return eventManager;
-        }
+public class EventManager : SingletonManager<EventManager>, IManager {
+    public ManagerStatus status {
+        get { return managerStatus; }
     }
 
-    private void Init() {
+    private Dictionary<string, UnityEvent> events;
+
+    protected override void Init() {
         if (events == null) {
             events = new Dictionary<string, UnityEvent>();
         }
@@ -41,7 +27,7 @@ public class EventManager : MonoBehaviour {
     }
 
     public static void StopListener(string eventName, UnityAction listener) {
-        if (eventManager == null) return;
+        if (manager == null) return;
         UnityEvent thisEvent;
         if (instance.events.TryGetValue(eventName, out thisEvent)) {
             thisEvent.RemoveListener(listener);

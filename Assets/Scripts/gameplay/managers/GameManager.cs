@@ -1,55 +1,26 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
+﻿public class GameManager : SingletonManager<GameManager>, IManager {
+    public ManagerStatus status {
+        get { return managerStatus; }
+    }
 
-public class GameManager : MonoBehaviour {
     private static int cristalCount; // static count of cristals on current level
-    public int number = 1; // static number of current level
+    public static int number = 1; // static number of current level
     private LevelManager levelManager; // LevelManager wich use GameManager
     private UIManager uiManager; // UIManager in future
     private Player player; // main player script
     private Level level; // current level data
 
-    private static GameManager gameManager;
-
-    public static GameManager instance {
-        get {
-            if (gameManager == null) {
-                gameManager = FindObjectOfType(typeof(GameManager)) as GameManager;
-                if (gameManager != null) {
-                    gameManager.InitGame();
-                }
-                else {
-                    Debug.LogError("No LevelManager on Scene");
-                }
-            }
-            return gameManager;
-        }
-    }
-
-    /// <summary>
-    /// Game start point
-    /// </summary>
-    void Awake() {
-        gameManager = instance;
+    protected override void Init() {
+        levelManager = LevelManager.instance;
         EventManager.StartListener("warpCristall", DecrementCristal);
         EventManager.StartListener("loseGame", Loose);
     }
 
-    /// <summary>
-    /// Initialize all object first time.
-    /// Fill dictionary for levelManager.
-    /// Instantiale player.
-    /// Set gameCamera for palyer and set target for gameCamera
-    /// </summary>
-    private void InitGame() {
-        levelManager = LevelManager.instance;
-        gameManager.Restart();
-    }
 
     /// <summary>
     /// Restart current level (same as new level)
     /// </summary>
-    private void Restart() {
+    public void Restart() {
         LoadLevel();
         InitPlayer();
         cristalCount = level.cristals;
@@ -106,11 +77,9 @@ public class GameManager : MonoBehaviour {
 
     private void Win() {
         Invoke("DebugNextLevel", 3f); // temp call of method "go to next level"
-        //TODO: make action for win and go no next level
     }
 
     private void Loose() {
         Invoke("Restart", 1f);
-        //TODO: make action for loose
     }
 }
