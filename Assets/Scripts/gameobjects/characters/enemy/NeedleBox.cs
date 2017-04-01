@@ -1,23 +1,20 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 
 public class NeedleBox : MonoBehaviour {
-    public AudioClip dropSound;
     public bool dropBox;
-    private IEnumerator coroutine;
-
-    private Vector3 up;
-    private Vector3 down;
     public float downSpeed = 2.5f;
     public float upSpeed = 0.67f;
 
+    private AudioSource audioSource;
+    private IEnumerator coroutine;
+    private Vector3 up;
+    private Vector3 down;
     private Transform box;
 
     void Awake() {
         box = transform;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start() {
@@ -47,6 +44,7 @@ public class NeedleBox : MonoBehaviour {
             if (drop) {
                 while (isGoal(box.position, down)) {
                     box.position = Vector3.MoveTowards(box.position, down, downSpeed * Time.deltaTime);
+                    audioSource.Play();
                     yield return null;
                 }
             }
@@ -61,7 +59,7 @@ public class NeedleBox : MonoBehaviour {
                 box.position = Vector3.MoveTowards(box.position, down, downSpeed * Time.deltaTime);
                 yield return null;
             }
-            AudioSource.PlayClipAtPoint (dropSound, transform.position);
+            audioSource.Play();
             yield return new WaitForSeconds(2f);
             while (box.position.y < 1.1f) {
                 box.position = Vector3.MoveTowards(box.position, up, upSpeed * Time.deltaTime);

@@ -17,7 +17,7 @@ public class Volcano : AbstractCannon {
         for (int i = 0; i < waypointsLists.Capacity; i++) {
             waypointsLists.Add(new BezierPath(count, p0, p1, p2[i], p3[i]).EvaluateWaypoints());
         }
-        InvokeRepeating("Shoot", 0f, firerate);
+        InvokeRepeating("Shoot", firerate, firerate);
     }
 
     protected override MovePath SetPath() {
@@ -29,7 +29,6 @@ public class Volcano : AbstractCannon {
         while (shellLeft > 0) {
             shellLeft--;
             ActivateShell();
-            AudioSource.PlayClipAtPoint(shotSound, transform.position);
             yield return new WaitForSeconds(0.3f);
         }
     }

@@ -5,13 +5,15 @@ public abstract class AbstractCannon : MonoBehaviour, IShootable {
     public GameObject shellPrefab;
     public float firerate;
     public float shellSpeed;
-    public AudioClip shotSound;
     public int poolAmount;
 
     protected List<GameObject> shellPool;
     protected MovePath path;
 
+    private AudioSource audioSource;
+
     protected void Start() {
+        audioSource = GetComponent<AudioSource>();
         SetUpCannon();
         CreatePool();
     }
@@ -31,6 +33,7 @@ public abstract class AbstractCannon : MonoBehaviour, IShootable {
     protected void ActivateShell() {
         foreach (var shell in shellPool) {
             if (!shell.activeInHierarchy) {
+                audioSource.Play();
                 shell.GetComponent<Shell>().path = SetPath();
                 shell.GetComponent<Shell>().speed = shellSpeed;
                 shell.SetActive(true);

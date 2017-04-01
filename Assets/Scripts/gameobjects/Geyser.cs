@@ -2,18 +2,17 @@
 using UnityEngine;
 
 public class Geyser : MonoBehaviour {
-    public AudioClip geyserSound;
     public float pause;
 
+    private AudioSource audioSource;
     private float duration;
-
-
     private GameObject steam;
 
     void Awake() {
+        audioSource = GetComponent<AudioSource>();
         steam = transform.FindChild("Steam").gameObject;
         steam.SetActive(false);
-        duration = geyserSound.length;
+        duration = audioSource.clip.length;
     }
 
     void Start() {
@@ -24,7 +23,7 @@ public class Geyser : MonoBehaviour {
         while (true) {
             yield return new WaitForSeconds(pause);
             steam.SetActive(true);
-            AudioSource.PlayClipAtPoint(geyserSound, transform.position);
+            audioSource.Play();
             yield return new WaitForSeconds(duration);
             steam.SetActive(false);
         }

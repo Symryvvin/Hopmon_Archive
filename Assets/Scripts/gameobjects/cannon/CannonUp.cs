@@ -16,7 +16,7 @@ public class CannonUp : AbstractCannon {
         for (int i = 0; i < waypointsLists.Capacity; i++) {
             waypointsLists.Add(new BezierPath(count, p0, p1, p2[i], p3[i]).EvaluateWaypoints());
         }
-        InvokeRepeating("Shoot", 0f, firerate);
+        InvokeRepeating("Shoot", firerate, firerate);
     }
 
     protected override MovePath SetPath() {
@@ -25,7 +25,6 @@ public class CannonUp : AbstractCannon {
 
     public override void Shoot() {
         ActivateShell();
-        AudioSource.PlayClipAtPoint(shotSound, transform.position);
     }
 
     public void OnDrawGizmos() {

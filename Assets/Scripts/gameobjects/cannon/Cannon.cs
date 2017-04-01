@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class Cannon : AbstractCannon {
+﻿public class Cannon : AbstractCannon {
     private const int count = 2;
 
     protected override void SetUpCannon() {
@@ -8,7 +6,7 @@ public class Cannon : AbstractCannon {
         var end = start + transform.forward * 50f;
         path = new LinePath(count, start, end);
         path.EvaluateWaypoints();
-        InvokeRepeating("Shoot", 0f, firerate);
+        InvokeRepeating("Shoot", firerate, firerate);
     }
 
     protected override MovePath SetPath() {
@@ -17,6 +15,5 @@ public class Cannon : AbstractCannon {
 
     public override void Shoot() {
         ActivateShell();
-        AudioSource.PlayClipAtPoint(shotSound, transform.position);
     }
 }

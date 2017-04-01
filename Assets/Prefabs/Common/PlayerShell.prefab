@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 54105207500837228}
   - component: {fileID: 114122533381722060}
   m_Layer: 0
-  m_Name: PlayerMissle
+  m_Name: PlayerShell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,11 +105,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1449224686393414}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1739864a51ed49b42bc5e0aeafc6534c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b2b3e4a4b9eea64f925d841d9c1c595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
   damage: 1
+  shot: {fileID: 8300000, guid: b88a1325c29203e41a920b44bc9f2b95, type: 3}
+  hit: {fileID: 8300000, guid: 94e375b603451dc4b9f473c0a1bf05c0, type: 3}
 --- !u!135 &135352780956886484
 SphereCollider:
   m_ObjectHideFlags: 1
