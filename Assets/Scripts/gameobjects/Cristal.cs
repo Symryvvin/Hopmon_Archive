@@ -39,7 +39,7 @@ public class Cristal : MonoBehaviour, ICollectible {
     /// Call if cristal was collected
     /// </summary>
     public void Collect() {
-        AudioSource.PlayClipAtPoint(pick, transform.position);
+        AudioSource.PlayClipAtPoint(pick, Camera.main.transform.position);
         state = State.COLLECTED;
     }
 
@@ -47,7 +47,7 @@ public class Cristal : MonoBehaviour, ICollectible {
     /// Call if cristall was released
     /// </summary>
     public void Release() {
-        AudioSource.PlayClipAtPoint(release, transform.position);
+        AudioSource.PlayClipAtPoint(release, Camera.main.transform.position);
         state = State.RELEASE;
     }
 }

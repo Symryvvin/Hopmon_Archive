@@ -28,7 +28,7 @@ public class PlayerFire : MonoBehaviour {
                 percentReload = Mathf.RoundToInt(100f - time * 100f / reloadTime);
             }
             if (percentReload >= 100) {
-                AudioSource.PlayClipAtPoint(fireReady, transform.position);
+                AudioSource.PlayClipAtPoint(fireReady, Camera.main.transform.position);
                 yield return new WaitForSeconds(0.2f);
                 reloadState = ReloadState.READY;
             }

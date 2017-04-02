@@ -2,16 +2,17 @@
 
 public class PlayerShell : Shell {
     public int damage;
-    public AudioClip shot;
-    public AudioClip hit;
+    public AudioSource shot;
+    public AudioSource hit;
 
     private const string ENEMY = "Enemy";
     private const string GATE = "Gate";
 
     public new void OnEnable() {
         base.OnEnable();
+        hit.transform.SetParent(transform);
         if (path != null)
-            AudioSource.PlayClipAtPoint(shot, transform.position);
+           shot.Play();
     }
 
     void OnTriggerEnter(Collider col) {
@@ -30,9 +31,10 @@ public class PlayerShell : Shell {
     private void HitDestructableObject(GameObject hitObject) {
         var desctuct = hitObject.GetComponent<IDestructable>();
         if (desctuct != null) {
+            hit.transform.SetParent(null);
+            hit.Play();
             Destroy();
             desctuct.Hit(damage);
-            AudioSource.PlayClipAtPoint(hit, transform.position);
         }
     }
 }
