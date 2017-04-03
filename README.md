@@ -8,7 +8,7 @@
 #### Официальное описание
 > HOPMON is a 3D arcade action game. There are 45 levels in total and to complete each level, Hopmon will have to collect all the > crystals and place them on the warpzone where the star symbol is printed.
 
-[Официальный сайт от разрабочика оригинальной игры](http://www.saitogames.com/hopmon/)
+[Официальный сайт от разработчика оригинальной игры](http://www.saitogames.com/hopmon/)
 
 
 #### Об игре от меня
