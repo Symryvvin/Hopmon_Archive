@@ -23,10 +23,10 @@ public class PlayerFire : MonoBehaviour {
 
     private IEnumerator Reload(float time) {
         while (reloadState == ReloadState.RELOAD) {
-            if (time > 0) {
-                time -= Time.deltaTime;
-                percentReload = Mathf.RoundToInt(100f - time * 100f / reloadTime);
-            }
+            time -= reloadTime / 10f;
+            yield return new WaitForSeconds(reloadTime / 10f);
+            EventManager.TriggerEvent("charging");
+            percentReload = Mathf.RoundToInt(100f - time * 100f / reloadTime);
             if (percentReload >= 100) {
                 AudioSource.PlayClipAtPoint(fireReady, Camera.main.transform.position);
                 yield return new WaitForSeconds(0.2f);
@@ -54,6 +54,7 @@ public class PlayerFire : MonoBehaviour {
         var start = transform.position + transform.up / 2;
         shell.path = new LinePath(2, start, start + transform.forward * 30f).EvaluateWaypoints();
         shellInstance.SetActive(true);
+        EventManager.TriggerEvent("disCharging");
         Reload();
     }
 
