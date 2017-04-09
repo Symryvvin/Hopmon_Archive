@@ -15,6 +15,7 @@ public class Player : MonoBehaviour {
         GetComponent<PlayerFire>().Reload();
         liveState = LiveState.ALIVE;
         collector.ClearCollectedCristals();
+        ResetSpeed();
     }
 
     void OnTriggerEnter(Collider col) {
@@ -26,5 +27,9 @@ public class Player : MonoBehaviour {
     void ThouchEnemy() {
         liveState = LiveState.DEAD;
         EventManager.TriggerEvent("loseGame");
+    }
+
+    private void ResetSpeed() {
+        GetComponent<PlayerMoveControll>().ChangeSpeed(0);
     }
 }

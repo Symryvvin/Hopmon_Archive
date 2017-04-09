@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GameCamera : MonoBehaviour {
     public Transform target;
 
-    private enum Move {
+    public enum Move {
         STOP,
         LEFT,
         RIGHT
@@ -12,7 +11,7 @@ public class GameCamera : MonoBehaviour {
 
     private const float distance = 6f;
     private const float height = 8.4f;
-    private Move moving = Move.STOP;
+    public Move moving = Move.STOP;
     private float rotY;
     private float angleMin;
     private float angleMax;
@@ -94,7 +93,7 @@ public class GameCamera : MonoBehaviour {
     }
 
     private void CameraRotate(int round) {
-        rotY += round * 1f;
+        rotY += round * 1.5f;
         rotY = Mathf.Clamp(rotY, angleMin, angleMax);
         rotation = Quaternion.Euler(0, rotY, 0);
         position = targerPos - rotation * offset;

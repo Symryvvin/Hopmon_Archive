@@ -37,6 +37,7 @@ public class PlayerMoveControll : MonoBehaviour {
     void Dead() {
         StopAllMoves();
         StopAllCoroutines();
+        gameCamera.Init();
     }
 
     private bool CheckMove() {
@@ -77,14 +78,16 @@ public class PlayerMoveControll : MonoBehaviour {
     }
 
     private void Controll(float v, float h) {
-        if (h != 0) {
-            v = 0;
-        }
-        if (h != 0 || v != 0) {
-            if (Move((int) h, (int) v)) {
-                audioSource.Play();
-                animator.SetBool("Walk", true);
-                animator.SetBool("Idle", false);
+        if (gameCamera.moving == GameCamera.Move.STOP) {
+            if (h != 0) {
+                v = 0;
+            }
+            if (h != 0 || v != 0) {
+                if (Move((int) h, (int) v)) {
+                    audioSource.Play();
+                    animator.SetBool("Walk", true);
+                    animator.SetBool("Idle", false);
+                }
             }
         }
     }
