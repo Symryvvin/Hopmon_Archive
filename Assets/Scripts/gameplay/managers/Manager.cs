@@ -11,6 +11,7 @@ public class Manager : MonoBehaviour {
         managers.Add(GameManager.instance);
         managers.Add(LevelManager.instance);
         managers.Add(AudioManager.instance);
+        managers.Add(UIManager.instance);
         StartCoroutine(StartUpManagers());
     }
 

@@ -3,14 +3,15 @@
         get { return managerStatus; }
     }
 
-    private static int cristalCount; // static count of cristals on current level
     public static int number = 1; // static number of current level
     private LevelManager levelManager; // LevelManager wich use GameManager
     private UIManager uiManager; // UIManager in future
     private Player player; // main player script
     private Level level; // current level data
+    private LevelStats stats;
 
     protected override void Init() {
+        uiManager = UIManager.instance;
         levelManager = LevelManager.instance;
         EventManager.StartListener("warpCristall", DecrementCristal);
         EventManager.StartListener("loseGame", Loose);
@@ -23,7 +24,8 @@
     public void Restart() {
         LoadLevel();
         InitPlayer();
-        cristalCount = level.cristals;
+        stats = new LevelStats(number, level.cristals);
+        uiManager.UpdateLevelStats(stats);
     }
 
     /// <summary>
@@ -68,9 +70,10 @@
     /// <summary>
     /// Decrement cristall count when player bring cristal to warpzone
     /// </summary>
-    public void DecrementCristal() {
-        cristalCount--;
-        if (cristalCount == 0) {
+    private void DecrementCristal() {
+        stats.CristalCount--;
+        uiManager.UpdateLevelStats(stats);
+        if (stats.CristalCount == 0) {
             Win();
         }
     }
