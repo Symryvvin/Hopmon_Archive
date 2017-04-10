@@ -32,7 +32,7 @@ public class NeedleBox : MonoBehaviour {
 
     IEnumerator Drop() {
         bool drop = false;
-        while (true) {
+        while (box.position != down) {
             RaycastHit info;
             Debug.DrawRay(box.position, -box.up * 1.0F, Color.red);
             if (Physics.Raycast(box.position, -box.up, out info, 1.0F)) {
@@ -44,9 +44,9 @@ public class NeedleBox : MonoBehaviour {
             if (drop) {
                 while (isGoal(box.position, down)) {
                     box.position = Vector3.MoveTowards(box.position, down, downSpeed * Time.deltaTime);
-                    audioSource.Play();
                     yield return null;
                 }
+                audioSource.Play();
             }
             yield return null;
         }
