@@ -13,7 +13,7 @@ public class PlayerFire : MonoBehaviour, IResettable {
     private PlayerShell shell;
     private ReloadState reloadState;
 
-    void Start() {
+    public void Init() {
         player = GetComponent<Player>();
         shellInstance = Instantiate(shellPrefab);
         shellInstance.SetActive(false);

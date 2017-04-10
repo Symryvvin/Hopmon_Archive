@@ -11,7 +11,7 @@ public class Collector : MonoBehaviour, IResettable {
     /// <summary>
     /// Initialise all components on Start
     /// </summary>
-    void Awake() {
+    public void Init() {
         controll = GetComponent<PlayerMoveControll>();
         playerBody = transform.FindChild("body").transform;
     }

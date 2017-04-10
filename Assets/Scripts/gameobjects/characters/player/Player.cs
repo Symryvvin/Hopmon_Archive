@@ -8,7 +8,14 @@ public class Player : MonoBehaviour {
     [SerializeField] private PlayerFire pFire;
     [SerializeField] private Collector pCollector;
 
-    public void ResetPlayer() {
+    public void InitPlayer() {
+        pMoveControll.Init();
+        pFire.Init();
+        pCollector.Init();
+        EventManager.StartListener("Reset", ResetPlayer);
+    }
+
+    private void ResetPlayer() {
         transform.position = startPoint + Vector3.up / 10f;
         transform.rotation = Quaternion.identity;
         liveState = LiveState.ALIVE;

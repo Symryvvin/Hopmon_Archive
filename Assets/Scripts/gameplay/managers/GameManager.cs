@@ -35,9 +35,9 @@
     private void InitPlayer() {
         if (player == null) {
             player = levelManager.GetPlayerInstance().GetComponent<Player>();
+            player.InitPlayer();
         }
         player.SetStart(level.start);
-        player.ResetPlayer();
     }
 
     /// <summary>
