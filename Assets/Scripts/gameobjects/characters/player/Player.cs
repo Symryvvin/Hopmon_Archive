@@ -2,20 +2,19 @@
 
 public class Player : MonoBehaviour {
     public LiveState liveState;
-    private Collector collector;
+    private Vector3 startPoint;
+    // Player keep reference on all player script Components
+    [SerializeField] private PlayerMoveControll pMoveControll;
+    [SerializeField] private PlayerFire pFire;
+    [SerializeField] private Collector pCollector;
 
-    public void Init() {
-        collector = GetComponent<Collector>();
-        collector.Init();
-    }
-
-    public void ResetPlayer(Vector3 startPoint) {
+    public void ResetPlayer() {
         transform.position = startPoint + Vector3.up / 10f;
         transform.rotation = Quaternion.identity;
-        GetComponent<PlayerFire>().Reload();
         liveState = LiveState.ALIVE;
-        collector.ClearCollectedCristals();
-        ResetSpeed();
+        pMoveControll.Reset();
+        pFire.Reset();
+        pCollector.Reset();
     }
 
     void OnTriggerEnter(Collider col) {
@@ -29,7 +28,7 @@ public class Player : MonoBehaviour {
         EventManager.TriggerEvent("loseGame");
     }
 
-    private void ResetSpeed() {
-        GetComponent<PlayerMoveControll>().ChangeSpeed(0);
+    public void SetStart(Vector3 levelStart) {
+        startPoint = levelStart;
     }
 }

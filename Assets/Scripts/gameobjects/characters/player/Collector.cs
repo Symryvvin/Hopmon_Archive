@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collector : MonoBehaviour {
+public class Collector : MonoBehaviour, IResettable {
     private PlayerMoveControll controll; // PlayerMove instance
     private Transform playerBody; // transform of Hopmon "body" mesh
 
@@ -11,9 +11,16 @@ public class Collector : MonoBehaviour {
     /// <summary>
     /// Initialise all components on Start
     /// </summary>
-    public void Init() {
+    void Awake() {
         controll = GetComponent<PlayerMoveControll>();
         playerBody = transform.FindChild("body").transform;
+    }
+
+    public void Reset() {
+        cristals.Clear();
+        foreach (Transform c in playerBody) {
+            Destroy(c.gameObject);
+        }
     }
 
     /// <summary>
@@ -60,13 +67,6 @@ public class Collector : MonoBehaviour {
                 }
             }
             yield return null;
-        }
-    }
-
-    public void ClearCollectedCristals() {
-        cristals.Clear();
-        foreach (Transform c in playerBody) {
-            Destroy(c.gameObject);
         }
     }
 

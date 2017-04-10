@@ -7,7 +7,7 @@ public class MainMenu : Menu, IMainMenu {
         // get last completed level from database and load it with GameManager
        // GameManager.GetLastCompletedLevelNumber();
         GameManager.number = 1;
-        GameManager.instance.Restart();
+        GameManager.instance.StartGame();
         UIManager.instance.ShowGUI();
     }
 

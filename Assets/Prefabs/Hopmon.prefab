@@ -545,6 +545,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   liveState: 0
+  pMoveControll: {fileID: 114147382641705174}
+  pFire: {fileID: 114331052577442744}
+  pCollector: {fileID: 114476155932492972}
 --- !u!114 &114476155932492972
 MonoBehaviour:
   m_ObjectHideFlags: 1

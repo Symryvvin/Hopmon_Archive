@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class GameCamera : MonoBehaviour {
+public class GameCamera : MonoBehaviour, IResettable {
     public Transform target;
 
     public enum Move {
@@ -26,14 +26,19 @@ public class GameCamera : MonoBehaviour {
 
     public void Init() {
         targerPos = target.transform.position;
-        transform.position = new Vector3(targerPos.x, targerPos.y + height, targerPos.z - distance);
+        Reset();
         offset = targerPos - transform.position;
         transform.LookAt(targerPos);
+        EventManager.StartListener("Reset", Reset);
+    }
+
+    public void Reset() {
+        transform.position = new Vector3(targerPos.x, targerPos.y + height, targerPos.z - distance);
         angleMin = -90f;
         angleMax = 90f;
         rotY = 0;
+        transform.rotation = Quaternion.Euler(transform.eulerAngles.x, rotY, transform.eulerAngles.z);
     }
-
 
     void LateUpdate() {
         if (target != null) {

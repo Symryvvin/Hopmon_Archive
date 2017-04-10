@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class PlayerFire : MonoBehaviour {
+public class PlayerFire : MonoBehaviour, IResettable {
     public float speed;
     public AudioClip fireReady;
     public int percentReload;
@@ -21,6 +21,11 @@ public class PlayerFire : MonoBehaviour {
         Reload();
     }
 
+    public void Reset() {
+        Reload();
+        EventManager.TriggerEvent("disCharging");
+    }
+
     private IEnumerator Reload(float time) {
         while (reloadState == ReloadState.RELOAD) {
             time -= reloadTime / 10f;
@@ -36,7 +41,7 @@ public class PlayerFire : MonoBehaviour {
         }
     }
 
-    public void Reload() {
+    private void Reload() {
         StopAllCoroutines();
         reloadState = ReloadState.RELOAD;
         StartCoroutine(Reload(reloadTime));

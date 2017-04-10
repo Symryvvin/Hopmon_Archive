@@ -19,11 +19,12 @@
 
 
     /// <summary>
-    /// Restart current level (same as new level)
+    /// StartGame current level (same as new level)
     /// </summary>
-    public void Restart() {
+    public void StartGame() {
         LoadLevel();
         InitPlayer();
+        EventManager.TriggerEvent("Reset");
         stats = new LevelStats(number, level.cristals);
         uiManager.UpdateLevelStats(stats);
     }
@@ -34,9 +35,9 @@
     private void InitPlayer() {
         if (player == null) {
             player = levelManager.GetPlayerInstance().GetComponent<Player>();
-            player.Init();
         }
-        player.ResetPlayer(level.start);
+        player.SetStart(level.start);
+        player.ResetPlayer();
     }
 
     /// <summary>
@@ -54,7 +55,7 @@
         levelManager.UnLoadLevelMap();
         if (number > 1)
             number--;
-        Restart();
+        StartGame();
     }
 
     /// <summary>
@@ -64,7 +65,7 @@
         levelManager.UnLoadLevelMap();
         if (number < 45)
             number++;
-        Restart();
+        StartGame();
     }
 
     /// <summary>
@@ -83,6 +84,6 @@
     }
 
     private void Loose() {
-        Invoke("Restart", 1f);
+        Invoke("StartGame", 1f);
     }
 }

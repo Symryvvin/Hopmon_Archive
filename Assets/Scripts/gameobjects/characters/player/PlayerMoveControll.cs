@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerMoveControll : MonoBehaviour {
+public class PlayerMoveControll : MonoBehaviour, IResettable {
     private GameCamera gameCamera;
     private Player player;
     private Transform playerTransform;
@@ -24,6 +24,11 @@ public class PlayerMoveControll : MonoBehaviour {
         playerTransform = transform;
     }
 
+    public void Reset() {
+        ChangeSpeed(0);
+        StopAllMoves();
+    }
+
     void Alive() {
         switch (moveState) {
             case MoveState.STAND:
@@ -32,12 +37,6 @@ public class PlayerMoveControll : MonoBehaviour {
             case MoveState.WALK:
                 break;
         }
-    }
-
-    void Dead() {
-        StopAllMoves();
-        StopAllCoroutines();
-        gameCamera.Init();
     }
 
     private bool CheckMove() {
@@ -129,7 +128,7 @@ public class PlayerMoveControll : MonoBehaviour {
                 Alive();
                 break;
             case LiveState.DEAD:
-                Dead();
+              //  Dead();
                 break;
         }
     }
