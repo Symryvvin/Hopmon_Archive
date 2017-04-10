@@ -13,7 +13,7 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
 
     public PrefabList prefabList; // data asset file
     public Transform level; // transform of empty GameObject (parent for level parts)
-    private Dictionary<string, PrefabItem> namedItemList; // dicrionary of prefabs, key = name + world
+    private Dictionary<string, PrefabItem> namedItemList; // dicrionary of prefabs, key = prefabName + world
     private JsonLevelStruct jsonLevelStruct; // sctrut object of json file
     private World world; // word type of level
     private World lastWorld;
@@ -35,7 +35,7 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     /// </summary>
     /// <returns>Hopmon gameObject</returns>
     public GameObject GetPlayerInstance() {
-        return Instantiate(GetPrefabByName("Hopmon", true));
+        return Instantiate(GetPrefabByName("Hopmon", true, false));
     }
 
     /// <summary>
@@ -44,23 +44,34 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     /// <param name="number">level number</param>
     /// <returns>Level with init fields for using by GameManager</returns>
     public Level LoadLevelMap(int number) {
+        LoadLevelStruct(number);
+        ChangeMusic();
+        foreach (var jsonLevelObject in jsonLevelStruct.parts) {
+            GenerateAnyLevelObject(jsonLevelObject);
+        }
+        return new Level(jsonLevelStruct);
+    }
+
+    public Level LoadLevelParts(int number) {
+        LoadLevelStruct(number);
+        foreach (var jsonLevelObject in jsonLevelStruct.parts) {
+            GenerateLevelPart(jsonLevelObject);
+        }
+        return new Level(jsonLevelStruct);
+    }
+
+    private void LoadLevelStruct(int number) {
         string json = GetJson(number);
         jsonLevelStruct = JsonUtility.FromJson<JsonLevelStruct>(json);
         // very important to naming array "object" like in json file
         jsonLevelStruct.parts = JsonUtility.FromJson<LevelObjectWrapper>(json).objects;
         world = (World) Enum.Parse(typeof(World), jsonLevelStruct.world);
-        if (lastWorld != world || !firstLoad) {
-            firstLoad = true;
-            lastWorld = world;
-            ChangeMusic();
-        }
-        foreach (var jsonLevelObject in jsonLevelStruct.parts) {
-            GenerateLevelObject(jsonLevelObject);
-        }
-        return new Level(jsonLevelStruct);
     }
 
     private void ChangeMusic() {
+        if (lastWorld != world || !firstLoad) {
+            firstLoad = true;
+            lastWorld = world;
             switch (world) {
                 case World.TEMPLE:
                     EventManager.TriggerEvent("templeMusic");
@@ -72,6 +83,7 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
                     EventManager.TriggerEvent("spaceMusic");
                     break;
             }
+        }
     }
 
     /// <summary>
@@ -85,16 +97,25 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     }
 
 
+    private void GenerateLevelPart(JsonLevelObjectStruct levelObject) {
+        GenerateLevelObject(levelObject, true);
+    }
+
+    private void GenerateAnyLevelObject(JsonLevelObjectStruct levelObject) {
+        GenerateLevelObject(levelObject, false);
+    }
+
     /// <summary>
     /// Generate gameObject on scene and set parent level - empty GameObject on scene
     /// </summary>
     /// <param name="levelObject">Loaded sctuct from JSON file</param>
-    private void GenerateLevelObject(JsonLevelObjectStruct levelObject) {
+    /// <param name="onlyPart">if type is a PART</param>
+    private void GenerateLevelObject(JsonLevelObjectStruct levelObject, bool onlyPart) {
         string loName = levelObject.name;
         bool common = levelObject.common;
         var position = levelObject.position;
         var rotation = levelObject.rotation;
-        var prefab = GetPrefabByName(loName, common);
+        var prefab = GetPrefabByName(loName, common, onlyPart);
         if (prefab != null) {
             var go = Instantiate(prefab,
                 new Vector3(position.x, prefab.transform.position.y, position.z),
@@ -106,11 +127,15 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     /// <summary>
     /// Get prefab by key from dictionaye namedItemList
     /// </summary>
-    /// <param name="name">name of prefab</param>
+    /// <param name="prefabName">prefabName of prefab</param>
     /// <param name="common">world type of prefab</param>
+    /// <param name="onlyPart"></param>
     /// <returns>prefab GameObject</returns>
-    private GameObject GetPrefabByName(string name, bool common) {
-        string key = common ? name + "COMMON" : name + world;
+    private GameObject GetPrefabByName(string prefabName, bool common, bool onlyPart) {
+        string key = common ? prefabName + "COMMON" : prefabName + world;
+        if (onlyPart) {
+            return namedItemList[key].type == Kind.PART ? namedItemList[key].prefab : null;
+        }
         return namedItemList[key].prefab;
     }
 

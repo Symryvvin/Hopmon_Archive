@@ -141,7 +141,7 @@ MonoBehaviour:
     world: 3
     prefab: {fileID: 1686425782571456, guid: a209c6b3b164ec640bb4dd918e0cd748, type: 2}
   - name: EnemyD
-    type: 0
+    type: 2
     world: 3
     prefab: {fileID: 1549459439837934, guid: 259c9d8e320de3f4c9262f7ce6b7dbac, type: 2}
   - name: EnemyE
