@@ -40,6 +40,7 @@ public class Cristal : MonoBehaviour, ICollectible {
     /// </summary>
     public void Collect() {
         AudioSource.PlayClipAtPoint(pick, Camera.main.transform.position);
+        GetComponent<Collider>().enabled = false;
         state = State.COLLECTED;
     }
 
