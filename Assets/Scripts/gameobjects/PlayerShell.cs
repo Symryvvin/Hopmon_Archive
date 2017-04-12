@@ -30,6 +30,9 @@ public class PlayerShell : Shell {
 
     private void HitDestructableObject(GameObject hitObject) {
         var desctuct = hitObject.GetComponent<IDestructable>();
+        if (hitObject.name.Equals("Mesh")) {
+            desctuct = hitObject.GetComponentInParent<IDestructable>();
+        }
         if (desctuct != null) {
             hit.transform.SetParent(null);
             hit.Play();

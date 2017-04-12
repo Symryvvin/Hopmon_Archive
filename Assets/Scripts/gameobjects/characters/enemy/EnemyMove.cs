@@ -24,7 +24,7 @@ public class EnemyMove : MonoBehaviour {
         enemyRigidbody = GetComponent<Rigidbody>();
     }
 
-    protected void Update() {
+    protected virtual void Update() {
         switch (moveState) {
             case MoveState.STAND:
                 CalculateMoveDirection();
