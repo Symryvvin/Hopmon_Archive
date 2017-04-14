@@ -1,0 +1,58 @@
+Scripts
+├───UI
+│	├───Menu
+│	└───HUD
+├───Manager
+│	├───Manager
+│	├───GameManager.cs
+│	├───EventManager.cs
+│	├───AudioManager.cs
+│	└───GameEvent.cs
+├───Dao
+│	├───AssetDao.cs
+│	├───LevelDao.cs
+│	└───ProfileDao.cs
+├───Sevice
+│	├───RuleService.cs
+│	├───GameService.cs
+│	├───LevelService.cs
+│	└───ProfileService.cs
+└───Gameobject
+	├───Game.cs
+	├───Level.cs
+	├───Actors
+	│	├───Player
+	│	│	├───Controll.cs
+	│	│	├───Collector.cs
+	│	│	├───Shoot.cs
+	│	│	├───Shell.cs
+	│	│	└───Player.cs
+	│	├───Enemy
+	│	│	├───Move.cs
+	│	│	├───GhostMove.cs
+	│	│	├───CubeMove.cs
+	│	│	├───JellyfishMove.cs
+	│	│	├───FrogMove.cs
+	│	│	├───UFOMove.cs
+	│	│	└───IEnemy.cs
+	│	├───Camera
+	│	│	├───Controll.cs
+	│	│	└───Track.cs
+	│	└───IDesctuctable.cs
+	├───Structure
+	│	├───Cannon
+	│	│	├───Cannon.cs
+	│	│	├───CannonUp.cs
+	│	│	├───Volcano.cs
+	│	│	├───Shell.cs
+	│	│	├───MovePath.cs
+	│	│	├───LinePath.cs
+	│	│	└───BezierPath.cs
+	│	├───Warpzone.cs
+	│	├───Booster.cs
+	│	├───Geyser.cs
+	│	├───NeedleBall.cs
+	│	├───NeedleBox.cs
+	└───Collect
+		├───Cristal.cs
+		└───ICollectable.cs
