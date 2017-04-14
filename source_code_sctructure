@@ -73,7 +73,7 @@ Scripts
 	│	├───Booster.cs
 	│	├───Geyser.cs
 	│	├───NeedleBall.cs
-	│	├───NeedleBox.cs
+	│	└───NeedleBox.cs
 	└───Collect
 		├───Cristal.cs
 		└───ICollectable.cs
