@@ -1,6 +1,8 @@
-﻿public class SeletLevelMenu : Menu, ISelectLevelMenu {
-    private int number;
+﻿using UnityEngine;
 
+public class SelectLevelMenu : Menu, ISelectLevelMenu {
+    private int number = 1;
+    [SerializeField] private RectTransform levels;
 
     public void Play() {
         GameManager.number = number;
@@ -9,10 +11,16 @@
     }
 
     public void SelectLevel() {
+        LevelManager.instance.LoadLevelParts(number);
         //Activale select level Panel
     }
 
     public void Back() {
         UIManager.instance.ShowMainMenu();
+    }
+
+    public void ChangeLevel(int n) {
+        LevelManager.instance.UnLoadLevelMap();
+        LevelManager.instance.LoadLevelParts(n);
     }
 }
