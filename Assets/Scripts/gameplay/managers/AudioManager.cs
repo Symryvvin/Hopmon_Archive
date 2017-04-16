@@ -34,7 +34,7 @@ public class AudioManager : SingletonManager<AudioManager>, IManager {
     }
 
     private AudioClip GetClip(string source) {
-        return Resources.Load("Music/" + source) as AudioClip;
+        return Resources.Load("Audio/Music/" + source) as AudioClip;
     }
 
     private void PlayMusic(AudioSource source, AudioClip clip) {
