@@ -11,7 +11,7 @@ public class SelectLevelMenu : Menu, ISelectLevelMenu {
     }
 
     public void SelectLevel() {
-        LevelManager.instance.LoadLevelParts(number);
+       // LevelManager.instance.LoadLevelParts(number);
         //Activale select level Panel
     }
 
@@ -21,6 +21,6 @@ public class SelectLevelMenu : Menu, ISelectLevelMenu {
 
     public void ChangeLevel(int n) {
         LevelManager.instance.UnLoadLevelMap();
-        LevelManager.instance.LoadLevelParts(n);
+      //  LevelManager.instance.LoadLevelParts(n);
     }
 }

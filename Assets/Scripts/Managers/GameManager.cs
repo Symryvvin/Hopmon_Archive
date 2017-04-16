@@ -25,7 +25,7 @@
         LoadLevel();
         InitPlayer();
         EventManager.TriggerEvent("Reset");
-        stats = new LevelStats(number, level.cristals);
+        stats = new LevelStats(number, level.GetCristallCount());
         uiManager.UpdateLevelStats(stats);
     }
 
@@ -45,7 +45,8 @@
     /// </summary>
     private void LoadLevel() {
         levelManager.UnLoadLevelMap();
-        level = levelManager.LoadLevelMap(number);
+        level = levelManager.LoadLevel(number);
+        levelManager.InstantiateTilesForLevel(level);
     }
 
     /// <summary>

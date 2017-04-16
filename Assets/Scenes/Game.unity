@@ -2124,7 +2124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabList: {fileID: 11400000, guid: 14a9c2312cbe0ad40a97035fbf9ea8f6, type: 2}
-  level: {fileID: 1183051590}
+  wrapper: {fileID: 1183051590}
 --- !u!4 &1106193103
 Transform:
   m_ObjectHideFlags: 0
