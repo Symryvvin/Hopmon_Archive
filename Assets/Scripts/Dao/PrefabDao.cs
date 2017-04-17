@@ -10,19 +10,23 @@ public class PrefabDao {
         this.prefabList = prefabList;
     }
 
-    public GameObject GetPrefabFromTile(Tile tile, World world) {
+    public void InstanceDictionary() {
         if (namedItemList == null) {
             namedItemList = new Dictionary<string, PrefabItem>();
             foreach (var item in prefabList.itemList) {
                 namedItemList.Add(item.name + item.world, item);
             }
         }
-        else {
-            string key = tile.common ? tile.name + "COMMON" : tile.name + world;
-/*            if (onlyPart) {
-                return namedItemList[key].type == Kind.PART ? namedItemList[key].prefab : null;
-            }*/
+    }
+
+    public GameObject GetPrefabFromTile(Level.Tile tile, World world) {
+        string key = "";
+        try {
+            key = tile.common ? tile.name + "COMMON" : tile.name + world;
             return namedItemList[key].prefab;
+        }
+        catch (KeyNotFoundException e) {
+            Debug.LogError("KEY : " + key + ". error " + e);
         }
         return null;
     }
@@ -30,5 +34,4 @@ public class PrefabDao {
     public GameObject GetPlayerPrefab() {
         return namedItemList["HopmonCOMMON"].prefab;
     }
-
 }

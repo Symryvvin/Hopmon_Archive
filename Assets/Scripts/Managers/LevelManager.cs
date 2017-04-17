@@ -32,24 +32,35 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
             levels.Add(i, levelDao.getLevelByNumber(i));
         }
         prefabDao = new PrefabDao(prefabList);
+        prefabDao.InstanceDictionary();
        // firstLoad = false;
     }
 
     public Level LoadLevel(int number) {
         string json = levels[number];
         Level level = JsonUtility.FromJson<Level>(json);
-        level.parts = JsonUtility.FromJson<TileWrapper>(json).objects;
+        #if UNITY_EDITOR
+        level.DebugPrintLevelInfo();
+        level.size.DebugPrintSize();
+        level.tiles.DebugTilesCount();
+        #endif
         world = (World) Enum.Parse(typeof(World), level.world);
         return level;
     }
 
     public void InstantiateTilesForLevel(Level level) {
-        foreach (var tile in level.parts) {
+        foreach (var tile in level.tiles.parts) {
+            InstantiateTile(tile);
+        }
+        foreach (var tile in level.tiles.enemies) {
+            InstantiateTile(tile);
+        }
+        foreach (var tile in level.tiles.structures) {
             InstantiateTile(tile);
         }
     }
 
-    private void InstantiateTile(Tile tile) {
+    private void InstantiateTile(Level.Tile tile) {
         var position = tile.position;
         var rotation = tile.rotation;
         var prefab = prefabDao.GetPrefabFromTile(tile, world);
