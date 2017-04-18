@@ -6,6 +6,11 @@ public class AudioManager : SingletonManager<AudioManager>, IManager {
         get { return managerStatus; }
     }
 
+    private const string MAIN = "MAIN_THEME";
+    private const string TEMPLE = "TEMPLE_WORLD_THEME";
+    private const string JUNGLE = "JUNGLE_WORLD_THEME";
+    private const string SPACE = "SPACE_WORLD_THEME";
+
     public AudioSource mainTheme;
     public AudioSource templeTheme;
     public AudioSource jungleTheme;
@@ -20,11 +25,7 @@ public class AudioManager : SingletonManager<AudioManager>, IManager {
             jungleTheme,
             spaceTheme
         };
-        EventManager.StartListener("templeMusic", TempleMusic);
-        EventManager.StartListener("jungleMusic", JungleMusic);
-        EventManager.StartListener("spaceMusic", SpaceMusic);
-        PlayMusic(mainTheme, GetClip("MainTheme"));
-        mainTheme.Play();
+        MainTheme();
     }
 
     private void StopAllMusic() {
@@ -43,15 +44,23 @@ public class AudioManager : SingletonManager<AudioManager>, IManager {
         source.Play();
     }
 
-    private void TempleMusic() {
-        PlayMusic(templeTheme, GetClip("TempleTheme"));
+    public void MainTheme() {
+        PlayMusic(mainTheme, GetClip(MAIN));
     }
 
-    private void JungleMusic() {
-        PlayMusic(jungleTheme, GetClip("JungleTheme"));
+    public void TempleMusic() {
+        if (templeTheme.isPlaying) return;
+            PlayMusic(templeTheme, GetClip(TEMPLE));
+
     }
 
-    private void SpaceMusic() {
-        PlayMusic(spaceTheme, GetClip("SpaceTheme"));
+    public void JungleMusic() {
+        if (jungleTheme.isPlaying) return;
+        PlayMusic(jungleTheme, GetClip(JUNGLE));
+    }
+
+    public void SpaceMusic() {
+        if (spaceTheme.isPlaying) return;
+        PlayMusic(spaceTheme, GetClip(SPACE));
     }
 }

@@ -1,20 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// A singletone class of LevelManager. Load level from file. Create object of type Level for using by GameManager
-/// </summary>
 public class LevelManager : SingletonManager<LevelManager>, IManager {
     public ManagerStatus status {
         get { return managerStatus; }
     }
 
-    public Transform wrapper; // transform of empty GameObject (parent for level parts)
-
-    //  private World lastWorld;
-    //  private bool firstLoad;
+    public Transform wrapper;
     private IDictionary<int, Level> levels;
-
     private LevelService levelService;
 
     protected override void Init() {
@@ -36,6 +29,7 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
         foreach (var t in allTilesTransform) {
             t.SetParent(wrapper);
         }
+        levelService.ChangeMusic(level);
     }
 
     //TODO переместить в класс Game

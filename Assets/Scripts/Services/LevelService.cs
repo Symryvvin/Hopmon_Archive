@@ -78,4 +78,19 @@ public class LevelService {
         }
         return count;
     }
+
+    public void ChangeMusic(Level level) {
+        var world = (World) Enum.Parse(typeof(World), level.world);
+        switch (world) {
+            case World.TEMPLE:
+                AudioManager.instance.TempleMusic();
+                break;
+            case World.JUNGLE:
+                AudioManager.instance.JungleMusic();
+                break;
+            case World.SPACE:
+                AudioManager.instance.SpaceMusic();
+                break;
+        }
+    }
 }
