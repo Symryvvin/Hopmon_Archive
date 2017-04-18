@@ -11,17 +11,25 @@ public class LevelService {
 
     public LevelService(bool network) {
         isNetworkAvaiable = network;
+        InstanceLevelDao();
+        InstancePrefabDao();
     }
 
-    private ILevelDao InstanceLevelDao() {
-        if (isNetworkAvaiable)
-            return new MySqlLevelDao();
-        return new LocalLevelDao();
+    private void InstanceLevelDao() {
+        if (levelDao == null) {
+            if (isNetworkAvaiable)
+                levelDao =  new MySqlLevelDao();
+            levelDao =  new LocalLevelDao();
+        }
+    }
+
+    private void InstancePrefabDao() {
+        if (prefabDao == null) {
+            prefabDao = new PrefabDao();
+        }
     }
 
     public IDictionary<int, Level> GetLevelByPack(LevelPack pack) {
-        if (levelDao == null)
-            levelDao = InstanceLevelDao();
         return levelDao.GetLevelsByPack(pack);
     }
 
@@ -44,9 +52,6 @@ public class LevelService {
     }
 
     private Transform InstantiateTile(Level.Tile tile, World world) {
-        if (prefabDao == null) {
-            prefabDao = new PrefabDao();
-        }
         var position = tile.position;
         var rotation = tile.rotation;
         var prefab = prefabDao.GetPrefabFromTile(tile, world);
@@ -60,14 +65,8 @@ public class LevelService {
             .transform;
     }
 
-    public Transform InstancePlayerOnStartPoint(Level level) {
-        Transform player = GameObject.Instantiate(prefabDao.GetPlayerPrefab()).transform;
-        player.transform.position = level.start + Vector3.up / 10f;
-        return player;
-    }
-
-    public void DestroyPlayer(GameObject player) {
-        GameObject.Destroy(player);
+    public Player InstancePlayer() {
+        return GameObject.Instantiate(prefabDao.GetPlayerPrefab()).GetComponent<Player>().InitPlayer();
     }
 
     public int GetCristallCount(Level level) {
@@ -92,5 +91,9 @@ public class LevelService {
                 AudioManager.instance.SpaceMusic();
                 break;
         }
+    }
+
+    public int GetMaxLevelNumberInPack(LevelPack pack) {
+        return levelDao.GetLevelsCountByPack(pack);
     }
 }

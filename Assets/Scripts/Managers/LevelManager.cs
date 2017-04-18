@@ -7,66 +7,38 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     }
 
     public Transform wrapper;
-    private IDictionary<int, Level> levels;
+    public IDictionary<int, Level> levels { get; private set; }
+    private LevelPack pack;
     private LevelService levelService;
 
     protected override void Init() {
         levelService = new LevelService(false);
         //TODO создавать новый сервис в зависимости от пака увроней
-        levels = levelService.GetLevelByPack(LevelPack.CLASSIC);
-        // firstLoad = false;
+        ChangePack(LevelPack.CLASSIC);
+        levels = levelService.GetLevelByPack(pack);
     }
 
-    //TODO переместить в класс Game
-    public Level LoadLevel(int number) {
-        return levels[number];
+    public static void ChangePack(LevelPack pack) {
+        instance.pack = pack;
     }
 
-    public void CreateLevel(Level level) {
-        if (wrapper.childCount > 0)
-            DestroyLevel();
-        List<Transform> allTilesTransform = levelService.InstanceLevelTiles(level);
+    public static LevelPack GetCurrentPack() {
+        return instance.pack;
+    }
+
+    public static void CreateLevel(Level level) {
+        if (instance.wrapper.childCount > 0)
+            instance.DestroyLevel();
+        List<Transform> allTilesTransform = instance.levelService.InstanceLevelTiles(level);
         foreach (var t in allTilesTransform) {
-            t.SetParent(wrapper);
+            t.SetParent(instance.wrapper);
         }
-        levelService.ChangeMusic(level);
+        instance.levelService.ChangeMusic(level);
     }
 
-    //TODO переместить в класс Game
-    public Transform GetPlayerInstance(Level level) {
-        return levelService.InstancePlayerOnStartPoint(level);
+    public static Level GetLevelByNumber(int number) {
+        return instance.levels[number];
     }
-
-    //TODO переместить в класс Game
-    public void DestroyPlayer(GameObject player) {
-        levelService.DestroyPlayer(player);
-    }
-
-
-    //TODO переместить в класс Game
-    public int GetCristalCount(Level level) {
-        return levelService.GetCristallCount(level);
-    }
-
-
-/*  private void ChangeMusic() {
-        if (lastWorld != world || !firstLoad) {
-            firstLoad = true;
-            lastWorld = world;
-            switch (world) {
-                case World.TEMPLE:
-                    EventManager.TriggerEvent("templeMusic");
-                    break;
-                case World.JUNGLE:
-                    EventManager.TriggerEvent("jungleMusic");
-                    break;
-                case World.SPACE:
-                    EventManager.TriggerEvent("spaceMusic");
-                    break;
-            }
-        }
-    }
-*/
 
     private void DestroyLevel() {
         foreach (Transform child in wrapper) {

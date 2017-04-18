@@ -1,7 +1,8 @@
 ﻿using System.Collections;
+using Assets.Scripts.Gameobjects.Game;
 using UnityEngine;
 
-public class PlayerFire : MonoBehaviour, IResettable {
+public class PlayerFire : MonoBehaviour {
     public float speed;
     public AudioClip fireReady;
     public int percentReload;
@@ -16,7 +17,6 @@ public class PlayerFire : MonoBehaviour, IResettable {
     public void Init() {
         player = GetComponent<Player>();
         shellInstance = Instantiate(shellPrefab);
-        shellInstance.transform.SetParent(player.transform);
         shellInstance.SetActive(false);
         shell = shellInstance.GetComponent<PlayerShell>();
         Reload();
@@ -24,14 +24,14 @@ public class PlayerFire : MonoBehaviour, IResettable {
 
     public void Reset() {
         Reload();
-        EventManager.TriggerEvent("disCharging");
+        EventManager.TriggerEvent(GameEvents.DISCHARGE);
     }
 
     private IEnumerator Reload(float time) {
         while (reloadState == ReloadState.RELOAD) {
             time -= reloadTime / 10f;
             yield return new WaitForSeconds(reloadTime / 10f);
-            EventManager.TriggerEvent("charging");
+            EventManager.TriggerEvent(GameEvents.CHARGE);
             percentReload = Mathf.RoundToInt(100f - time * 100f / reloadTime);
             if (percentReload >= 100) {
                 AudioSource.PlayClipAtPoint(fireReady, Camera.main.transform.position);
@@ -60,7 +60,7 @@ public class PlayerFire : MonoBehaviour, IResettable {
         var start = transform.position + transform.up / 2;
         shell.path = new LinePath(2, start, start + transform.forward * 30f).EvaluateWaypoints();
         shellInstance.SetActive(true);
-        EventManager.TriggerEvent("disCharging");
+        EventManager.TriggerEvent(GameEvents.DISCHARGE);
         Reload();
     }
 

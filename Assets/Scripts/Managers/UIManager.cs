@@ -9,7 +9,7 @@ public class UIManager : SingletonManager<UIManager>, IManager {
     [SerializeField] private Menu mainMenu;
     [SerializeField] private Menu settingsMenu;
     [SerializeField] private Menu selectLeveMenu;
-    [SerializeField] private GameInterface gui;
+    [SerializeField] private HUD hud;
 
     private Menu activeMenu;
 
@@ -20,7 +20,7 @@ public class UIManager : SingletonManager<UIManager>, IManager {
             mainMenu,
             settingsMenu,
             selectLeveMenu,
-            gui
+            hud
         };
 
         foreach (var menu in menus) {
@@ -28,30 +28,28 @@ public class UIManager : SingletonManager<UIManager>, IManager {
             menu.Close();
         }
 
-        gui.InitGUI();
-
         activeMenu = mainMenu;
         activeMenu.Show();
     }
 
     public void ShowSettings() {
-        CloseActiveMenu();
         ShowMenu(settingsMenu);
     }
 
     public void ShowSelectLevel() {
-        CloseActiveMenu();
         ShowMenu(selectLeveMenu);
     }
 
     public void ShowMainMenu() {
-        CloseActiveMenu();
         ShowMenu(mainMenu);
     }
 
     public void ShowGUI() {
-        CloseActiveMenu();
-        ShowMenu(gui);
+        ShowMenu(hud);
+    }
+
+    public static HUD GetHUD() {
+        return instance.hud;
     }
 
     private void CloseActiveMenu() {
@@ -62,12 +60,8 @@ public class UIManager : SingletonManager<UIManager>, IManager {
     }
 
     private void ShowMenu(Menu menu) {
+        CloseActiveMenu();
         menu.Show();
-    }
-
-    public void UpdateLevelStats(LevelStats stats) {
-        gui.SetLevelStats(stats);
-        gui.UpdateLevelStats();
     }
 
     void Update() {

@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Gameobjects.Game;
 using UnityEngine;
 
-public class Collector : MonoBehaviour, IResettable {
+public class Collector : MonoBehaviour {
     private PlayerMoveControll controll; // PlayerMove instance
     private Transform playerBody; // transform of Hopmon "body" mesh
 
@@ -62,7 +63,7 @@ public class Collector : MonoBehaviour, IResettable {
                 if (cristal != null) {
                     cristal.GetComponent<Cristal>().Release();
                     cristals.Remove(cristal);
-                    EventManager.TriggerEvent("warpCristall");
+                    EventManager.TriggerEvent(GameEvents.WARP_CRISTAL);
                     controll.ChangeSpeed(cristals.Count);
                 }
             }

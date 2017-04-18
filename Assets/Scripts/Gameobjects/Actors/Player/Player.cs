@@ -1,25 +1,29 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Gameobjects.Game;
+using UnityEngine;
+using GameObject = UnityEngine.Object;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour{
     public LiveState liveState;
+    private Vector3 startPoint;
     // Player keep reference on all player script Components
-    [SerializeField] private PlayerMoveControll pMoveControll;
-    [SerializeField] private PlayerFire pFire;
-    [SerializeField] private Collector pCollector;
+    [SerializeField] private PlayerMoveControll controll;
+    [SerializeField] private PlayerFire shoot;
+    [SerializeField] private Collector collector;
 
-    public void InitPlayer() {
-        pMoveControll.Init();
-        pFire.Init();
-        pCollector.Init();
-        EventManager.StartListener("Reset", ResetPlayer);
+    public Player InitPlayer() {
+        controll.Init();
+        shoot.Init();
+        collector.Init();
+        return this;
     }
 
-    private void ResetPlayer() {
+    public void ResetPlayer() {
+        transform.position = startPoint + Vector3.up / 10f;
         transform.rotation = Quaternion.identity;
         liveState = LiveState.ALIVE;
-        pMoveControll.Reset();
-        pFire.Reset();
-        pCollector.Reset();
+        controll.Reset();
+        shoot.Reset();
+        collector.Reset();
     }
 
     void OnTriggerEnter(Collider col) {
@@ -30,7 +34,10 @@ public class Player : MonoBehaviour {
 
     void ThouchEnemy() {
         liveState = LiveState.DEAD;
-        EventManager.TriggerEvent("loseGame");
+        EventManager.TriggerEvent(GameEvents.DEFEATE);
     }
 
+    public void MoveToStart(Level level) {
+        startPoint = level.start;
+    }
 }
