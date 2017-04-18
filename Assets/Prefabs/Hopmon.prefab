@@ -56,10 +56,10 @@ GameObject:
   - component: {fileID: 95196907996360762}
   - component: {fileID: 54941109139613298}
   - component: {fileID: 135566196134286566}
-  - component: {fileID: 114376653558645918}
   - component: {fileID: 114476155932492972}
   - component: {fileID: 114147382641705174}
   - component: {fileID: 114331052577442744}
+  - component: {fileID: 114787414026129708}
   - component: {fileID: 82937643520750124}
   m_Layer: 0
   m_Name: Hopmon
@@ -533,21 +533,6 @@ MonoBehaviour:
   shellPrefab: {fileID: 1449224686393414, guid: f9503bc6f0a340141823c5e0c6827d67,
     type: 2}
   reloadTime: 4.5
---- !u!114 &114376653558645918
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1305992247909396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37ab37189dda2994ab801576c0de005e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  liveState: 0
-  pMoveControll: {fileID: 114147382641705174}
-  pFire: {fileID: 114331052577442744}
-  pCollector: {fileID: 114476155932492972}
 --- !u!114 &114476155932492972
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -559,6 +544,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3a5f1a565970f4a90267d0d1e9441c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114787414026129708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1305992247909396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37ab37189dda2994ab801576c0de005e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  liveState: 0
+  controll: {fileID: 114147382641705174}
+  shoot: {fileID: 114331052577442744}
+  collector: {fileID: 114476155932492972}
 --- !u!135 &135566196134286566
 SphereCollider:
   m_ObjectHideFlags: 1
