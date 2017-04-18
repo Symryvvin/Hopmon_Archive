@@ -25,7 +25,7 @@
         LoadLevel();
         InitPlayer();
         EventManager.TriggerEvent("Reset");
-        stats = new LevelStats(number, level.GetCristallCount());
+        stats = new LevelStats(number, LevelManager.instance.GetCristalCount(level));
         uiManager.UpdateLevelStats(stats);
     }
 
@@ -33,27 +33,28 @@
     /// Instance player if null and reset player prefences
     /// </summary>
     private void InitPlayer() {
+        if (player != null) {
+            LevelManager.instance.DestroyPlayer(player.gameObject);
+            player = null;
+        }
         if (player == null) {
-            player = levelManager.GetPlayerInstance().GetComponent<Player>();
+            player = LevelManager.instance.GetPlayerInstance(level).GetComponent<Player>();
             player.InitPlayer();
         }
-        player.SetStart(level.start);
     }
 
     /// <summary>
     /// Loadl new level and destroy current level
     /// </summary>
     private void LoadLevel() {
-        levelManager.UnLoadLevelMap();
         level = levelManager.LoadLevel(number);
-        levelManager.InstantiateTilesForLevel(level);
+        LevelManager.instance.CreateLevel(level);
     }
 
     /// <summary>
     /// Debug method for previous level button
     /// </summary>
     public void DebugPrevLevel() {
-        levelManager.UnLoadLevelMap();
         if (number > 1)
             number--;
         StartGame();
@@ -63,7 +64,6 @@
     /// Debug method for next level button
     /// </summary>
     public void DebugNextLevel() {
-        levelManager.UnLoadLevelMap();
         if (number < 45)
             number++;
         StartGame();

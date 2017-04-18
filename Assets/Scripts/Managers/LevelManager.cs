@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -11,68 +9,49 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
         get { return managerStatus; }
     }
 
-    public PrefabList prefabList; // data asset file
     public Transform wrapper; // transform of empty GameObject (parent for level parts)
-    private World world; // word type of level
-  //  private World lastWorld;
-  //  private bool firstLoad;
-    private IDictionary<int, string> levels;
-    private ILevelDao levelDao;
-    private PrefabDao prefabDao;
 
-    /// <summary>
-    /// Set dictionary of prefabs, getting from data asset prefabList
-    /// </summary>
+    //  private World lastWorld;
+    //  private bool firstLoad;
+    private IDictionary<int, Level> levels;
+
+    private LevelService levelService;
+
     protected override void Init() {
-        // db is not inmplement use local dao
-        levelDao = new LocalLevelDao();
-        levels = new Dictionary<int, string>();
-        int levelCount = levelDao.getLevelsCountByPack(LevelPack.CLASSIC);
-        for (int i = 1; i <= levelCount; i++) {
-            levels.Add(i, levelDao.getLevelByNumber(i));
-        }
-        prefabDao = new PrefabDao(prefabList);
-        prefabDao.InstanceDictionary();
-       // firstLoad = false;
+        levelService = new LevelService(false);
+        //TODO создавать новый сервис в зависимости от пака увроней
+        levels = levelService.GetLevelByPack(LevelPack.CLASSIC);
+        // firstLoad = false;
     }
 
+    //TODO переместить в класс Game
     public Level LoadLevel(int number) {
-        string json = levels[number];
-        Level level = JsonUtility.FromJson<Level>(json);
-        #if UNITY_EDITOR
-        level.DebugPrintLevelInfo();
-        level.size.DebugPrintSize();
-        level.tiles.DebugTilesCount();
-        #endif
-        world = (World) Enum.Parse(typeof(World), level.world);
-        return level;
+        return levels[number];
     }
 
-    public void InstantiateTilesForLevel(Level level) {
-        foreach (var tile in level.tiles.parts) {
-            InstantiateTile(tile);
-        }
-        foreach (var tile in level.tiles.enemies) {
-            InstantiateTile(tile);
-        }
-        foreach (var tile in level.tiles.structures) {
-            InstantiateTile(tile);
+    public void CreateLevel(Level level) {
+        if (wrapper.childCount > 0)
+            DestroyLevel();
+        List<Transform> allTilesTransform = levelService.InstanceLevelTiles(level);
+        foreach (var t in allTilesTransform) {
+            t.SetParent(wrapper);
         }
     }
 
-    private void InstantiateTile(Level.Tile tile) {
-        var position = tile.position;
-        var rotation = tile.rotation;
-        var prefab = prefabDao.GetPrefabFromTile(tile, world);
-        if (prefab == null) return;
-        var go = Instantiate(prefab,
-            new Vector3(position.x, prefab.transform.position.y, position.z),
-            Quaternion.Euler(0, rotation.y, 0));
-        go.transform.SetParent(wrapper);
+    //TODO переместить в класс Game
+    public Transform GetPlayerInstance(Level level) {
+        return levelService.InstancePlayerOnStartPoint(level);
     }
 
-    public GameObject GetPlayerInstance() {
-        return Instantiate(prefabDao.GetPlayerPrefab());
+    //TODO переместить в класс Game
+    public void DestroyPlayer(GameObject player) {
+        levelService.DestroyPlayer(player);
+    }
+
+
+    //TODO переместить в класс Game
+    public int GetCristalCount(Level level) {
+        return levelService.GetCristallCount(level);
     }
 
 
@@ -95,10 +74,7 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     }
 */
 
-    /// <summary>
-    /// Unload level by destroing all gameobjects from level parent
-    /// </summary>
-    public void UnLoadLevelMap() {
+    private void DestroyLevel() {
         foreach (Transform child in wrapper) {
             Destroy(child.gameObject);
         }

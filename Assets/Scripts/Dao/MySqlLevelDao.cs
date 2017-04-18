@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 
 public class MySqlLevelDao : ILevelDao {
-    public string getLevelByNumber(int number) {
+    public string GetJsonLevelByNumber(int number, LevelPack pack) {
         throw new NotImplementedException();
     }
 
-    public List<string> getLevels() {
+    public Level GetLevelByNumber(int number, LevelPack pack) {
         throw new NotImplementedException();
     }
 
-    public int getLevelsCountByPack(LevelPack pack) {
+    public IDictionary<int, Level> GetLevelsByPack(LevelPack pack) {
+        throw new NotImplementedException();
+    }
+
+    public int GetLevelsCountByPack(LevelPack pack) {
         throw new NotImplementedException();
     }
 }

@@ -44,14 +44,4 @@ public class Level {
         Debug.Log("Level #" + number + ". Name : " + name + ". World : " + world + ".\n" +
                   "Start position : " + "x=" + start.x + "y=" + start.y + "z=" + start.z);
     }
-
-    //TODO must move to service
-    public int GetCristallCount() {
-        int count = 0;
-        foreach (var part in tiles.parts) {
-            if (part.name.Equals("Cristal"))
-                count++;
-        }
-        return count;
-    }
 }

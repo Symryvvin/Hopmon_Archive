@@ -20,7 +20,6 @@ public class SelectLevelMenu : Menu, ISelectLevelMenu {
     }
 
     public void ChangeLevel(int n) {
-        LevelManager.instance.UnLoadLevelMap();
       //  LevelManager.instance.LoadLevelParts(n);
     }
 }
