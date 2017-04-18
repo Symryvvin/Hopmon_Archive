@@ -16,6 +16,7 @@ public class PlayerFire : MonoBehaviour, IResettable {
     public void Init() {
         player = GetComponent<Player>();
         shellInstance = Instantiate(shellPrefab);
+        shellInstance.transform.SetParent(player.transform);
         shellInstance.SetActive(false);
         shell = shellInstance.GetComponent<PlayerShell>();
         Reload();
