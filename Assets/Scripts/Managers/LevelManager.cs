@@ -7,22 +7,46 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     }
 
     public Transform wrapper;
-    public IDictionary<int, Level> levels { get; private set; }
-    private LevelPack pack;
+
+    private ILevelDao levelDao;
     private LevelService levelService;
 
+    private Pack pack;
+    private List<string> packNames;
+
     protected override void Init() {
-        levelService = new LevelService(false);
-        //TODO создавать новый сервис в зависимости от пака увроней
-        ChangePack(LevelPack.CLASSIC);
-        levels = levelService.GetLevelByPack(pack);
+        // while we don`t have database with levels use LocalLevelDao
+        levelDao = new LocalLevelDao();
+        levelService = new LevelService();
+        // take list of exiting level pack
+        packNames = levelDao.GetLevelPackNameList();
+        // and load pack with index 0 (now it CLASSIC pack in Levels/CLASSIC)
+        pack = new Pack(packNames[0]);
+        pack.LoadPack(levelDao);
     }
 
-    public static void ChangePack(LevelPack pack) {
-        instance.pack = pack;
+    private void ChangePack(Pack p) {
+        pack = p;
     }
 
-    public static LevelPack GetCurrentPack() {
+    public void SwitchLevelPack() {
+        Pack p;
+        int index = 0;
+        foreach (var n in packNames) {
+            if (pack.packName.Equals(n))
+                break;
+            index++;
+        }
+        if (index < packNames.Count)
+            p = new Pack(packNames[index]);
+        else {
+            p = new Pack(packNames[0]);
+        }
+        p.LoadPack(levelDao);
+        ChangePack(p);
+    }
+
+    public static Pack GetCurrentPack() {
         return instance.pack;
     }
 
@@ -37,7 +61,7 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     }
 
     public static Level GetLevelByNumber(int number) {
-        return instance.levels[number];
+        return instance.pack.GetLevelByNumber(number);
     }
 
     private void DestroyLevel() {

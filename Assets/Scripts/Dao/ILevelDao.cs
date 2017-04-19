@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
 public interface ILevelDao {
-    string GetJsonLevelByNumber(int number, LevelPack pack);
+    string GetJsonLevelByNumber(int number, Pack pack);
 
-    Level GetLevelByNumber(int number, LevelPack pack);
+    Level GetLevelByNumber(int number, Pack pack);
 
-    IDictionary<int, Level> GetLevelsByPack(LevelPack pack);
+    IDictionary<int, Level> GetLevelsByPack(Pack pack);
 
-    int GetLevelsCountByPack(LevelPack pack);
+    List<string> GetLevelPackNameList();
 }

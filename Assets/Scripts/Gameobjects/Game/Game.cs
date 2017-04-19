@@ -8,7 +8,7 @@ public class Game {
     private int number;
     private LevelStats stats;
     private readonly HUD hud;
-    private readonly LevelService levelService = new LevelService(false);
+    private readonly LevelService levelService = new LevelService();
 
     public Game(int number) {
         status = GameStatus.INITIALIZE;

@@ -4,33 +4,17 @@ using UnityEngine;
 using GameObject = UnityEngine.Object;
 
 public class LevelService {
-    private ILevelDao levelDao;
     private PrefabDao prefabDao;
-    private readonly bool isNetworkAvaiable;
 
-
-    public LevelService(bool network) {
-        isNetworkAvaiable = network;
-        InstanceLevelDao();
+    public LevelService() {
         InstancePrefabDao();
     }
 
-    private void InstanceLevelDao() {
-        if (levelDao == null) {
-            if (isNetworkAvaiable)
-                levelDao =  new MySqlLevelDao();
-            levelDao =  new LocalLevelDao();
-        }
-    }
 
     private void InstancePrefabDao() {
         if (prefabDao == null) {
             prefabDao = new PrefabDao();
         }
-    }
-
-    public IDictionary<int, Level> GetLevelByPack(LevelPack pack) {
-        return levelDao.GetLevelsByPack(pack);
     }
 
     public List<Transform> InstanceLevelTiles(Level level) {
@@ -93,7 +77,7 @@ public class LevelService {
         }
     }
 
-    public int GetMaxLevelNumberInPack(LevelPack pack) {
-        return levelDao.GetLevelsCountByPack(pack);
+    public int GetMaxLevelNumberInPack(Pack pack) {
+        return pack.GetLevelCountInPack();
     }
 }
