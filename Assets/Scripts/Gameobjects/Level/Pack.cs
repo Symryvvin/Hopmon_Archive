@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 public class Pack {
     public string packName { get; private set; }
@@ -18,5 +19,13 @@ public class Pack {
 
     public Level GetLevelByNumber(int number) {
         return levels[number];
+    }
+
+    public IDictionary<int, Level> GetLevels() {
+        return levels;
+    }
+
+    public Level GetFirstLevelInPack() {
+        return levels.First().Value;
     }
 }

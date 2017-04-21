@@ -28,10 +28,7 @@ public class PrefabDao {
             return namedItemList[key].prefab;
         }
         catch (KeyNotFoundException e) {
-            Debug.LogError
-            ("KEY : " +
-             key + ". error " +
-             e);
+            Debug.LogError("KEY : " + key + ". error " + e);
         }
         return null;
     }

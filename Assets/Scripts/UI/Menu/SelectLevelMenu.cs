@@ -1,25 +1,119 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class SelectLevelMenu : Menu, ISelectLevelMenu {
-    private int number = 1;
-    [SerializeField] private RectTransform levels;
+// Sory for many stupid comments, i am tried to refactor this class
+public class SelectLevelMenu : Menu {
+    private Pack currentPack;
+    private Level currentLevel;
+    public RectTransform levelsView;
+    public Button play;
+    public Button select;
+    public Button back;
+    public Text levelPackName;
+    public RectTransform levelsPanel;
+    public RectTransform levelButton;
+    private Image currentLevelSelect;
 
+    // If player click "Start" in Main Menu this menu is enable
+    void OnEnable() {
+        Camera.main.GetComponent<OrbitCamera>().isRotate = true;
+        BuildLevel(FirstLevelInPack());
+    }
+
+    // If player click "Back" in Select Level Menu this menu is disable
+    void OnDisale() {
+        Camera.main.GetComponent<OrbitCamera>().isRotate = false;
+        LevelManager.DestroyLevel();
+    }
+
+    // Load first level from pack in future must load last incomplete level get from profile
     public void Play() {
-        GameManager.number = number;
+        if (currentLevel == null)
+            currentLevel = FirstLevelInPack();
+        GameManager.level = currentLevel;
         GameManager.instance.StartGame();
-        UIManager.instance.ShowGUI();
     }
 
+    // Activate panel with level list
     public void SelectLevel() {
-       // LevelManager.instance.LoadLevelParts(number);
-        //Activale select level Panel
+        SelectActivation(!levelsView.gameObject.activeSelf);
     }
 
+    // Return to Main Menu
     public void Back() {
         UIManager.instance.ShowMainMenu();
     }
 
-    public void ChangeLevel(int n) {
-      //  LevelManager.instance.LoadLevelParts(n);
+    private void SelectActivation(bool active) {
+        levelsView.gameObject.SetActive(active);
+        play.interactable = !active;
+        back.interactable = !active;
+        if (active) {
+            currentPack = LevelManager.GetCurrentPack();
+            LoadLevelList();
+        }
+    }
+
+    // Change pack, set current level pack and load button list for pick level
+    public void ChangeLevelPack() {
+        currentPack = SwitchLevelPack();
+        LoadLevelList();
+    }
+
+    private Pack SwitchLevelPack() {
+        return LevelManager.SwitchLevelPack();
+    }
+
+    private void LoadLevelList() {
+        SetLevelPackName(currentPack);
+        ClearLevelList();
+        bool isLoaded = false;
+        IDictionary<int, Level> levels = currentPack.GetLevels();
+        foreach (var level in levels.Values) {
+            var changeButton = Instantiate(levelButton, levelsPanel);
+            Text text = changeButton.FindChild("Number").GetComponent<Text>();
+            Image image = changeButton.GetComponent<Image>();
+            Button button = changeButton.GetComponent<Button>();
+            text.text = level.number.ToString();
+            AddListenerToButton(button, level, image);
+            if (!isLoaded) {
+                ChangeLevel(level, image);
+                isLoaded = true;
+            }
+        }
+    }
+
+    private void AddListenerToButton(Button button, Level level, Image image) {
+        button.onClick.AddListener(delegate { ChangeLevel(level, image); });
+    }
+
+    private void ClearLevelList() {
+        if (levelsPanel.childCount == 0) return;
+        foreach (RectTransform rt in levelsPanel) {
+            Destroy(rt.gameObject);
+        }
+    }
+
+    private void SetLevelPackName(Pack pack) {
+        levelPackName.text = pack.packName;
+    }
+
+    public void ChangeLevel(Level level, Image image) {
+        if (currentLevelSelect != null)
+            currentLevelSelect.fillCenter = false;
+        currentLevelSelect = image;
+        currentLevelSelect.fillCenter = true;
+        currentLevel = level;
+        LevelManager.DestroyLevel();
+        BuildLevel(currentLevel);
+    }
+
+    private Level FirstLevelInPack() {
+        return LevelManager.GetCurrentPack().GetFirstLevelInPack();
+    }
+
+    private void BuildLevel(Level level) {
+        LevelManager.BuildLevel(level, true);
     }
 }

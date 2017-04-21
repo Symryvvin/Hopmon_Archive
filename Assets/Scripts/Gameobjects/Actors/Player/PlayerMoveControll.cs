@@ -12,7 +12,7 @@ public class PlayerMoveControll : MonoBehaviour, IResettable {
     private Animator animator;
     private AudioSource audioSource;
 
-    public void Init() {
+    void Start() {
         gameCamera = Camera.main.GetComponent<GameCamera>();
         playerRigidbody = GetComponent<Rigidbody>();
         player = GetComponent<Player>();

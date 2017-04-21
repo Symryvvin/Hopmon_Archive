@@ -10,13 +10,6 @@ public class Player : MonoBehaviour{
     [SerializeField] private PlayerFire shoot;
     [SerializeField] private Collector collector;
 
-    public Player InitPlayer() {
-        controll.Init();
-        shoot.Init();
-        collector.Init();
-        return this;
-    }
-
     public void ResetPlayer() {
         transform.position = startPoint + Vector3.up / 10f;
         transform.rotation = Quaternion.identity;

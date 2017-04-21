@@ -18,7 +18,7 @@ public class HUD : Menu {
     }
 
     public void UpdateHUD() {
-        currentStats.text = "Level " + stats.number + " Cristals " + stats.cristal;
+        currentStats.text = "Level " + stats.number + " Cristals " + stats.cristals;
     }
 
     private void Charge() {

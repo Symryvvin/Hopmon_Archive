@@ -9,6 +9,7 @@ public class Level {
     public Vector3 start;
     public Tiles tiles;
     public Size size;
+    public int cristals = 0;
 
     [Serializable]
     public struct Tiles {

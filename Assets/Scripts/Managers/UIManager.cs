@@ -9,7 +9,6 @@ public class UIManager : SingletonManager<UIManager>, IManager {
     [SerializeField] private Menu mainMenu;
     [SerializeField] private Menu settingsMenu;
     [SerializeField] private Menu selectLeveMenu;
-    [SerializeField] private HUD hud;
 
     private Menu activeMenu;
 
@@ -19,8 +18,7 @@ public class UIManager : SingletonManager<UIManager>, IManager {
         menus = new List<Menu> {
             mainMenu,
             settingsMenu,
-            selectLeveMenu,
-            hud
+            selectLeveMenu
         };
 
         foreach (var menu in menus) {
@@ -42,14 +40,6 @@ public class UIManager : SingletonManager<UIManager>, IManager {
 
     public void ShowMainMenu() {
         ShowMenu(mainMenu);
-    }
-
-    public void ShowGUI() {
-        ShowMenu(hud);
-    }
-
-    public static HUD GetHUD() {
-        return instance.hud;
     }
 
     private void CloseActiveMenu() {

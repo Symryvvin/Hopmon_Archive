@@ -10,6 +10,12 @@ public class LocalLevelDao : ILevelDao {
         return new StreamReader(LEVEL_FOLDER + pack.packName + "/" + number + EXT).ReadToEnd();
     }
 
+    private Level GetLevelByFileName(string name, Pack pack) {
+        string json = new StreamReader(LEVEL_FOLDER + pack.packName + "/" + name).ReadToEnd();
+        Level level = JsonUtility.FromJson<Level>(json);
+        return level;
+    }
+
     public Level GetLevelByNumber(int number, Pack pack) {
         string json = GetJsonLevelByNumber(number, pack);
         Level level = JsonUtility.FromJson<Level>(json);
@@ -17,18 +23,19 @@ public class LocalLevelDao : ILevelDao {
     }
 
     public IDictionary<int, Level> GetLevelsByPack(Pack pack) {
-        IDictionary<int, Level> dictionary = new Dictionary<int, Level>();
-        int count = GetLevelsCountByPack(pack);
-        for (int i = 1; i <= count; i++) {
-            dictionary.Add(i, GetLevelByNumber(i, pack));
+        IDictionary<int, Level> dictionary = new SortedDictionary<int, Level>();
+        FileInfo[] files = GetLevelFiles(pack);
+        foreach (var file in files) {
+            Level level = GetLevelByFileName(file.Name, pack);
+            int index = level.number;
+            dictionary.Add(index, level);
         }
         return dictionary;
     }
 
-    private int GetLevelsCountByPack(Pack pack) {
-        return new DirectoryInfo(LEVEL_FOLDER + pack.packName + "/").GetFiles().Length;
+    private FileInfo[] GetLevelFiles(Pack pack) {
+        return new DirectoryInfo(LEVEL_FOLDER + pack.packName + "/").GetFiles();
     }
-
 
     public List<string> GetLevelPackNameList() {
         List<string> list = new List<string>();

@@ -3,63 +3,56 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameObject = UnityEngine.Object;
 
-public class LevelService {
+public class LevelService : MonoBehaviour {
     private PrefabDao prefabDao;
 
-    public LevelService() {
-        InstancePrefabDao();
+    void Start() {
+        DontDestroyOnLoad(gameObject);
+        prefabDao = new PrefabDao();
     }
 
-
-    private void InstancePrefabDao() {
-        if (prefabDao == null) {
-            prefabDao = new PrefabDao();
-        }
-    }
-
-    public List<Transform> InstanceLevelTiles(Level level) {
-        List<Transform> transforms = new List<Transform>();
+    public void InstanceLevelTiles(Level level, bool partOnly) {
         var world = (World) Enum.Parse(typeof(World), level.world);
-        transforms.AddRange(InstantiateTiles(level.tiles.parts, world));
-        transforms.AddRange(InstantiateTiles(level.tiles.enemies, world));
-        transforms.AddRange(InstantiateTiles(level.tiles.structures, world));
-        return transforms;
-    }
-
-
-    private List<Transform> InstantiateTiles(Level.Tile[] tiles, World world) {
-        List<Transform> transfroms = new List<Transform>();
-        foreach (var tile in tiles) {
-            transfroms.Add(InstantiateTile(tile, world));
+        if (partOnly)
+            InstantiateTiles(level.tiles.parts, world);
+        else {
+            InstantiateTiles(level.tiles.parts, world);
+            InstantiateTiles(level.tiles.structures, world);
+            InstantiateTiles(level.tiles.enemies, world);
         }
-        return transfroms;
     }
 
-    private Transform InstantiateTile(Level.Tile tile, World world) {
+    public void InstanceLevelPartTiles(Level level, World world) {
+        InstantiateTiles(level.tiles.parts, world);
+    }
+
+
+    private void InstantiateTiles(Level.Tile[] tiles, World world) {
+        foreach (var tile in tiles) {
+            InstantiateTile(tile, world);
+        }
+    }
+
+    private void InstantiateTile(Level.Tile tile, World world) {
         var position = tile.position;
         var rotation = tile.rotation;
         var prefab = prefabDao.GetPrefabFromTile(tile, world);
-        if (prefab == null) {
+        if (prefab != null) {
+            Instantiate(prefab,
+                    new Vector3(position.x, prefab.transform.position.y, position.z),
+                    Quaternion.Euler(0, rotation.y, 0))
+                .transform.SetParent(transform);
+        }
+        else {
             Debug.LogError("Error. Prefab with name " + tile.name + " is null");
-            return null;
         }
-        return GameObject.Instantiate(prefab,
-                new Vector3(position.x, prefab.transform.position.y, position.z),
-                Quaternion.Euler(0, rotation.y, 0))
-            .transform;
     }
 
-    public Player InstancePlayer() {
-        return GameObject.Instantiate(prefabDao.GetPlayerPrefab()).GetComponent<Player>().InitPlayer();
-    }
-
-    public int GetCristallCount(Level level) {
-        int count = 0;
-        foreach (var part in level.tiles.structures) {
-            if (part.name.Equals("Cristal"))
-                count++;
+    public void DestroyLevel() {
+        if (transform.childCount == 0) return;
+        foreach (Transform t in transform) {
+            Destroy(t.gameObject);
         }
-        return count;
     }
 
     public void ChangeMusic(Level level) {
@@ -77,7 +70,8 @@ public class LevelService {
         }
     }
 
-    public int GetMaxLevelNumberInPack(Pack pack) {
-        return pack.GetLevelCountInPack();
+    public void CenteredLevel(Level level) {
+        transform.position = new Vector3(transform.position.x - (float) level.size.length / 2, 0,
+            transform.position.z - (float) level.size.width / 2);
     }
 }
