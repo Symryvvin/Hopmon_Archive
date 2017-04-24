@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Assets.Scripts.Gameobjects.Level {
     public class PackLoader {
-        private const string LEVEL_FOLDER = "Levels/";
+        public const string LEVEL_FOLDER = "Levels/";
 
         private static Pack LoadPackByName(string name) {
             return new Pack(name);

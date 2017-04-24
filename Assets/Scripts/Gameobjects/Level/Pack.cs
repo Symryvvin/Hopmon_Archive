@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Gameobjects.Game;
+using Assets.Scripts.Gameobjects.Level;
 
 public class Pack {
     public string packName { get; private set; }
+    public string path { get; private set; }
     private IDictionary<int, Level> levels;
 
     public Pack(string packName) {
         this.packName = packName;
+        path = PackLoader.LEVEL_FOLDER + "/" + packName;
     }
 
-    public Pack LoadPack(ILevelDao levelDao) {
-        levels = levelDao.GetLevelsByPack(this);
+    public Pack LoadPack() {
+        levels = LevelLoader.GetLevelsByPack(this);
         return this;
     }
 

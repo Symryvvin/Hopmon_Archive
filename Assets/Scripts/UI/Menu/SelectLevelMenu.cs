@@ -18,13 +18,13 @@ public class SelectLevelMenu : Menu {
     // If player click "Start" in Main Menu this menu is enable
     void OnEnable() {
         Camera.main.GetComponent<OrbitCamera>().isRotate = true;
+        currentPack = LevelManager.GetCurrentPack();
         BuildLevel(FirstLevelInPack());
     }
 
     // If player click "Back" in Select Level Menu this menu is disable
     void OnDisale() {
         Camera.main.GetComponent<OrbitCamera>().isRotate = false;
-
     }
 
     // Load first level from pack in future must load last incomplete level get from profile
@@ -51,23 +51,18 @@ public class SelectLevelMenu : Menu {
         play.interactable = !active;
         back.interactable = !active;
         if (active) {
-            currentPack = LevelManager.GetCurrentPack();
             LoadLevelList();
         }
     }
 
     // Change pack, set current level pack and load button list for pick level
     public void ChangeLevelPack() {
-        currentPack = SwitchLevelPack();
+        currentPack = LevelManager.SwitchLevelPack();
         LoadLevelList();
     }
 
-    private Pack SwitchLevelPack() {
-        return LevelManager.SwitchLevelPack();
-    }
-
     private void LoadLevelList() {
-        SetLevelPackName(currentPack);
+        SetLevelPackName();
         ClearLevelList();
         bool isLoaded = false;
         IDictionary<int, Level> levels = currentPack.GetLevels();
@@ -96,8 +91,8 @@ public class SelectLevelMenu : Menu {
         }
     }
 
-    private void SetLevelPackName(Pack pack) {
-        levelPackName.text = pack.packName;
+    private void SetLevelPackName() {
+        levelPackName.text = currentPack.packName;
     }
 
     public void ChangeLevel(Level level, Image image) {
@@ -110,7 +105,7 @@ public class SelectLevelMenu : Menu {
     }
 
     private Level FirstLevelInPack() {
-        return LevelManager.GetCurrentPack().GetFirstLevelInPack();
+        return currentPack.GetFirstLevelInPack();
     }
 
     private void BuildLevel(Level level) {

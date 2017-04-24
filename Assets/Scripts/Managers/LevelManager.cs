@@ -6,14 +6,10 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
         get { return managerStatus; }
     }
 
-    private ILevelDao levelDao;
     private Pack pack;
     private List<Pack> packs;
 
     protected override void Init() {
-        // while we don`t have database with levelsView use LocalLevelDao
-        levelDao = new LocalLevelDao();
-        // and load pack with index 0 (now it CLASSIC pack in Levels/CLASSIC)
         packs = PackLoader.GetPackList();
         pack = LoadPackByIndex(0);
     }
@@ -26,7 +22,7 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     }
 
     private static Pack LoadPackByIndex(int index) {
-        return instance.packs[index].LoadPack(instance.levelDao);
+        return instance.packs[index].LoadPack();
     }
 
     public static Pack GetCurrentPack() {

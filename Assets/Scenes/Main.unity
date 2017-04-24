@@ -1457,6 +1457,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1202457638}
   - component: {fileID: 1202457639}
+  - component: {fileID: 1202457637}
   m_Layer: 0
   m_Name: Builder
   m_TagString: Untagged
@@ -1464,6 +1465,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1202457637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1202457636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0820e44b40bfdb4bb31f40e5b4eb684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabList: {fileID: 11400000, guid: 14a9c2312cbe0ad40a97035fbf9ea8f6, type: 2}
 --- !u!4 &1202457638
 Transform:
   m_ObjectHideFlags: 0
@@ -1488,6 +1501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb75cc0de14b9f439bd267999d91180, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loader: {fileID: 1202457637}
 --- !u!1 &1224937980
 GameObject:
   m_ObjectHideFlags: 0
@@ -2895,7 +2909,6 @@ MonoBehaviour:
   levelsPanel: {fileID: 173231373}
   levelButton: {fileID: 224643181348098230, guid: 1f498c99e4f33bb498ab5aebbfc4081f,
     type: 2}
-  builder: {fileID: 1202457636}
 --- !u!1 &2109123851
 GameObject:
   m_ObjectHideFlags: 0

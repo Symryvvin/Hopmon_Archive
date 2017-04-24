@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class LevelBuilder : MonoBehaviour {
     private static Transform parent;
-    private static PrefabDao prefabDao;
+    private static PrefabLoader prefabLoader;
 
     void Start() {
         DontDestroyOnLoad(gameObject);
-        prefabDao = new PrefabDao();
+        prefabLoader = GetComponent<PrefabLoader>();
         parent = transform;
     }
 
@@ -44,7 +44,7 @@ public class LevelBuilder : MonoBehaviour {
     private static void InstantiateTile(Tile tile, World world) {
         var position = tile.position;
         var rotation = tile.rotation;
-        var prefab = prefabDao.GetPrefabFromTile(tile, world);
+        var prefab = prefabLoader.GetPrefabFromTile(tile, world);
         if (prefab != null) {
             Instantiate(prefab,
                     new Vector3(position.x, prefab.transform.position.y, position.z),
