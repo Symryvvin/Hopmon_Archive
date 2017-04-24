@@ -6,6 +6,4 @@ public interface ILevelDao {
     Level GetLevelByNumber(int number, Pack pack);
 
     IDictionary<int, Level> GetLevelsByPack(Pack pack);
-
-    List<string> GetLevelPackNameList();
 }

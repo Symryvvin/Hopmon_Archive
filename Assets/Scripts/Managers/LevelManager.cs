@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Gameobjects.Level;
 
 public class LevelManager : SingletonManager<LevelManager>, IManager {
     public ManagerStatus status {
@@ -8,28 +9,25 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
     public LevelService levelService;
     private ILevelDao levelDao;
     private Pack pack;
-    private List<string> packNames;
+    private List<Pack> packs;
 
     protected override void Init() {
         // while we don`t have database with levelsView use LocalLevelDao
         levelDao = new LocalLevelDao();
-        // take list of exiting level pack
-        packNames = levelDao.GetLevelPackNameList();
         // and load pack with index 0 (now it CLASSIC pack in Levels/CLASSIC)
+        packs = PackLoader.GetPackList();
         pack = LoadPackByIndex(0);
     }
 
     public static Pack SwitchLevelPack() {
-        int index = instance.packNames.IndexOf(instance.pack.packName);
+        int index = instance.packs.IndexOf(instance.pack);
         index++;
-        instance.pack = index < instance.packNames.Count ? LoadPackByIndex(index) : LoadPackByIndex(0);
+        instance.pack = index < instance.packs.Count ? LoadPackByIndex(index) : LoadPackByIndex(0);
         return instance.pack;
     }
 
     private static Pack LoadPackByIndex(int index) {
-        Pack p = new Pack(instance.packNames[index]);
-        p.LoadPack(instance.levelDao);
-        return p;
+        return instance.packs[index].LoadPack(instance.levelDao);
     }
 
     public static Pack GetCurrentPack() {

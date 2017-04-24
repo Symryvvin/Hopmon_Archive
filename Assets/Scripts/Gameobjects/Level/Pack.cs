@@ -9,8 +9,9 @@ public class Pack {
         this.packName = packName;
     }
 
-    public void LoadPack(ILevelDao levelDao) {
+    public Pack LoadPack(ILevelDao levelDao) {
         levels = levelDao.GetLevelsByPack(this);
+        return this;
     }
 
     public int GetLevelCountInPack() {

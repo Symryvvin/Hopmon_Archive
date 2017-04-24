@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using GameObject = UnityEngine.Object;
 
@@ -71,7 +70,7 @@ public class LevelService : MonoBehaviour {
     }
 
     public void CenteredLevel(Level level) {
-        transform.position = new Vector3(transform.position.x - (float) level.size.length / 2, 0,
-            transform.position.z - (float) level.size.width / 2);
+        transform.position = new Vector3(transform.position.x - (float) level.size.width / 2, 0,
+            transform.position.z - (float) level.size.length / 2);
     }
 }

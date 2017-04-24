@@ -36,13 +36,4 @@ public class LocalLevelDao : ILevelDao {
     private FileInfo[] GetLevelFiles(Pack pack) {
         return new DirectoryInfo(LEVEL_FOLDER + pack.packName + "/").GetFiles();
     }
-
-    public List<string> GetLevelPackNameList() {
-        List<string> list = new List<string>();
-        DirectoryInfo[] directories = new DirectoryInfo(LEVEL_FOLDER).GetDirectories();
-        foreach (var dir in directories) {
-            list.Add(dir.Name);
-        }
-        return list;
-    }
 }
