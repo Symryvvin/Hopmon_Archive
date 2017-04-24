@@ -560,8 +560,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: DebugPrevLevel
+      - m_Target: {fileID: 354500185}
+        m_MethodName: PrevLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -630,7 +630,6 @@ MonoBehaviour:
     cristals: 0
   player: {fileID: 1776111787}
   hud: {fileID: 960393507}
-  levelService: {fileID: 0}
 --- !u!1 &376200966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1947,8 +1946,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: GoToNextLevel
+      - m_Target: {fileID: 354500185}
+        m_MethodName: NextLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

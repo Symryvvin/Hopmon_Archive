@@ -1,38 +1,47 @@
 ﻿using System;
+using Assets.Scripts.Gameobjects.Level;
 using UnityEngine;
-using GameObject = UnityEngine.Object;
 
-public class LevelService : MonoBehaviour {
-    private PrefabDao prefabDao;
+public class LevelBuilder : MonoBehaviour {
+    private static Transform parent;
+    private static PrefabDao prefabDao;
 
     void Start() {
         DontDestroyOnLoad(gameObject);
         prefabDao = new PrefabDao();
+        parent = transform;
     }
 
-    public void InstanceLevelTiles(Level level, bool partOnly) {
+    public static void BuildLevel(Level level, bool partOnly) {
+        DestroyLevel();
         var world = (World) Enum.Parse(typeof(World), level.world);
-        if (partOnly)
+        if (partOnly) {
             InstantiateTiles(level.tiles.parts, world);
+            CenteredLevel(level);
+        }
         else {
             InstantiateTiles(level.tiles.parts, world);
             InstantiateTiles(level.tiles.structures, world);
             InstantiateTiles(level.tiles.enemies, world);
+            ChangeMusic(world);
         }
     }
 
-    public void InstanceLevelPartTiles(Level level, World world) {
-        InstantiateTiles(level.tiles.parts, world);
+    public static void DestroyLevel() {
+        if (parent.childCount == 0) return;
+        foreach (Transform t in parent) {
+            Destroy(t.gameObject);
+        }
     }
 
 
-    private void InstantiateTiles(Level.Tile[] tiles, World world) {
+    private static void InstantiateTiles(Tile[] tiles, World world) {
         foreach (var tile in tiles) {
             InstantiateTile(tile, world);
         }
     }
 
-    private void InstantiateTile(Level.Tile tile, World world) {
+    private static void InstantiateTile(Tile tile, World world) {
         var position = tile.position;
         var rotation = tile.rotation;
         var prefab = prefabDao.GetPrefabFromTile(tile, world);
@@ -40,22 +49,19 @@ public class LevelService : MonoBehaviour {
             Instantiate(prefab,
                     new Vector3(position.x, prefab.transform.position.y, position.z),
                     Quaternion.Euler(0, rotation.y, 0))
-                .transform.SetParent(transform);
+                .transform.SetParent(parent);
         }
         else {
             Debug.LogError("Error. Prefab with name " + tile.name + " is null");
         }
     }
 
-    public void DestroyLevel() {
-        if (transform.childCount == 0) return;
-        foreach (Transform t in transform) {
-            Destroy(t.gameObject);
-        }
+    private static void CenteredLevel(Level level) {
+        parent.position = new Vector3(parent.position.x - (float) level.size.width / 2, 0,
+            parent.position.z - (float) level.size.length / 2);
     }
 
-    public void ChangeMusic(Level level) {
-        var world = (World) Enum.Parse(typeof(World), level.world);
+    private static void ChangeMusic(World world) {
         switch (world) {
             case World.TEMPLE:
                 AudioManager.instance.TempleMusic();
@@ -67,10 +73,5 @@ public class LevelService : MonoBehaviour {
                 AudioManager.instance.SpaceMusic();
                 break;
         }
-    }
-
-    public void CenteredLevel(Level level) {
-        transform.position = new Vector3(transform.position.x - (float) level.size.width / 2, 0,
-            transform.position.z - (float) level.size.length / 2);
     }
 }

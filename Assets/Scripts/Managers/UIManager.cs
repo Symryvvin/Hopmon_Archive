@@ -53,14 +53,4 @@ public class UIManager : SingletonManager<UIManager>, IManager {
         CloseActiveMenu();
         menu.Show();
     }
-
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (!mainMenu.isActive())
-                ShowMainMenu();
-            else {
-                mainMenu.Close();
-            }
-        }
-    }
 }

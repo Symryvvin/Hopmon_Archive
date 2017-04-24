@@ -6,44 +6,29 @@ public class Game : MonoBehaviour {
     public Level level;
     public Player player;
     public HUD hud;
-    public LevelService levelService;
     private LevelStats stats;
 
     void Start() {
         status = GameStatus.INITIALIZE;
         hud.StartListeners();
         EventManager.StartListener(GameEvents.START_GAME, StartGame);
-        EventManager.StartListener(GameEvents.NEXT_LEVEL, NextLevel);
-        EventManager.StartListener(GameEvents.PREV_LEVEL, PrevLevel);
         EventManager.StartListener(GameEvents.WARP_CRISTAL, WarpCristal);
+        EventManager.StartListener(GameEvents.DEFEATE, Defeat);
+        EventManager.StartListener(GameEvents.VICTORY, Victory);
     }
 
     private void StartGame() {
-        BuildLevel();
+        level.Build();
         InitStatsAndHUD();
         player.MoveToStart(level);
         player.ResetPlayer();
         status = GameStatus.STARTED;
     }
 
-    private void BuildLevel() {
-        LevelManager.BuildLevel(level, false);
-    }
-
     private void InitStatsAndHUD() {
-        level.cristals = CalculateCristalsCount();
         stats = new LevelStats(level);
         hud.InitHUD(stats);
         EventManager.TriggerEvent(GameEvents.UPDATE_HUD);
-    }
-
-    private int CalculateCristalsCount() {
-        int count = 0;
-        foreach (var part in level.tiles.structures) {
-            if (part.name.Equals("Cristal"))
-                count++;
-        }
-        return count;
     }
 
     private void WarpCristal() {
@@ -54,16 +39,21 @@ public class Game : MonoBehaviour {
         }
     }
 
-    private void NextLevel() {
-     //   level = LevelManager.NextLevel();
-    //    if (number < levelService.GetMaxLevelNumberInPack(LevelManager.GetCurrentPack()))
-    //        number++;
-        Start();
+    public void NextLevel() {
+        level = LevelManager.NextLevel(level);
+        StartGame();
     }
 
-    private void PrevLevel() {
-   //     if (number > 1)
-    //        number--;
-        Start();
+    public void PrevLevel() {
+        level = LevelManager.PrevLevel(level);
+        StartGame();
+    }
+
+    private void Victory() {
+        Invoke("NextLevel", 3f);
+    }
+
+    private void Defeat() {
+        Invoke("StartGame", 1f);
     }
 }

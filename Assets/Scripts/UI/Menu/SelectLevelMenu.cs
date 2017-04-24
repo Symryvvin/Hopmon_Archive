@@ -24,7 +24,7 @@ public class SelectLevelMenu : Menu {
     // If player click "Back" in Select Level Menu this menu is disable
     void OnDisale() {
         Camera.main.GetComponent<OrbitCamera>().isRotate = false;
-        LevelManager.DestroyLevel();
+
     }
 
     // Load first level from pack in future must load last incomplete level get from profile
@@ -43,6 +43,7 @@ public class SelectLevelMenu : Menu {
     // Return to Main Menu
     public void Back() {
         UIManager.instance.ShowMainMenu();
+        LevelBuilder.DestroyLevel();
     }
 
     private void SelectActivation(bool active) {
@@ -105,7 +106,6 @@ public class SelectLevelMenu : Menu {
         currentLevelSelect = image;
         currentLevelSelect.fillCenter = true;
         currentLevel = level;
-        LevelManager.DestroyLevel();
         BuildLevel(currentLevel);
     }
 
@@ -114,6 +114,6 @@ public class SelectLevelMenu : Menu {
     }
 
     private void BuildLevel(Level level) {
-        LevelManager.BuildLevel(level, true);
+        level.BuildPart();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Gameobjects.Level;
 using UnityEngine;
 
 
@@ -20,7 +21,7 @@ public class PrefabDao {
         }
     }
 
-    public GameObject GetPrefabFromTile(Level.Tile tile, World world) {
+    public GameObject GetPrefabFromTile(Tile tile, World world) {
         InstanceDictionary();
         string key = "";
         try {

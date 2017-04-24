@@ -6,7 +6,6 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
         get { return managerStatus; }
     }
 
-    public LevelService levelService;
     private ILevelDao levelDao;
     private Pack pack;
     private List<Pack> packs;
@@ -38,20 +37,11 @@ public class LevelManager : SingletonManager<LevelManager>, IManager {
         return instance.pack.GetLevelByNumber(number);
     }
 
-    public static void DestroyLevel() {
-        instance.levelService.DestroyLevel();
+    public static Level NextLevel(Level level) {
+        return instance.pack.GetNextLevelFrom(level);
     }
 
-    public static void BuildLevel(Level level, bool partTypeOnly) {
-        DestroyLevel();
-        instance.levelService.InstanceLevelTiles(level, partTypeOnly);
-        if (!partTypeOnly)
-            instance.levelService.ChangeMusic(level);
-        else
-            instance.levelService.CenteredLevel(level);
-    }
-
-    public static Level NextLevel() {
-        throw new System.NotImplementedException();
+    public static Level PrevLevel(Level level) {
+        return instance.pack.GetPrevLevelFrom(level);
     }
 }

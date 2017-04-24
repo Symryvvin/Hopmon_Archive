@@ -14,8 +14,6 @@ public class GameManager : SingletonManager<GameManager>, IManager {
 
     protected override void Init() {
         //TODO получает данные из профиля и устанавливает номер уровня и пак который был последним
-        EventManager.StartListener(GameEvents.DEFEATE, Defeat);
-        EventManager.StartListener(GameEvents.VICTORY, Victory);
     }
 
     public void StartGame() {
@@ -35,25 +33,5 @@ public class GameManager : SingletonManager<GameManager>, IManager {
             }
             yield return null;
         }
-    }
-
-    public void RestartGame() {
-        EventManager.TriggerEvent(GameEvents.START_GAME);
-    }
-
-    public void DebugPrevLevel() {
-        EventManager.TriggerEvent(GameEvents.PREV_LEVEL);
-    }
-
-    public void GoToNextLevel() {
-        EventManager.TriggerEvent(GameEvents.NEXT_LEVEL);
-    }
-
-    private void Victory() {
-        Invoke("GoToNextLevel", 3f);
-    }
-
-    private void Defeat() {
-        Invoke("RestartGame", 1f);
     }
 }

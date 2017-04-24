@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Gameobjects.Level;
 using UnityEngine;
 
 [Serializable]
@@ -9,37 +10,28 @@ public class Level {
     public Vector3 start;
     public Tiles tiles;
     public Size size;
-    public int cristals = 0;
+    public int cristals;
 
-    [Serializable]
-    public struct Tiles {
-        public Tile[] parts;
-        public Tile[] enemies;
-        public Tile[] structures;
+    public void Build() {
 
-        public void DebugTilesCount() {
-            Debug.Log("Parts : " + parts.Length + ". Enemies : " + enemies.Length + ". Structures : " +
-                      structures.Length);
+        LevelBuilder.BuildLevel(this, false);
+        CountCristals();
+    }
+
+    public void BuildPart() {
+        LevelBuilder.BuildLevel(this, true);
+        CountCristals();
+    }
+
+    private void CountCristals() {
+        int count = 0;
+        foreach (var part in tiles.structures) {
+            if (part.name.Equals("Cristal"))
+                count++;
         }
+        cristals = count;
     }
 
-    [Serializable]
-    public struct Tile {
-        public string name;
-        public bool common;
-        public Vector3 position;
-        public Vector3 rotation;
-    }
-
-    [Serializable]
-    public struct Size {
-        public int width;
-        public int length;
-
-        public void DebugPrintSize() {
-            Debug.Log("Level size: " + width + "x" + length);
-        }
-    }
 
     public void DebugPrintLevelInfo() {
         Debug.Log("Level #" + number + ". Name : " + name + ". World : " + world + ".\n" +

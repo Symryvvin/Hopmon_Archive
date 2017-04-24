@@ -16,5 +16,6 @@
         public static readonly string DISCHARGE = "DISCHARGE";
         public static readonly string CHARGE = "CHARGE";
         public static readonly string UPDATE_HUD = "UPDATE_HUD";
+        public static readonly string COMPLETE_LAST_LEVEL = "COMPLETE_LAST_LEVEL";
     }
 }
