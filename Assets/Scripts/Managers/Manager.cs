@@ -1,17 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour {
     private List<IManager> managers;
 
     void Awake() {
-        managers = new List<IManager>();
-        managers.Add(EventManager.instance);
-        managers.Add(GameManager.instance);
-        managers.Add(LevelManager.instance);
-        managers.Add(AudioManager.instance);
-        managers.Add(UIManager.instance);
+        DontDestroyOnLoad(gameObject);
+        managers = new List<IManager> {
+            EventManager.instance,
+            GameManager.instance,
+            AudioManager.instance,
+            UIManager.instance,
+            LevelManager.instance
+        };
+/*        if (SceneManager.GetSceneByName("Game") == SceneManager.GetSceneAt(SceneManager.sceneCount)) {
+             print("game csene");
+        }*/
         StartCoroutine(StartUpManagers());
     }
 

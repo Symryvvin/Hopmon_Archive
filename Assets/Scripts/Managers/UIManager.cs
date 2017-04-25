@@ -9,7 +9,6 @@ public class UIManager : SingletonManager<UIManager>, IManager {
     [SerializeField] private Menu mainMenu;
     [SerializeField] private Menu settingsMenu;
     [SerializeField] private Menu selectLeveMenu;
-    [SerializeField] private HUD hud;
 
     private Menu activeMenu;
 
@@ -19,8 +18,7 @@ public class UIManager : SingletonManager<UIManager>, IManager {
         menus = new List<Menu> {
             mainMenu,
             settingsMenu,
-            selectLeveMenu,
-            hud
+            selectLeveMenu
         };
 
         foreach (var menu in menus) {
@@ -44,14 +42,6 @@ public class UIManager : SingletonManager<UIManager>, IManager {
         ShowMenu(mainMenu);
     }
 
-    public void ShowGUI() {
-        ShowMenu(hud);
-    }
-
-    public static HUD GetHUD() {
-        return instance.hud;
-    }
-
     private void CloseActiveMenu() {
         foreach (var menu in menus) {
             if (menu.isActive())
@@ -62,15 +52,5 @@ public class UIManager : SingletonManager<UIManager>, IManager {
     private void ShowMenu(Menu menu) {
         CloseActiveMenu();
         menu.Show();
-    }
-
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (!mainMenu.isActive())
-                ShowMainMenu();
-            else {
-                mainMenu.Close();
-            }
-        }
     }
 }

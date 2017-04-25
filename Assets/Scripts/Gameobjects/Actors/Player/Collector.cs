@@ -12,7 +12,7 @@ public class Collector : MonoBehaviour {
     /// <summary>
     /// Initialise all components on Start
     /// </summary>
-    public void Init() {
+    void Start() {
         controll = GetComponent<PlayerMoveControll>();
         playerBody = transform.FindChild("body").transform;
     }

@@ -3,6 +3,8 @@
 # =============== #
 Temp/
 Library/
+Assets/PostProcessing/
+Assets/PostProcessing.meta
 
 # ===================================== #
 # Rider generated #

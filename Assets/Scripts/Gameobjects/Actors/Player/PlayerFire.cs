@@ -14,12 +14,16 @@ public class PlayerFire : MonoBehaviour {
     private PlayerShell shell;
     private ReloadState reloadState;
 
-    public void Init() {
+    void Start() {
         player = GetComponent<Player>();
         shellInstance = Instantiate(shellPrefab);
         shellInstance.SetActive(false);
         shell = shellInstance.GetComponent<PlayerShell>();
         Reload();
+    }
+
+    public void Init() {
+
     }
 
     public void Reset() {

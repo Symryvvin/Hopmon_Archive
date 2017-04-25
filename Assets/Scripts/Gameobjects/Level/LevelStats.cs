@@ -1,11 +1,11 @@
 ﻿public class LevelStats {
     public int number;
-    public int cristal;
+    public int cristals;
     public int enemies;
 
-    public LevelStats(int number, int cristal, int enemies) {
-        this.number = number;
-        this.cristal = cristal;
-        this.enemies = enemies;
+    public LevelStats(Level level) {
+        number = level.number;
+        cristals = level.cristals;
+        enemies = 0;
     }
 }

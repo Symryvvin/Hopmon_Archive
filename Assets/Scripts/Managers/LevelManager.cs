@@ -1,48 +1,43 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
+using Assets.Scripts.Gameobjects.Level;
 
 public class LevelManager : SingletonManager<LevelManager>, IManager {
     public ManagerStatus status {
         get { return managerStatus; }
     }
 
-    public Transform wrapper;
-    public IDictionary<int, Level> levels { get; private set; }
-    private LevelPack pack;
-    private LevelService levelService;
+    private Pack pack;
+    private List<Pack> packs;
 
     protected override void Init() {
-        levelService = new LevelService(false);
-        //TODO создавать новый сервис в зависимости от пака увроней
-        ChangePack(LevelPack.CLASSIC);
-        levels = levelService.GetLevelByPack(pack);
+        packs = PackLoader.GetPackList();
+        pack = LoadPackByIndex(0);
     }
 
-    public static void ChangePack(LevelPack pack) {
-        instance.pack = pack;
-    }
-
-    public static LevelPack GetCurrentPack() {
+    public static Pack SwitchLevelPack() {
+        int index = instance.packs.IndexOf(instance.pack);
+        index++;
+        instance.pack = index < instance.packs.Count ? LoadPackByIndex(index) : LoadPackByIndex(0);
         return instance.pack;
     }
 
-    public static void CreateLevel(Level level) {
-        if (instance.wrapper.childCount > 0)
-            instance.DestroyLevel();
-        List<Transform> allTilesTransform = instance.levelService.InstanceLevelTiles(level);
-        foreach (var t in allTilesTransform) {
-            t.SetParent(instance.wrapper);
-        }
-        instance.levelService.ChangeMusic(level);
+    private static Pack LoadPackByIndex(int index) {
+        return instance.packs[index].LoadPack();
+    }
+
+    public static Pack GetCurrentPack() {
+        return instance.pack;
     }
 
     public static Level GetLevelByNumber(int number) {
-        return instance.levels[number];
+        return instance.pack.GetLevelByNumber(number);
     }
 
-    private void DestroyLevel() {
-        foreach (Transform child in wrapper) {
-            Destroy(child.gameObject);
-        }
+    public static Level NextLevel(Level level) {
+        return instance.pack.GetNextLevelFrom(level);
+    }
+
+    public static Level PrevLevel(Level level) {
+        return instance.pack.GetPrevLevelFrom(level);
     }
 }
