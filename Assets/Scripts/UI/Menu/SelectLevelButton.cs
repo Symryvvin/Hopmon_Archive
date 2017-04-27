@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PickLevelButton : MonoBehaviour {
+public class SelectLevelButton : MonoBehaviour {
     public Level level;
     private Image image;
     private Button button;

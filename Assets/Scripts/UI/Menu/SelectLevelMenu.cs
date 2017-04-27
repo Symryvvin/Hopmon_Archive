@@ -10,7 +10,7 @@ public class SelectLevelMenu : Menu {
     public Text levelPack;
     public RectTransform levelsPanel;
     public RectTransform levelButtonPrefab;
-    private PickLevelButton selectedLevel;
+    private SelectLevelButton selectedLevel;
 
     // If player click "Start" in Main Menu this menu is enable
     void OnEnable() {
@@ -55,7 +55,7 @@ public class SelectLevelMenu : Menu {
         List<Button> selectButtons = new List<Button>();
         foreach (var level in levels.Values) {
             var button = Instantiate(levelButtonPrefab, levelsPanel).GetComponent<Button>();
-            button.GetComponent<PickLevelButton>().level = level;
+            button.GetComponent<SelectLevelButton>().level = level;
             selectButtons.Add(button);
         }
         LinkButtons(selectButtons);
@@ -65,7 +65,7 @@ public class SelectLevelMenu : Menu {
     private void LinkButtons(List<Button> buttons) {
         int count = buttons.Count;
         for (int i = 0; i < buttons.Count; i++) {
-            var pick = buttons[i].GetComponent<PickLevelButton>();
+            var pick = buttons[i].GetComponent<SelectLevelButton>();
             if (i == 0) {
                 pick.AddNextPrevButtons(buttons[i + 1],
                     buttons[count - 1]);
@@ -82,7 +82,7 @@ public class SelectLevelMenu : Menu {
     }
 
     private void ActivateFirstButton(Button first) {
-        var pick = first.GetComponent<PickLevelButton>();
+        var pick = first.GetComponent<SelectLevelButton>();
         pick.OnSelect();
     }
 
@@ -97,7 +97,7 @@ public class SelectLevelMenu : Menu {
         levelPack.text = currentPack.packName;
     }
 
-    public void ActiveLevel(PickLevelButton button) {
+    public void ActiveLevel(SelectLevelButton button) {
         if (selectedLevel != null) {
             selectedLevel.Deactivate();
         }

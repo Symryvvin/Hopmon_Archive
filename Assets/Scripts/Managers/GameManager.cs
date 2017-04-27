@@ -34,4 +34,10 @@ public class GameManager : SingletonManager<GameManager>, IManager {
             yield return null;
         }
     }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            SceneManager.LoadScene("Main");
+        }
+    }
 }

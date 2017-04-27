@@ -7,7 +7,6 @@ public class LevelBuilder : MonoBehaviour {
     private static PrefabLoader prefabLoader;
 
     void Start() {
-        DontDestroyOnLoad(gameObject);
         prefabLoader = GetComponent<PrefabLoader>();
         parent = transform;
     }

@@ -6,15 +6,18 @@ public class UIManager : SingletonManager<UIManager>, IManager {
         get { return managerStatus; }
     }
 
-    [SerializeField] private Menu mainMenu;
-    [SerializeField] private Menu settingsMenu;
-    [SerializeField] private Menu selectLeveMenu;
+    private Menu mainMenu;
+    private Menu settingsMenu;
+    private Menu selectLeveMenu;
 
     private Menu activeMenu;
 
     private List<Menu> menus;
 
     protected override void Init() {
+        mainMenu = GameObject.Find("MainCanvas/MainMenu").GetComponent<MainMenu>();
+        settingsMenu = GameObject.Find("MainCanvas/SettingsMenu").GetComponent<SettingsMenu>();
+        selectLeveMenu = GameObject.Find("MainCanvas/SelectLevelMenu").GetComponent<SelectLevelMenu>();
         menus = new List<Menu> {
             mainMenu,
             settingsMenu,
