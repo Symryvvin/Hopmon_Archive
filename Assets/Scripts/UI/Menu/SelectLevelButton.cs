@@ -22,13 +22,11 @@ public class PickLevelButton : MonoBehaviour {
 
     void Start() {
         number.text = level.number.ToString();
-
     }
 
     public void OnClick() {
         EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         eventSystem.SetSelectedGameObject(GameObject.Find("Play"));
-        AudioManager.instance.PlayClick();
     }
 
     public void AddNextPrevButtons(Button next, Button previous) {
@@ -36,33 +34,16 @@ public class PickLevelButton : MonoBehaviour {
         this.previous = previous;
     }
 
-    private void ChangeLevelPackButtonNavigation() {
-        Navigation navigation = selectLevelPack.navigation;
-        navigation.mode = Navigation.Mode.Explicit;
-        navigation.selectOnDown = button;
-        navigation.selectOnUp = button;
-        selectLevelPack.navigation = navigation;
-    }
-
     public void OnSelect() {
         menu.ActiveLevel(this);
         level.BuildPart();
         image.fillCenter = true;
-        Navigation navigation = button.navigation;
-        navigation.mode = Navigation.Mode.Explicit;
-        navigation.selectOnUp = selectLevelPack;
-        navigation.selectOnDown = selectLevelPack;
-        navigation.selectOnLeft = previous;
-        navigation.selectOnRight = next;
-        button.navigation = navigation;
-        ChangeLevelPackButtonNavigation();
-        AudioManager.instance.PlaySelect();
+        NavigationUtils.ExplicitNavigation(button, selectLevelPack, selectLevelPack, previous, next);
+        NavigationUtils.ExplicitNavigation(selectLevelPack, button, button, null, null);
     }
 
     public void Deactivate() {
         image.fillCenter = false;
-        Navigation navigation = button.navigation;
-        navigation.mode = Navigation.Mode.None;
-        button.navigation = navigation;
+        NavigationUtils.DeactivateNavigation(button);
     }
 }
