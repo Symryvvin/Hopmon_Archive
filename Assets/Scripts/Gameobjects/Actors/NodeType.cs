@@ -1,5 +1,5 @@
 ﻿namespace Assets.Scripts.Gameobjects.Actors {
-    public enum GraphNodeType {
+    public enum NodeType {
         NORMAL,
         BOOSTER,
         BLOCKED
