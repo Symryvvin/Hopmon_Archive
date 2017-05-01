@@ -1,36 +1,50 @@
-﻿using Assets.Scripts.Gameobjects.Game;
+﻿using Assets.Scripts.Gameobjects.Actors.Movements;
+using Assets.Scripts.Gameobjects.Game;
 using UnityEngine;
-using GameObject = UnityEngine.Object;
 
-public class Player : MonoBehaviour{
-    public LiveState liveState;
-    private Vector3 startPoint;
-    // Player keep reference on all player script Components
-    [SerializeField] private PlayerMoveControll controll;
-    [SerializeField] private PlayerFire shoot;
-    [SerializeField] private Collector collector;
+namespace Assets.Scripts.Gameobjects.Actors.Player {
+    public class Player : MonoBehaviour{
+        public LiveState liveState;
+        // Player keep reference on all player script Components
+        [SerializeField] private Controll controll;
+        [SerializeField] private PlayerFire shoot;
+        [SerializeField] private Collector collector;
 
-    public void ResetPlayer() {
-        transform.position = startPoint + Vector3.up / 10f;
-        transform.rotation = Quaternion.identity;
-        liveState = LiveState.ALIVE;
-        controll.Reset();
-        shoot.Reset();
-        collector.Reset();
-    }
-
-    void OnTriggerEnter(Collider col) {
-        if (col.CompareTag("Enemy")) {
-            ThouchEnemy();
+        public void ResetPlayer() {
+            liveState = LiveState.ALIVE;
+            controll.Reset();
+            shoot.Reset();
+            collector.Reset();
         }
-    }
 
-    void ThouchEnemy() {
-        liveState = LiveState.DEAD;
-        EventManager.TriggerEvent(GameEvents.DEFEATE);
-    }
+        public void SetNodeForPlayer(Node node) {
+            controll.current = node;
+        }
 
-    public void MoveToStart(Level level) {
-        startPoint = level.start;
+        void Update() {
+            switch (liveState) {
+            case LiveState.ALIVE:
+                controll.Alive();
+                break;
+            case LiveState.DEAD:
+                //  Dead();
+                break;
+            }
+        }
+
+        void OnTriggerEnter(Collider col) {
+            if (col.CompareTag("Enemy")) {
+                ThouchEnemy();
+            }
+        }
+
+        void ThouchEnemy() {
+            liveState = LiveState.DEAD;
+            EventManager.TriggerEvent(GameEvents.DEFEATE);
+        }
+
+        public void MoveToStart(Level.Level level) {
+            controll.MoveToStart(level.start);
+        }
     }
 }

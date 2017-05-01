@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Gameobjects.Level;
 using UnityEngine;
 
 public class LevelLoader {

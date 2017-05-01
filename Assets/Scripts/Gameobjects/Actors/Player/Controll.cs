@@ -1,83 +1,70 @@
 using System.Collections;
+using Assets.Scripts.Gameobjects.Actors.Movements;
 using UnityEngine;
 
-public class PlayerMoveControll : MonoBehaviour, IResettable {
-    private GameCamera gameCamera;
-    private Player player;
-    private Transform playerTransform;
-    private Rigidbody playerRigidbody;
-    private float moveSpeed = 2.5f;
-    [SerializeField] private MoveState moveState;
-    private bool boost;
-    private Animator animator;
-    private AudioSource audioSource;
+namespace Assets.Scripts.Gameobjects.Actors.Player {
+    public class Controll : MonoBehaviour {
+        private GameCamera gameCamera;
+        private Transform playerTransform;
+        private Rigidbody playerRigidbody;
+        private float moveSpeed = 2.5f;
+        [SerializeField] private MoveState moveState;
+        private bool boost;
+        private Animator animator;
+        private AudioSource audioSource;
+        public Node current;
 
-    void Start() {
-        gameCamera = Camera.main.GetComponent<GameCamera>();
-        playerRigidbody = GetComponent<Rigidbody>();
-        player = GetComponent<Player>();
-        animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
-        gameCamera.target = transform;
-        gameCamera.Init();
-        moveState = MoveState.STAND;
-        playerTransform = transform;
-    }
+        void Start() {
+            gameCamera = Camera.main.GetComponent<GameCamera>();
+            playerRigidbody = GetComponent<Rigidbody>();
+            animator = GetComponent<Animator>();
+            audioSource = GetComponent<AudioSource>();
+            gameCamera.target = transform;
+            gameCamera.Init();
+            moveState = MoveState.STAND;
+            playerTransform = transform;
+        }
 
-    public void Reset() {
-        ChangeSpeed(0);
-        StopAllMoves();
-    }
+        public void Reset() {
+            ChangeSpeed(0);
+            StopAllMoves();
+        }
 
-    void Alive() {
-        switch (moveState) {
+        public void Alive() {
+            switch (moveState) {
             case MoveState.STAND:
                 Idle();
                 break;
             case MoveState.WALK:
                 break;
+            }
         }
-    }
 
-    private bool CheckMove() {
-        return !NextBlock() && NextGround();
-    }
-
-    private bool NextGround() {
-        var ray = new Ray(transform.position + transform.forward + transform.up, -transform.up);
-        return Physics.Raycast(ray, 1.05F, 1 << 9);
-    }
-
-    private bool NextBlock() {
-        Ray ray = new Ray(transform.position + transform.up / 2, transform.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1.0F, 1 << 8)) {
-            return !hit.collider.name.Contains("InvisibleWall");
+        private void Idle() {
+            float horizontal = (int) Input.GetAxisRaw("Horizontal");
+            float vertical = (int) Input.GetAxisRaw("Vertical");
+            if (gameCamera.moving == GameCamera.Move.STOP && !boost) {
+                switch (gameCamera.point) {
+                case CameraPoint.NORTH:
+                    Move(vertical, horizontal);
+                    break;
+                case CameraPoint.WEST:
+                    Move(-horizontal, vertical);
+                    break;
+                case CameraPoint.SOUTH:
+                    Move(-vertical, -horizontal);
+                    break;
+                case CameraPoint.EAST:
+                    Move(horizontal, -vertical);
+                    break;
+                }
+            }
+            else {
+                Move(0, 0);
+            }
         }
-        return false;
-    }
 
-    void Idle() {
-        float horizontal = (int) Input.GetAxisRaw("Horizontal");
-        float vertical = (int) Input.GetAxisRaw("Vertical");
-        switch (gameCamera.point) {
-            case CameraPoint.NORTH:
-                Controll(vertical, horizontal);
-                break;
-            case CameraPoint.WEST:
-                Controll(-horizontal, vertical);
-                break;
-            case CameraPoint.SOUTH:
-                Controll(-vertical, -horizontal);
-                break;
-            case CameraPoint.EAST:
-                Controll(horizontal, -vertical);
-                break;
-        }
-    }
-
-    private void Controll(float v, float h) {
-        if (gameCamera.moving == GameCamera.Move.STOP) {
+        private void Move(float v, float h) {
             if (h != 0) {
                 v = 0;
             }
@@ -89,63 +76,52 @@ public class PlayerMoveControll : MonoBehaviour, IResettable {
                 }
             }
         }
-    }
 
-    private bool Move(int xDir, int zDir) {
-        Vector3 current = playerTransform.position;
-        Vector3 end = current + new Vector3(xDir, 0f, zDir);
-        playerTransform.LookAt(end);
-        if (CheckMove()) {
-            StartCoroutine(MoveTo(end));
+        private bool Move(int x, int z) {
+            Node end = current.GetNextNode(x, z);
+            if (end == null || end.isBlocked()) {
+                playerTransform.LookAt(current.position + new Vector3(x, 0f, z));
+                return false;
+            }
+            playerTransform.LookAt(end.position +  Vector3.up * 0.1f);
+            StartCoroutine(MoveTo(end.position +  Vector3.up * 0.1f));
+            current = end;
             return true;
         }
-        return false;
-    }
 
-    private IEnumerator MoveTo(Vector3 position) {
-        moveState = MoveState.WALK;
-        float distance = (playerTransform.position - position).sqrMagnitude;
-        while (distance > float.Epsilon) {
-            var moveTo = Vector3.MoveTowards(playerRigidbody.position, position,
-                (boost ? 5f : moveSpeed) * Time.deltaTime);
-            playerRigidbody.MovePosition(moveTo);
-            distance = (playerTransform.position - position).sqrMagnitude;
-            yield return null;
+        private IEnumerator MoveTo(Vector3 position) {
+            moveState = MoveState.WALK;
+            float distance = (playerTransform.position - position).sqrMagnitude;
+            while (distance > float.Epsilon) {
+                var moveTo = Vector3.MoveTowards(playerRigidbody.position, position,
+                    (boost ? 5f : moveSpeed) * Time.deltaTime);
+                playerRigidbody.MovePosition(moveTo);
+                distance = (playerTransform.position - position).sqrMagnitude;
+                yield return null;
+            }
+            StopAllMoves();
         }
-        StopAllMoves();
-    }
 
-    private void StopAllMoves() {
-        moveState = MoveState.STAND;
-        boost = false;
-        animator.SetBool("Walk", false);
-        animator.SetBool("Idle", true);
-    }
-
-    void Update() {
-        switch (player.liveState) {
-            case LiveState.ALIVE:
-                Alive();
-                break;
-            case LiveState.DEAD:
-              //  Dead();
-                break;
+        private void StopAllMoves() {
+            moveState = MoveState.STAND;
+            boost = false;
+            animator.SetBool("Walk", false);
+            animator.SetBool("Idle", true);
         }
-    }
 
-    public void ChangeSpeed(int cristalCount) {
-        if (cristalCount > 0) {
-            moveSpeed = 30.0f / (cristalCount + 12.0f);
+        public void ChangeSpeed(int cristalCount) {
+            if (cristalCount > 0) {
+                moveSpeed = 30.0f / (cristalCount + 12.0f);
+            }
+            else {
+                moveSpeed = 2.5f;
+            }
+            animator.speed = moveSpeed / 2.5f;
         }
-        else {
-            moveSpeed = 2.5f;
-        }
-        animator.speed = moveSpeed / 2.5f;
-    }
 
-    private Vector3 GetNextPoint(Booster b) {
-        print(b.direction);
-        switch (b.direction) {
+        private Vector3 GetNextPoint(Booster b) {
+            print(b.direction);
+            switch (b.direction) {
             case MoveDirection.FORWARD:
                 return Vector3.forward;
             case MoveDirection.BACK:
@@ -156,29 +132,35 @@ public class PlayerMoveControll : MonoBehaviour, IResettable {
                 return Vector3.right;
             default:
                 return Vector3.zero;
-        }
-    }
-
-    private bool Boost(Vector3 end) {
-        Move((int) end.x, (int) end.z);
-        return true;
-    }
-
-    public void OnTriggerEnter(Collider collider) {
-        if (collider.CompareTag("Booster")) {
-            var booster = collider.GetComponent<Booster>();
-            var end = GetNextPoint(booster);
-            StartCoroutine(WaitForStand(end));
-        }
-    }
-
-    private IEnumerator WaitForStand(Vector3 end) {
-        while (true) {
-            if (moveState == MoveState.STAND) {
-                boost = Boost(end);
-                break;
             }
-            yield return null;
+        }
+
+        private bool Boost(Vector3 end) {
+            Move((int) end.x, (int) end.z);
+            return true;
+        }
+
+        public void OnTriggerEnter(Collider collider) {
+            if (collider.CompareTag("Booster")) {
+                var booster = collider.GetComponent<Booster>();
+                var end = GetNextPoint(booster);
+                StartCoroutine(WaitForStand(end));
+            }
+        }
+
+        private IEnumerator WaitForStand(Vector3 end) {
+            while (true) {
+                if (moveState == MoveState.STAND) {
+                    boost = Boost(end);
+                    break;
+                }
+                yield return null;
+            }
+        }
+
+        public void MoveToStart(Vector3 levelStart) {
+            transform.position = levelStart + Vector3.up * 0.1f;
+            transform.rotation = Quaternion.identity;
         }
     }
 }

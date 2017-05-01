@@ -1,4 +1,6 @@
-﻿public class LevelStats {
+﻿using Assets.Scripts.Gameobjects.Level;
+
+public class LevelStats {
     public int number;
     public int cristals;
     public int enemies;

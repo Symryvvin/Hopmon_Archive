@@ -2,5 +2,6 @@
     INITIALIZE,
     STARTED,
     PAUSED,
-    STOPPED
+    STOPPED,
+    STARTING
 }
