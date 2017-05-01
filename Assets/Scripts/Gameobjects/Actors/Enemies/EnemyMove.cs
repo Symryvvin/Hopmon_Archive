@@ -93,9 +93,10 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         protected virtual void Move() {
             var directions = new Dictionary<Vector3, Node>(current.directions);
             end = CalculateMoveDirection(directions);
-            current.ChangeType(NodeType.BLOCKED_FOR_ENEMY);
             if (end != null) {
+                current.RestoreType();
                 end.ChangeType(NodeType.BLOCKED_FOR_ENEMY);
+                current = end;
                 StartCoroutine(MoveTo(end.position));
             }
         }
@@ -109,8 +110,6 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
                 yield return null;
             }
             moveState = MoveState.STAND;
-            current.RestoreType();
-            current = end;
         }
     }
 }

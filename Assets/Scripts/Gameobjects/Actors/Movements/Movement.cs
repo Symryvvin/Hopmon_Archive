@@ -18,6 +18,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Movements {
                     // Если узел это ускоритель, меняем ему тип
                     if (tile.name.Equals("Arrow")) {
                         node.ChangeType(NodeType.BOOSTER);
+                        node.ChangeTypeToRestore(NodeType.BOOSTER);
                     }
                     nodes.Add(node);
                 }
