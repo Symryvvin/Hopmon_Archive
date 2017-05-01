@@ -267,8 +267,7 @@ MonoBehaviour:
   moveDummy: {fileID: 4696625422378004}
   moveState: 0
   direction: 0
-  schema: 
-  moveSpeed: 2.5
+  moveSpeed: 2.1
   rotateSpeed: 180
 --- !u!135 &135837314838144692
 SphereCollider:

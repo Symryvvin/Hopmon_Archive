@@ -17,7 +17,8 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
 
         public void Dead() {
             move.current.RestoreType();
-            move.end.RestoreType();
+            if (move.end != null)
+                move.end.RestoreType();
             Destroy(gameObject);
         }
     }
