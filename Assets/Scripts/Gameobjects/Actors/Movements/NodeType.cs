@@ -1,6 +1,6 @@
 ﻿namespace Assets.Scripts.Gameobjects.Actors.Movements {
     public enum NodeType {
-        PLAYER,
+        NO_TYPE,
         NORMAL,
         BOOSTER,
         BLOCKED,

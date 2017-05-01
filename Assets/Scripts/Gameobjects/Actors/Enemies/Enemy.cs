@@ -3,6 +3,11 @@
 namespace Assets.Scripts.Gameobjects.Actors.Enemies {
     public class Enemy : MonoBehaviour, IDestructable {
         [SerializeField] private int hitPoint;
+        private EnemyMove move;
+
+        void Start() {
+            move = GetComponent<EnemyMove>();
+        }
 
         public void Hit(int damage) {
             hitPoint = hitPoint - damage;
@@ -11,6 +16,8 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         }
 
         public void Dead() {
+            move.current.RestoreType();
+            move.end.RestoreType();
             Destroy(gameObject);
         }
     }

@@ -8,8 +8,10 @@ namespace Assets.Scripts.Gameobjects.Actors.Movements {
         public Vector3 position;
         public IDictionary<Vector3, Node> directions;
         private GameObject draw;
+        private NodeType toRestore;
 
         public Node(Tile tile) {
+            toRestore = NodeType.NO_TYPE;
             position = tile.position;
         }
 
@@ -56,9 +58,15 @@ namespace Assets.Scripts.Gameobjects.Actors.Movements {
             return type == NodeType.BLOCKED;
         }
 
-
         public void ChangeType(NodeType newType) {
             type = newType;
+            if (toRestore == NodeType.NO_TYPE)
+                toRestore = type;
+            ColoredByType();
+        }
+
+        public void RestoreType() {
+            type = toRestore;
             ColoredByType();
         }
 
@@ -69,9 +77,6 @@ namespace Assets.Scripts.Gameobjects.Actors.Movements {
                 break;
             case NodeType.BLOCKED_FOR_ENEMY:
                 SetColor(Color.yellow);
-                break;
-            case NodeType.PLAYER:
-                SetColor(Color.green);
                 break;
             case NodeType.NORMAL:
                 SetColor(Color.white);

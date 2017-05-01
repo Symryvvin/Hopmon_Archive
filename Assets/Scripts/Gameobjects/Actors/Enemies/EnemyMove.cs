@@ -12,12 +12,8 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         public Transform moveDummy;
         public MoveState moveState;
         public MoveDirection direction;
-        public string schema;
-
-        protected Node current;
-        protected Node end;
-        protected readonly List<Vector3> moves = new List<Vector3>();
-
+        public Node current;
+        public Node end;
         private Game game;
         private Rigidbody enemyRigidbody;
         [SerializeField] private float moveSpeed;
@@ -113,7 +109,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
                 yield return null;
             }
             moveState = MoveState.STAND;
-            current.ChangeType(NodeType.NORMAL);
+            current.RestoreType();
             current = end;
         }
     }
