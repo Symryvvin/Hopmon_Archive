@@ -79,7 +79,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         private bool Move(int x, int z) {
             Node end = current.GetNextNode(x, z);
             if (end == null || end.isBlocked()) {
-                playerTransform.LookAt(current.position + new Vector3(x, 0f, z));
+                playerTransform.LookAt(current.position + new Vector3(x, 0.1f, z));
                 return false;
             }
             playerTransform.LookAt(end.position + Vector3.up * 0.1f);
