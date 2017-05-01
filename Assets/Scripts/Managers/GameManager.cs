@@ -1,5 +1,6 @@
 ﻿using System.Collections;
-using Assets.Scripts.Gameobjects.Game;
+using Assets.Scripts.Gameobjects.Games;
+using Assets.Scripts.Gameobjects.Levels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -32,6 +33,12 @@ public class GameManager : SingletonManager<GameManager>, IManager {
                 break;
             }
             yield return null;
+        }
+    }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            SceneManager.LoadScene("Main");
         }
     }
 }

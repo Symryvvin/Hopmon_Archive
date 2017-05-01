@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour {
     private List<IManager> managers;
 
     void Awake() {
         DontDestroyOnLoad(gameObject);
+        if (FindObjectsOfType(typeof(Manager)).Length > 1) {
+            Destroy(gameObject);
+        }
         managers = new List<IManager> {
             EventManager.instance,
             GameManager.instance,
@@ -15,9 +17,6 @@ public class Manager : MonoBehaviour {
             UIManager.instance,
             LevelManager.instance
         };
-/*        if (SceneManager.GetSceneByName("Game") == SceneManager.GetSceneAt(SceneManager.sceneCount)) {
-             print("game csene");
-        }*/
         StartCoroutine(StartUpManagers());
     }
 

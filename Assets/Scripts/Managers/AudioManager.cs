@@ -18,10 +18,6 @@ public class AudioManager : SingletonManager<AudioManager>, IManager {
 
     private List<AudioSource> musics;
 
-    public AudioSource menuAudio;
-    public AudioClip click;
-    public AudioClip change;
-
     protected override void Init() {
         musics = new List<AudioSource> {
             mainTheme,
@@ -65,15 +61,5 @@ public class AudioManager : SingletonManager<AudioManager>, IManager {
     public void SpaceMusic() {
         if (spaceTheme.isPlaying) return;
         PlayMusic(spaceTheme, GetClip(SPACE));
-    }
-
-    public void PlayClick() {
-        menuAudio.clip = click;
-        menuAudio.Play();
-    }
-
-    public void PlaySelect() {
-        menuAudio.clip = change;
-        menuAudio.Play();
     }
 }
