@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Gameobjects.Level;
+﻿using Assets.Scripts.Gameobjects.Levels;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;

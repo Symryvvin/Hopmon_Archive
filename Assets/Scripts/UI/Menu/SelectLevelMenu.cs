@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Gameobjects.Level;
+using Assets.Scripts.Gameobjects.Levels;
 using UnityEngine;
 using UnityEngine.UI;
 

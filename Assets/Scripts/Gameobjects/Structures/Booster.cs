@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Gameobjects.Actors.Enemies;
+using UnityEngine;
 
 public class Booster : MonoBehaviour {
     public MoveDirection direction;

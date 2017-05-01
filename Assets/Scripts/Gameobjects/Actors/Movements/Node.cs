@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Gameobjects.Level;
+using Assets.Scripts.Gameobjects.Levels;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Movements {
