@@ -65,6 +65,10 @@ namespace Assets.Scripts.Gameobjects.Actors.Movements {
             ColoredByType();
         }
 
+        public void ChangeTypeToRestore(NodeType newType) {
+            toRestore = newType;
+        }
+
         public void RestoreType() {
             type = toRestore;
             ColoredByType();
