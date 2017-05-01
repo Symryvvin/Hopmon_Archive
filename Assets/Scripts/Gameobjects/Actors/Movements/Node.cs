@@ -111,6 +111,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Movements {
 
         public void Draw() {
             draw = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            draw.layer = 11;
             Transform ctx = draw.transform;
             ctx.localScale = Vector3.one * 0.2f;
             ctx.position = position + Vector3.up * 1.5f;

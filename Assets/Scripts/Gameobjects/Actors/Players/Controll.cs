@@ -1,6 +1,7 @@
 using System.Collections;
 using Assets.Scripts.Gameobjects.Actors.Enemies;
 using Assets.Scripts.Gameobjects.Actors.Movements;
+using Assets.Scripts.Gameobjects.Cameras;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Players {
