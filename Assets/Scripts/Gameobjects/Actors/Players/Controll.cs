@@ -60,9 +60,6 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
                     break;
                 }
             }
-            else {
-                Move(0, 0);
-            }
         }
 
         private void Move(float v, float h) {
