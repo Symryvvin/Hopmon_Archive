@@ -2,11 +2,11 @@
 
 Первый ранний билд, без интерфейса:
 
-[Версия 0.1 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/0.1)
-[Версия 0.2 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.2-alpha)
-[Версия 0.2.5 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.2.5-alpha)
-[Версия 0.3 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.3-alpha)
-[Версия 0.4 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.4-alpha)
+* [Версия 0.1 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/0.1)
+* [Версия 0.2 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.2-alpha)
+* [Версия 0.2.5 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.2.5-alpha)
+* [Версия 0.3 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.3-alpha)
+* [Версия 0.4 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.4-alpha)
 
 
 #### Официальное описание
