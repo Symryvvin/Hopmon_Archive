@@ -3,6 +3,10 @@
 Первый ранний билд, без интерфейса:
 
 [Версия 0.1 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/0.1)
+[Версия 0.2 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.2-alpha)
+[Версия 0.2.5 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.2.5-alpha)
+[Версия 0.3 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.3-alpha)
+[Версия 0.4 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.4-alpha)
 
 
 #### Официальное описание
@@ -10,7 +14,6 @@
 
 [Официальный сайт от разработчика оригинальной игры](http://www.saitogames.com/hopmon/)
 
-mocha girl Mae
 #### Об игре от меня
 
 Нашел я эту игру в сборнике «Игры для прекрасных дам», в котором содержалось довольно приличное количество игр и многие из них были очень увлекательными и интересными: это пиратская аркада Shipwreckers, необычная змейка NeedForEat, очень интересные игры на логику Lemmings Revolution, Sleep Walker, стратегия с уникальным управлением Majesty.
