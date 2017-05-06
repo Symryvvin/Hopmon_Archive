@@ -1,13 +1,21 @@
 ## HOPMON REMASTERING
 
-Первый ранний билд, без интерфейса:
+#### Описание версий сборок
 
-* [Версия 0.1 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/0.1)
-* [Версия 0.2 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.2-alpha)
-* [Версия 0.2.5 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.2.5-alpha)
-* [Версия 0.3 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.3-alpha)
-* [Версия 0.4 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.4-alpha)
+до 0.9.xx имеют постфикс -a означающий пре-релиз альфа версии, xx - добавление незначительных обновлений, нумеруются с 01 до 99
 
+* 0.1.xx.a - первая сборка
+* 0.2.xx.a - добавление интерфейса
+* 0.3.xx.a - разделение игры на две сцены: главное меню и игра
+* 0.4.xx.a - новая система перемещений
+* 0.5.xx.a - система сообщений
+* 0.6.xx.a - инкапсуляция правил игры
+* 0.7.xx.a - профили
+* 0.8.xx.a - меню настроек
+* 0.9.yy.b - бета-сборка с обнулением версий после второй точки. До релизной версии в yy сборки добавляются числа означающие различные фиксы и небольшие изменения.
+* 1.0 - релиз
+
+Последняя сборка [Версия 0.4 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.4-alpha)
 
 #### Официальное описание
 > HOPMON is a 3D arcade action game. There are 45 levels in total and to complete each level, Hopmon will have to collect all the > crystals and place them on the warpzone where the star symbol is printed.
