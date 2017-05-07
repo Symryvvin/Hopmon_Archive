@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Enemies {
     public class EnemyMove : MonoBehaviour {
-        public Transform moveDummy;
         public MoveState moveState;
         public MoveDirection direction;
         public Node current;
@@ -18,7 +17,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         private Rigidbody enemyRigidbody;
         [SerializeField] private float moveSpeed;
 
-        protected void Start() {
+        protected virtual void Start() {
             moveState = MoveState.STAND;
             direction = MoveDirection.STOP;
             enemyRigidbody = GetComponent<Rigidbody>();
@@ -31,7 +30,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
                 if (game.status == GameStatus.STARTED) {
                     Level level = game.level;
                     foreach (var node in level.nodes) {
-                        if (node.position + Vector3.up * 0.1f == transform.position) {
+                        if (node.position + new Vector3(0, transform.position.y, 0) == transform.position) {
                             current = node;
                             current.ChangeType(NodeType.BLOCKED_FOR_ENEMY);
                         }
@@ -80,13 +79,13 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         }
 
         protected void CurrentDirection() {
-            if (moveDummy.position.x < end.position.x)
+            if (transform.position.x < end.position.x)
                 direction = MoveDirection.RIGHT;
-            if (moveDummy.position.x > end.position.x)
+            if (transform.position.x > end.position.x)
                 direction = MoveDirection.LEFT;
-            if (moveDummy.position.z > end.position.z)
+            if (transform.position.z > end.position.z)
                 direction = MoveDirection.BACK;
-            if (moveDummy.position.z < end.position.z)
+            if (transform.position.z < end.position.z)
                 direction = MoveDirection.FORWARD;
         }
 
@@ -97,16 +96,18 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
                 current.RestoreType();
                 end.ChangeType(NodeType.BLOCKED_FOR_ENEMY);
                 current = end;
-                StartCoroutine(MoveTo(end.position));
+                StartCoroutine(MoveTo(end.position + new Vector3(0, transform.position.y, 0)));
             }
         }
 
         protected IEnumerator MoveTo(Vector3 position) {
-            float distance = (moveDummy.position - position).sqrMagnitude;
+            if (gameObject.name.Contains("JellyFish"))
+                print(position);
+            float distance = (transform.position - position).sqrMagnitude;
             while (distance > float.Epsilon) {
                 transform.position = Vector3.MoveTowards(enemyRigidbody.position, position, moveSpeed * Time.deltaTime);
                 moveState = MoveState.WALK;
-                distance = (moveDummy.position - position).sqrMagnitude;
+                distance = (transform.position - position).sqrMagnitude;
                 yield return null;
             }
             moveState = MoveState.STAND;

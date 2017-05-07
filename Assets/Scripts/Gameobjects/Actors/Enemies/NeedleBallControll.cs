@@ -8,11 +8,9 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         public float rotateSpeed;
 
         private int yAngle;
-        private Transform mesh;
 
-        protected new void Start() {
+        protected override void Start() {
             base.Start();
-            mesh = transform.FindChild("Mesh");
             yAngle = (int) transform.rotation.eulerAngles.y;
             if (yAngle == 0) {
                 direction = MoveDirection.FORWARD;
@@ -97,24 +95,24 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
             return directions.Count != 0 ? directions.ElementAt(Random.Range(0, directions.Count)).Value : null;
         }
 
-        new void Update() {
+        protected override void Update() {
             base.Update();
             switch (direction) {
             case MoveDirection.FORWARD:
-                mesh.rotation = Quaternion.AngleAxis(Time.deltaTime * rotateSpeed, Vector3.right) *
-                                mesh.rotation;
+                transform.rotation = Quaternion.AngleAxis(Time.deltaTime * rotateSpeed, Vector3.right) *
+                                     transform.rotation;
                 break;
             case MoveDirection.BACK:
-                mesh.rotation = Quaternion.AngleAxis(Time.deltaTime * rotateSpeed, Vector3.left) *
-                                mesh.rotation;
+                transform.rotation = Quaternion.AngleAxis(Time.deltaTime * rotateSpeed, Vector3.left) *
+                                     transform.rotation;
                 break;
             case MoveDirection.LEFT:
-                mesh.rotation = Quaternion.AngleAxis(Time.deltaTime * rotateSpeed, Vector3.forward) *
-                                mesh.rotation;
+                transform.rotation = Quaternion.AngleAxis(Time.deltaTime * rotateSpeed, Vector3.forward) *
+                                     transform.rotation;
                 break;
             case MoveDirection.RIGHT:
-                mesh.rotation = Quaternion.AngleAxis(Time.deltaTime * rotateSpeed, Vector3.back) *
-                                mesh.rotation;
+                transform.rotation = Quaternion.AngleAxis(Time.deltaTime * rotateSpeed, Vector3.back) *
+                                transform.rotation;
                 break;
             }
         }

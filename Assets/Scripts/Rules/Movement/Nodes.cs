@@ -19,7 +19,8 @@ namespace Assets.Scripts.Rules.Movement {
             {"Geyser", NodeType.NORMAL},
             {"Cristal", NodeType.NORMAL},
             {"NeedleBox", NodeType.BLOCKED_FOR_ENEMY},
-            {"NeedleBoxDrop", NodeType.BLOCKED_FOR_ENEMY}
+            {"NeedleBoxDrop", NodeType.BLOCKED_FOR_ENEMY},
+            {"InvisibleWall", NodeType.BLOCKED_FOR_ENEMY}
         };
 
         private void CreateNodes(Tiles tiles) {
