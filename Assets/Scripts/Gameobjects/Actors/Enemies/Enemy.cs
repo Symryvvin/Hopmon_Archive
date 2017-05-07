@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Gameobjects.Games;
+using Assets.Scripts.Managers.EventMessages;
+using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Enemies {
     public class Enemy : MonoBehaviour, IDestructable {
@@ -20,6 +22,10 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
             if (move.end != null)
                 move.end.RestoreType();
             Destroy(gameObject);
+        }
+
+        void OnTriggerEnter(Collider col) {
+            EventMessenger<Enemy, Collider>.TriggerEvent(GameEvents.ENEMY_TAKE_DAMAGE, this, col);
         }
     }
 }

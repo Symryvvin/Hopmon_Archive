@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Gameobjects.Actors.Shells;
+using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Players {
     public class PlayerShell : Shell {
@@ -6,40 +7,28 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         public AudioSource shot;
         public AudioSource hit;
 
-        private const string ENEMY = "Enemy";
-        private const string GATE = "Gate";
-
-        public new void OnEnable() {
+        public override void OnEnable() {
             base.OnEnable();
-            hit.transform.SetParent(transform);
-            if (path != null)
+            AttachParent(hit);
+            if (path != null) {
+                DetachParent(shot);
                 shot.Play();
-        }
-
-        void OnTriggerEnter(Collider col) {
-            if (col.CompareTag(ENEMY)) {
-                HitDestructableObject(col.gameObject);
             }
         }
 
-        new void OnCollisionEnter(Collision col) {
-            base.OnCollisionEnter(col);
-            if (col.gameObject.CompareTag(GATE)) {
-                HitDestructableObject(col.gameObject);
-            }
+        public void Explosion() {
+            DetachParent(hit);
+            AttachParent(shot);
+            hit.Play();
+            Destroy();
         }
 
-        private void HitDestructableObject(GameObject hitObject) {
-            var desctuct = hitObject.GetComponent<IDestructable>();
-            if (hitObject.name.Equals("Mesh")) {
-                desctuct = hitObject.GetComponentInParent<IDestructable>();
-            }
-            if (desctuct != null) {
-                hit.transform.SetParent(null);
-                hit.Play();
-                Destroy();
-                desctuct.Hit(damage);
-            }
+        private void DetachParent(AudioSource source) {
+            source.transform.SetParent(null);
+        }
+
+        private void AttachParent(AudioSource source) {
+            source.transform.SetParent(transform);
         }
     }
 }

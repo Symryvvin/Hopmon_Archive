@@ -1,7 +1,9 @@
-﻿using Assets.Scripts.Gameobjects.Actors.Players;
+﻿using System;
+using Assets.Scripts.Gameobjects.Actors.Players;
 using Assets.Scripts.Gameobjects.Levels;
 using Assets.Scripts.Managers;
 using Assets.Scripts.Managers.EventMessages;
+using Assets.Scripts.Rules;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Games {
@@ -16,9 +18,11 @@ namespace Assets.Scripts.Gameobjects.Games {
             status = GameStatus.INITIALIZE;
             hud.StartListeners();
             EventMessenger.StartListener(GameEvents.START_GAME, StartGame);
-            EventMessenger.StartListener(GameEvents.WARP_CRISTAL, WarpCristal);
             EventMessenger.StartListener(GameEvents.DEFEATE, Defeat);
             EventMessenger.StartListener(GameEvents.VICTORY, Victory);
+            EventMessenger<int>.StartListener(GameEvents.UPDATE_CRISTAL_COUNT, UpdateCristalCount);
+            CollisionHandler handler = CollisionHandler.instance;
+            handler.StartRules();
         }
 
         private void StartGame() {
@@ -28,7 +32,13 @@ namespace Assets.Scripts.Gameobjects.Games {
             InitPlayer();
             status = GameStatus.STARTED;
             foreach (var e in EventManager.instance.events) {
-                print(e.Key + " actions:\n" + e.Value.ListEvents());
+                try {
+                    print(e.Key + " actions:\n" + e.Value.ListEvents());
+                }
+                catch (NullReferenceException err) {
+                    Debug.Log(err + " " + e.Key);
+                }
+
             }
         }
 
@@ -48,8 +58,8 @@ namespace Assets.Scripts.Gameobjects.Games {
             EventMessenger.TriggerEvent(GameEvents.UPDATE_HUD);
         }
 
-        private void WarpCristal() {
-            stats.cristals--;
+        private void UpdateCristalCount(int count) {
+            stats.cristals = count;
             EventMessenger.TriggerEvent(GameEvents.UPDATE_HUD);
             if (stats.cristals == 0) {
                 EventMessenger.TriggerEvent(GameEvents.VICTORY);

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Assets.Scripts.Gameobjects.Games;
 using Assets.Scripts.Gameobjects.Levels;
+using Assets.Scripts.Managers.EventMessages;
 using Assets.Scripts.Rules.Movement;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace Assets.Scripts.Gameobjects.Structures {
         private Game game;
         private Node current;
 
-        void Start() {
+        protected void Start() {
             game = GameObject.Find("Game").GetComponent<Game>();
             StartCoroutine(WaitForStartGame());
         }
@@ -37,6 +38,10 @@ namespace Assets.Scripts.Gameobjects.Structures {
         public void Dead() {
             current.RestoreType();
             Destroy(gameObject);
+        }
+
+        protected void OnCollisionEnter(Collision col) {
+            EventMessenger<Gate, Collision>.TriggerEvent(GameEvents.GATE_TAKE_DAMAGE, this, col);
         }
     }
 }
