@@ -1,5 +1,6 @@
-﻿using Assets.Scripts.Gameobjects.Actors.Movements;
-using Assets.Scripts.Gameobjects.Games;
+﻿using Assets.Scripts.Gameobjects.Games;
+using Assets.Scripts.Managers.EventMessages;
+using Assets.Scripts.Rules.Movement;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Players {
@@ -40,7 +41,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
 
         void ThouchEnemy() {
             liveState = LiveState.DEAD;
-            EventManager.TriggerEvent(GameEvents.DEFEATE);
+            EventMessenger.TriggerEvent(GameEvents.DEFEATE);
         }
 
         public void MoveToStart(Levels.Level level) {

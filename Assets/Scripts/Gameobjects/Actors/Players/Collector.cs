@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Gameobjects.Games;
+using Assets.Scripts.Managers.EventMessages;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Players {
@@ -35,8 +36,8 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
             cristalTransform.position = new Vector3(playerBody.position.x,
                 playerBody.position.y + cristals.Count - (cristals.Count - 0.8f) * 0.6f, playerBody.position.z);
             cristalTransform.GetComponent<Cristal>().Collect();
-            controll.ChangeSpeed(cristals.Count);
-           // Messenger<int>.Broadcast("dsdsds", cristals.Count);
+            //controll.ChangeSpeed(cristals.Count);
+            EventMessenger<int>.TriggerEvent(GameEvents.CHANGE_SPEED, cristals.Count);
         }
 
         /// <summary>
@@ -65,8 +66,9 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
                     if (cristal != null) {
                         cristal.GetComponent<Cristal>().Release();
                         cristals.Remove(cristal);
-                        EventManager.TriggerEvent(GameEvents.WARP_CRISTAL);
-                        controll.ChangeSpeed(cristals.Count);
+                        EventMessenger.TriggerEvent(GameEvents.WARP_CRISTAL);
+                        EventMessenger<int>.TriggerEvent(GameEvents.CHANGE_SPEED, cristals.Count);
+                       // controll.ChangeSpeed(cristals.Count);
                     }
                 }
                 yield return null;

@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Gameobjects.Games;
 using Assets.Scripts.Gameobjects.Levels;
+using Assets.Scripts.Managers.EventMessages;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,9 +14,9 @@ public class HUD : Menu {
     }
 
     public void StartListeners() {
-        EventManager.StartListener(GameEvents.CHARGE, Charge);
-        EventManager.StartListener(GameEvents.DISCHARGE, Discharge);
-        EventManager.StartListener(GameEvents.UPDATE_HUD, UpdateHUD);
+        EventMessenger.StartListener(GameEvents.CHARGE, Charge);
+        EventMessenger.StartListener(GameEvents.DISCHARGE, Discharge);
+        EventMessenger.StartListener(GameEvents.UPDATE_HUD, UpdateHUD);
     }
 
     public void UpdateHUD() {

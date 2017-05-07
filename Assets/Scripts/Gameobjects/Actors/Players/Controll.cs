@@ -1,7 +1,9 @@
 using System.Collections;
 using Assets.Scripts.Gameobjects.Actors.Enemies;
-using Assets.Scripts.Gameobjects.Actors.Movements;
 using Assets.Scripts.Gameobjects.Cameras;
+using Assets.Scripts.Gameobjects.Games;
+using Assets.Scripts.Managers.EventMessages;
+using Assets.Scripts.Rules.Movement;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Players {
@@ -25,6 +27,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
             gameCamera.Init();
             moveState = MoveState.STAND;
             playerTransform = transform;
+            EventMessenger<int>.StartListener(GameEvents.CHANGE_SPEED, Speed);
         }
 
         public void Reset() {
@@ -106,6 +109,13 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
             boost = false;
             animator.SetBool("Walk", false);
             animator.SetBool("Idle", true);
+        }
+
+        private void Speed(int cristals) {
+
+
+                moveSpeed = 5.5f;
+            animator.speed = moveSpeed / 2.5f;
         }
 
         public void ChangeSpeed(int cristalCount) {

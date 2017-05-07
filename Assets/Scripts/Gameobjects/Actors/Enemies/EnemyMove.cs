@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Gameobjects.Actors.Movements;
 using Assets.Scripts.Gameobjects.Actors.Players;
 using Assets.Scripts.Gameobjects.Games;
 using Assets.Scripts.Gameobjects.Levels;
+using Assets.Scripts.Rules.Movement;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Enemies {
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
             while (true) {
                 if (game.status == GameStatus.STARTED) {
                     Level level = game.level;
-                    foreach (var node in level.movement.nodes) {
+                    foreach (var node in level.nodes) {
                         if (node.position + Vector3.up * 0.1f == transform.position) {
                             current = node;
                             current.ChangeType(NodeType.BLOCKED_FOR_ENEMY);
