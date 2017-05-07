@@ -101,8 +101,6 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         }
 
         protected IEnumerator MoveTo(Vector3 position) {
-            if (gameObject.name.Contains("JellyFish"))
-                print(position);
             float distance = (transform.position - position).sqrMagnitude;
             while (distance > float.Epsilon) {
                 transform.position = Vector3.MoveTowards(enemyRigidbody.position, position, moveSpeed * Time.deltaTime);
