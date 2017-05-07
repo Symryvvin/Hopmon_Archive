@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Assets.Scripts.Managers.EventMessages {
@@ -94,7 +92,7 @@ namespace Assets.Scripts.Managers.EventMessages {
             }
         }
 
-        public static void StopListener(string name, UnityAction action) {
+        public static void StopListener(string name, UnityAction<T> action) {
             RemoveListener(name, action);
         }
 
@@ -113,6 +111,53 @@ namespace Assets.Scripts.Managers.EventMessages {
             public void Remove(Delegate listener) {
                 actions.Remove(listener as UnityAction<T>);
                 RemoveListener(listener as UnityAction<T>);
+            }
+
+            public string ListEvents() {
+                string list = "";
+                foreach (var action in actions) {
+                    list += action.Method + " in " + action.Target.GetType() + "\n";
+                }
+                return list;
+            }
+        }
+    }
+
+    public class EventMessenger<T, U> : BaseEventMessenger {
+        public static void StartListener(string name, UnityAction<T, U> action) {
+            if (!AddListener(name, action)) {
+                GameEvent gameEvent = new GameEvent();
+                gameEvent.Add(action);
+                AddEvent(name, gameEvent);
+            }
+        }
+
+        public static void TriggerEvent(string name, T param0, U param1) {
+            GameEvent gameEvent = IsExistEvent(name) as GameEvent;
+            if (gameEvent != null) {
+                gameEvent.Invoke(param0, param1);
+            }
+        }
+
+        public static void StopListener(string name, UnityAction<T, U> action) {
+            RemoveListener(name, action);
+        }
+
+        internal class GameEvent : UnityEvent<T, U>, IGameEvent {
+            private readonly LinkedList<UnityAction<T, U>> actions;
+
+            public GameEvent() {
+                actions = new LinkedList<UnityAction<T, U>>();
+            }
+
+            public void Add(Delegate listener) {
+                actions.AddLast(listener as UnityAction<T, U>);
+                AddListener(actions.Last.Value);
+            }
+
+            public void Remove(Delegate listener) {
+                actions.Remove(listener as UnityAction<T, U>);
+                RemoveListener(listener as UnityAction<T, U>);
             }
 
             public string ListEvents() {
