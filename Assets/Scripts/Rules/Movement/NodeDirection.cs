@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Gameobjects.Actors.Movements {
+namespace Assets.Scripts.Rules.Movement {
     public class NodeDirection {
         public static Vector3 FORWARD = Vector3.forward;
         public static Vector3 BACK = Vector3.back;

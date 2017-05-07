@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Gameobjects.Actors.Movements {
+﻿namespace Assets.Scripts.Rules.Movement {
     public enum NodeType {
         NO_TYPE,
         NORMAL,
