@@ -9,8 +9,10 @@ namespace Assets.Scripts.Gameobjects.Structures {
     public class Gate : MonoBehaviour, IDestructable {
         private Game game;
         private Node current;
+        private Rigidbody rigidbody;
 
         protected void Start() {
+            rigidbody = GetComponent<Rigidbody>();
             game = GameObject.Find("Game").GetComponent<Game>();
             StartCoroutine(WaitForStartGame());
         }
@@ -37,7 +39,10 @@ namespace Assets.Scripts.Gameobjects.Structures {
 
         public void Dead() {
             current.RestoreType();
-            Destroy(gameObject);
+            rigidbody.AddForce(0, 1000, 0, ForceMode.Force);
+            rigidbody.AddTorque(transform.right * 1000, ForceMode.Impulse);
+            rigidbody.useGravity = true;
+            Destroy(gameObject, 4f);
         }
 
         protected void OnCollisionEnter(Collision col) {

@@ -38,7 +38,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
             collider.isTrigger = false;
             rigidbody.isKinematic = false;
             rigidbody.AddForce(0, 1000, 0, ForceMode.Force);
-            rigidbody.AddTorque(0, 0, 1000, ForceMode.Impulse);
+            rigidbody.AddTorque(transform.right * 1000, ForceMode.Impulse);
             rigidbody.useGravity = true;
             Destroy(gameObject, 4f);
         }

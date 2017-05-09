@@ -39,7 +39,6 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
                 if (Physics.Raycast(box.position, -box.up, out info, 1.0F)) {
                     print(info.collider.gameObject.name);
                     if (info.collider.gameObject.CompareTag("Player")) {
-                        print("ready");
                         yield return new WaitForSeconds(2f);
                         drop = true;
                     }

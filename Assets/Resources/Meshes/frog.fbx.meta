@@ -6,10 +6,29 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: face
+    100004: frog
+    100006: jellyfish
+    100008: ufo
     400000: //RootNode
+    400002: face
+    400004: frog
+    400006: jellyfish
+    400008: ufo
     2300000: //RootNode
+    2300002: face
+    2300004: frog
+    2300006: jellyfish
+    2300008: ufo
     3300000: //RootNode
+    3300002: face
+    3300004: frog
+    3300006: jellyfish
+    3300008: ufo
     4300000: frog
+    4300002: jellyfish
+    4300004: face
+    4300006: ufo
   materials:
     importMaterials: 0
     materialName: 0

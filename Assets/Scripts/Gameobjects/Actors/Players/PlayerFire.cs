@@ -63,7 +63,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         private void Fire() {
             if (!FirePressed() || !IsReloaded()) return;
             shell.speed = speed;
-            var start = transform.position + transform.up / 2;
+            var start = transform.position + transform.up / 2 + transform.forward * 0.3f;
             shell.path = new LinePath(2, start, start + transform.forward * 30f).EvaluateWaypoints();
             shellInstance.SetActive(true);
             EventMessenger.TriggerEvent(GameEvents.DISCHARGE);
