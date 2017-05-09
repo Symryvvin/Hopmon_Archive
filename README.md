@@ -15,7 +15,7 @@
 * 0.9.yy.b - бета-сборка с обнулением версий после второй точки. До релизной версии в yy сборки добавляются числа означающие различные фиксы и небольшие изменения.
 * 1.0 - релиз
 
-Последняя сборка [Версия 0.4 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.4-alpha)
+Последняя сборка [Версия 0.6 PreRelease](https://github.com/Symryvvin/Hopmon/releases/tag/v0.6-alpha)
 
 #### Официальное описание
 > HOPMON is a 3D arcade action game. There are 45 levels in total and to complete each level, Hopmon will have to collect all the > crystals and place them on the warpzone where the star symbol is printed.
