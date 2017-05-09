@@ -21,8 +21,8 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         void Start() {
             float x = box.position.x;
             float z = box.position.z;
-            up = new Vector3(x, 1.1f, z);
-            down = new Vector3(x, 0.1f, z);
+            up = new Vector3(x, 1.6f, z);
+            down = new Vector3(x, 0.6f, z);
             if (dropBox)
                 coroutine = Drop();
             else
@@ -37,13 +37,15 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
                 RaycastHit info;
                 Debug.DrawRay(box.position, -box.up * 1.0F, Color.red);
                 if (Physics.Raycast(box.position, -box.up, out info, 1.0F)) {
+                    print(info.collider.gameObject.name);
                     if (info.collider.gameObject.CompareTag("Player")) {
+                        print("ready");
                         yield return new WaitForSeconds(2f);
                         drop = true;
                     }
                 }
                 if (drop) {
-                    while (isGoal(box.position, down)) {
+                    while (isGoal(down)) {
                         box.position = Vector3.MoveTowards(box.position, down, downSpeed * Time.deltaTime);
                         yield return null;
                     }
@@ -56,21 +58,21 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         IEnumerator UpDown() {
             while (true) {
                 yield return new WaitForSeconds(2f);
-                while (isGoal(box.position, down)) {
+                while (isGoal(down)) {
                     box.position = Vector3.MoveTowards(box.position, down, downSpeed * Time.deltaTime);
                     yield return null;
                 }
                 audioSource.Play();
                 yield return new WaitForSeconds(2f);
-                while (box.position.y < 1.1f) {
+                while (isGoal(up)) {
                     box.position = Vector3.MoveTowards(box.position, up, upSpeed * Time.deltaTime);
                     yield return null;
                 }
             }
         }
 
-        private bool isGoal(Vector3 position, Vector3 endPosition) {
-            return Vector3.SqrMagnitude(position) - Vector3.SqrMagnitude(endPosition) > float.Epsilon;
+        private bool isGoal(Vector3 position) {
+            return (box.position - position).sqrMagnitude > float.Epsilon;
         }
     }
 }

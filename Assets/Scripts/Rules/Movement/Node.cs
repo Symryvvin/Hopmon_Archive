@@ -86,7 +86,7 @@ namespace Assets.Scripts.Rules.Movement {
             draw.layer = 11;
             Transform ctx = draw.transform;
             ctx.localScale = Vector3.one * 0.2f;
-            ctx.position = position + Vector3.up * 1.5f;
+            ctx.position = position + Vector3.up * 0.05f;
             ColoredByType();
         }
 

@@ -75,7 +75,6 @@ namespace Assets.Scripts.Rules {
 
         private void WarpCristal(Collector collector, Collider collider) {
             if (collider.CompareTag("WarpZone")) {
-                Debug.Log("release");
                 collector.Release();
             }
         }
