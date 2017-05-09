@@ -15,6 +15,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         public Node end;
         private Game game;
         private Rigidbody enemyRigidbody;
+        private bool dead;
         [SerializeField] private float moveSpeed;
 
         protected virtual void Start() {
@@ -41,14 +42,21 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
             }
         }
 
+        public void IsDead(bool dead) {
+            StopAllCoroutines();
+            this.dead = true;
+        }
+
         protected virtual void Update() {
-            switch (moveState) {
-            case MoveState.STAND:
-                Move();
-                break;
-            case MoveState.WALK:
-                CurrentDirection();
-                break;
+            if (!dead) {
+                switch (moveState) {
+                case MoveState.STAND:
+                    Move();
+                    break;
+                case MoveState.WALK:
+                    CurrentDirection();
+                    break;
+                }
             }
         }
 
