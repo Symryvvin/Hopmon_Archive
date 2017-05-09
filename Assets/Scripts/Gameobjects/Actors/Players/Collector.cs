@@ -15,6 +15,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         }
 
         public void Reset() {
+            StopAllCoroutines();
             cristals.Clear();
             foreach (Transform c in playerBody) {
                 Destroy(c.gameObject);

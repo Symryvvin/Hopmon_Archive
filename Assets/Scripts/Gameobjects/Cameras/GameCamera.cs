@@ -11,7 +11,7 @@ namespace Assets.Scripts.Gameobjects.Cameras {
         }
 
         private float distance = 6f;
-        private float height = 8.4f;
+        private float height = 7.4f;
         public Move moving = Move.STOP;
         private float rotY;
         private float angleMin;
@@ -22,16 +22,18 @@ namespace Assets.Scripts.Gameobjects.Cameras {
         private float moveX;
         private float moveZ;
         private Camera camera;
+        private Quaternion startRotation;
 
         public CameraPoint point;
         public bool blockDisable;
         public bool nodeDisable;
 
-        void Start() {
+        protected void Start() {
             camera = GetComponent<Camera>();
             camera.cullingMask &= ~(1 << LayerMask.NameToLayer("NodeLayer"));
             blockDisable = false;
             nodeDisable = true;
+            startRotation = transform.rotation;
         }
 
         public void Init() {
@@ -45,29 +47,42 @@ namespace Assets.Scripts.Gameobjects.Cameras {
             transform.position = new Vector3(targerPos.x, targerPos.y + height, targerPos.z - distance);
             angleMin = -90f;
             angleMax = 90f;
-            rotY = 0;
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, rotY, transform.eulerAngles.z);
+            transform.rotation = startRotation;
         }
 
-        void LateUpdate() {
+        protected void Update() {
+            targerPos = target.transform.position;
+            switch (Mathf.RoundToInt(transform.eulerAngles.y)) {
+            case 0:
+                point = CameraPoint.NORTH;
+                break;
+            case 90:
+                point = CameraPoint.WEST;
+                break;
+            case 180:
+                point = CameraPoint.SOUTH;
+                break;
+            case 270:
+                point = CameraPoint.EAST;
+                break;
+            }
+        }
+
+        protected void LateUpdate() {
             if (target != null) {
                 targerPos = target.transform.position;
-                switch ((int) transform.eulerAngles.y) {
-                case 0:
+                switch (point) {
+                case CameraPoint.NORTH:
                     transform.position = new Vector3(targerPos.x, targerPos.y + height, targerPos.z - distance);
-                    point = CameraPoint.NORTH;
                     break;
-                case 90:
+                case CameraPoint.WEST:
                     transform.position = new Vector3(targerPos.x - distance, targerPos.y + height, targerPos.z);
-                    point = CameraPoint.WEST;
                     break;
-                case 180:
+                case CameraPoint.SOUTH:
                     transform.position = new Vector3(targerPos.x, targerPos.y + height, targerPos.z + distance);
-                    point = CameraPoint.SOUTH;
                     break;
-                case 270:
+                case CameraPoint.EAST:
                     transform.position = new Vector3(targerPos.x + distance, targerPos.y + height, targerPos.z);
-                    point = CameraPoint.EAST;
                     break;
                 }
             }
@@ -75,9 +90,11 @@ namespace Assets.Scripts.Gameobjects.Cameras {
 
             if (LeftRotate()) {
                 moving = Move.LEFT;
+                point = CameraPoint.UNSTABLE;
             }
             if (RightRotate()) {
                 moving = Move.RIGHT;
+                point = CameraPoint.UNSTABLE;
             }
 
             switch (moving) {

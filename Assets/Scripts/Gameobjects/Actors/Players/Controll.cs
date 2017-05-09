@@ -31,6 +31,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         }
 
         public void Reset() {
+            gameCamera.Reset();
             ChangeSpeed(0);
             StopAllMoves();
         }
@@ -46,9 +47,9 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         }
 
         private void Idle() {
-            float horizontal = (int) Input.GetAxisRaw("Horizontal");
-            float vertical = (int) Input.GetAxisRaw("Vertical");
             if (gameCamera.moving == GameCamera.Move.STOP && !boost) {
+                float horizontal = (int) Input.GetAxisRaw("Horizontal");
+                float vertical = (int) Input.GetAxisRaw("Vertical");
                 switch (gameCamera.point) {
                 case CameraPoint.NORTH:
                     Move(vertical, horizontal);
