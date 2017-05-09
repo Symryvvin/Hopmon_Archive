@@ -42,7 +42,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
                     if (cristal != null) {
                         cristal.GetComponent<Cristal>().Release();
                         cristals.Remove(cristal);
-                        EventMessenger<int>.TriggerEvent(GameEvents.UPDATE_CRISTAL_COUNT, cristals.Count);
+                        EventMessenger.TriggerEvent(GameEvents.UPDATE_CRISTAL_COUNT);
                         EventMessenger<int>.TriggerEvent(GameEvents.CHANGE_SPEED, cristals.Count);
                     }
                 }

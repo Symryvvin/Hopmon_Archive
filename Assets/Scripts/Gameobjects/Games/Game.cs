@@ -20,7 +20,7 @@ namespace Assets.Scripts.Gameobjects.Games {
             EventMessenger.StartListener(GameEvents.START_GAME, StartGame);
             EventMessenger.StartListener(GameEvents.DEFEATE, Defeat);
             EventMessenger.StartListener(GameEvents.VICTORY, Victory);
-            EventMessenger<int>.StartListener(GameEvents.UPDATE_CRISTAL_COUNT, UpdateCristalCount);
+            EventMessenger.StartListener(GameEvents.UPDATE_CRISTAL_COUNT, UpdateCristalCount);
             CollisionHandler handler = CollisionHandler.instance;
             handler.StartRules();
         }
@@ -58,8 +58,8 @@ namespace Assets.Scripts.Gameobjects.Games {
             EventMessenger.TriggerEvent(GameEvents.UPDATE_HUD);
         }
 
-        private void UpdateCristalCount(int count) {
-            stats.cristals = count;
+        private void UpdateCristalCount() {
+            stats.cristals--;
             EventMessenger.TriggerEvent(GameEvents.UPDATE_HUD);
             if (stats.cristals == 0) {
                 EventMessenger.TriggerEvent(GameEvents.VICTORY);
