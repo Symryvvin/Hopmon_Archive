@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Assets.Scripts.Gameobjects.Games;
 using Assets.Scripts.Gameobjects.Levels;
+using Assets.Scripts.Managers.EventMessages;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -28,7 +29,7 @@ public class GameManager : SingletonManager<GameManager>, IManager {
                 game = GameObject.Find("Game").GetComponent<Game>();
                 game.level = level;
                 Debug.Log(game.status);
-                EventManager.TriggerEvent(GameEvents.START_GAME);
+                EventMessenger.TriggerEvent(GameEvents.START_GAME);
                 Debug.Log(game.status);
                 break;
             }

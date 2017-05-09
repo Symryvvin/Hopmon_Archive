@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Assets.Scripts.Gameobjects.Games;
+using Assets.Scripts.Managers.EventMessages;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Players {
@@ -29,14 +30,14 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
 
         public void Reset() {
             Reload();
-            EventManager.TriggerEvent(GameEvents.DISCHARGE);
+            EventMessenger.TriggerEvent(GameEvents.DISCHARGE);
         }
 
         private IEnumerator Reload(float time) {
             while (reloadState == ReloadState.RELOAD) {
                 time -= reloadTime / 10f;
                 yield return new WaitForSeconds(reloadTime / 10f);
-                EventManager.TriggerEvent(GameEvents.CHARGE);
+                EventMessenger.TriggerEvent(GameEvents.CHARGE);
                 percentReload = Mathf.RoundToInt(100f - time * 100f / reloadTime);
                 if (percentReload >= 100) {
                     AudioSource.PlayClipAtPoint(fireReady, Camera.main.transform.position);
@@ -62,10 +63,10 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         private void Fire() {
             if (!FirePressed() || !IsReloaded()) return;
             shell.speed = speed;
-            var start = transform.position + transform.up / 2;
+            var start = transform.position + transform.up / 2 + transform.forward * 0.3f;
             shell.path = new LinePath(2, start, start + transform.forward * 30f).EvaluateWaypoints();
             shellInstance.SetActive(true);
-            EventManager.TriggerEvent(GameEvents.DISCHARGE);
+            EventMessenger.TriggerEvent(GameEvents.DISCHARGE);
             Reload();
         }
 

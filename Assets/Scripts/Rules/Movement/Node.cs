@@ -2,7 +2,7 @@
 using Assets.Scripts.Gameobjects.Levels;
 using UnityEngine;
 
-namespace Assets.Scripts.Gameobjects.Actors.Movements {
+namespace Assets.Scripts.Rules.Movement {
     public class Node {
         public NodeType type;
         public Vector3 position;
@@ -13,40 +13,12 @@ namespace Assets.Scripts.Gameobjects.Actors.Movements {
         public Node(Tile tile) {
             toRestore = NodeType.NO_TYPE;
             position = tile.position;
-        }
-
-        public void CalculateDirections(Movement graph) {
             directions = new Dictionary<Vector3, Node>();
-            AddValueToDictionary(graph, NodeDirection.FORWARD);
-            AddValueToDictionary(graph, NodeDirection.BACK);
-            AddValueToDictionary(graph, NodeDirection.LEFT);
-            AddValueToDictionary(graph, NodeDirection.RIGHT);
-            CalculateForVolcano(graph);
         }
 
-        private void CalculateForVolcano(Movement graph) {
-            if (type == NodeType.BLOCKED_AROUND) {
-                List<Vector3> list = new List<Vector3>();
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        if (i == 0 || j == 0 || i == 3 - 1 || j == 3 - 1) {
-                            list.Add(new Vector3(position.x + j - 3/2, position.y, position.z + i - 3/2));
-                        }
-                    }
-                }
-                foreach (var node in graph.nodes) {
-                    if (list.Contains(node.position)) {
-                        node.ChangeType(NodeType.BLOCKED);
-                    }
-                }
-            }
-        }
-
-        private void AddValueToDictionary(Movement graph, Vector3 key) {
-            foreach (var node in graph.nodes) {
-                if (node.position == position + key) {
-                    directions.Add(key, node);
-                }
+        public void AddValueToDictionary(Vector3 key, Node node) {
+            if (node.position == position + key) {
+                directions.Add(key, node);
             }
         }
 
@@ -114,7 +86,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Movements {
             draw.layer = 11;
             Transform ctx = draw.transform;
             ctx.localScale = Vector3.one * 0.2f;
-            ctx.position = position + Vector3.up * 1.5f;
+            ctx.position = position + Vector3.up * 0.05f;
             ColoredByType();
         }
 

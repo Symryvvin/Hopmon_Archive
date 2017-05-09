@@ -1,5 +1,5 @@
 ﻿using System;
-using Assets.Scripts.Gameobjects.Actors.Movements;
+using Assets.Scripts.Rules.Movement;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Levels {
@@ -12,12 +12,12 @@ namespace Assets.Scripts.Gameobjects.Levels {
         public Tiles tiles;
         public Size size;
         public int cristals;
-        public Movement movement;
+        public Nodes nodes;
 
         public void Build() {
-            movement = new Movement();
-            movement.CalculateNodes(tiles);
-            movement.Draw();
+            nodes = new Nodes();
+            nodes.CalculateNodes(tiles);
+            nodes.Draw();
             LevelBuilder.BuildLevel(this, false);
             CountCristals();
         }

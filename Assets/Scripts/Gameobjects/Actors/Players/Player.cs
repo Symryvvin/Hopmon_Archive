@@ -1,11 +1,11 @@
-﻿using Assets.Scripts.Gameobjects.Actors.Movements;
-using Assets.Scripts.Gameobjects.Games;
+﻿using Assets.Scripts.Gameobjects.Games;
+using Assets.Scripts.Managers.EventMessages;
+using Assets.Scripts.Rules.Movement;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Players {
-    public class Player : MonoBehaviour{
+    public class Player : MonoBehaviour {
         public LiveState liveState;
-        // Player keep reference on all player script Components
         [SerializeField] private Controll controll;
         [SerializeField] private PlayerFire shoot;
         [SerializeField] private Collector collector;
@@ -21,30 +21,32 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
             controll.current = node;
         }
 
-        void Update() {
-            switch (liveState) {
-            case LiveState.ALIVE:
-                controll.Alive();
-                break;
-            case LiveState.DEAD:
-                //  Dead();
-                break;
-            }
-        }
-
-        void OnTriggerEnter(Collider col) {
-            if (col.CompareTag("Enemy")) {
-                ThouchEnemy();
-            }
-        }
-
-        void ThouchEnemy() {
+        public void Hit() {
             liveState = LiveState.DEAD;
-            EventManager.TriggerEvent(GameEvents.DEFEATE);
+            EventMessenger.TriggerEvent(GameEvents.DEFEATE);
         }
 
         public void MoveToStart(Levels.Level level) {
             controll.MoveToStart(level.start);
+        }
+
+        private bool IsAlive() {
+            return liveState == LiveState.ALIVE;
+        }
+
+        protected void Update() {
+            if (IsAlive())
+                controll.Alive();
+        }
+
+        protected void OnTriggerEnter(Collider col) {
+            EventMessenger<Player, Collider>.TriggerEvent(GameEvents.PLAYER_TAKE_DAMAGE, this, col);
+            EventMessenger<Collector, Collider>.TriggerEvent(GameEvents.COLLECT_CRISTAL, collector, col);
+            EventMessenger<Collector, Collider>.TriggerEvent(GameEvents.WARP_CRISTAL, collector, col);
+        }
+
+        protected void OnTriggerExit(Collider col) {
+            EventMessenger<Collector, Collider>.TriggerEvent(GameEvents.STOP_WARP, collector, col);
         }
     }
 }

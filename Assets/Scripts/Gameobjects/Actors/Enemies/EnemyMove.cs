@@ -1,24 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Gameobjects.Actors.Movements;
 using Assets.Scripts.Gameobjects.Actors.Players;
 using Assets.Scripts.Gameobjects.Games;
 using Assets.Scripts.Gameobjects.Levels;
+using Assets.Scripts.Rules.Movement;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Enemies {
     public class EnemyMove : MonoBehaviour {
-        public Transform moveDummy;
         public MoveState moveState;
         public MoveDirection direction;
         public Node current;
         public Node end;
         private Game game;
         private Rigidbody enemyRigidbody;
+        private bool dead;
         [SerializeField] private float moveSpeed;
 
-        protected void Start() {
+        protected virtual void Start() {
             moveState = MoveState.STAND;
             direction = MoveDirection.STOP;
             enemyRigidbody = GetComponent<Rigidbody>();
@@ -30,8 +30,8 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
             while (true) {
                 if (game.status == GameStatus.STARTED) {
                     Level level = game.level;
-                    foreach (var node in level.movement.nodes) {
-                        if (node.position + Vector3.up * 0.1f == transform.position) {
+                    foreach (var node in level.nodes) {
+                        if (node.position + new Vector3(0, transform.position.y, 0) == transform.position) {
                             current = node;
                             current.ChangeType(NodeType.BLOCKED_FOR_ENEMY);
                         }
@@ -42,14 +42,21 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
             }
         }
 
+        public void IsDead(bool dead) {
+            StopAllCoroutines();
+            this.dead = true;
+        }
+
         protected virtual void Update() {
-            switch (moveState) {
-            case MoveState.STAND:
-                Move();
-                break;
-            case MoveState.WALK:
-                CurrentDirection();
-                break;
+            if (!dead) {
+                switch (moveState) {
+                case MoveState.STAND:
+                    Move();
+                    break;
+                case MoveState.WALK:
+                    CurrentDirection();
+                    break;
+                }
             }
         }
 
@@ -80,37 +87,36 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         }
 
         protected void CurrentDirection() {
-            if (moveDummy.position.x < end.position.x)
+            if (transform.position.x < end.position.x)
                 direction = MoveDirection.RIGHT;
-            if (moveDummy.position.x > end.position.x)
+            if (transform.position.x > end.position.x)
                 direction = MoveDirection.LEFT;
-            if (moveDummy.position.z > end.position.z)
+            if (transform.position.z > end.position.z)
                 direction = MoveDirection.BACK;
-            if (moveDummy.position.z < end.position.z)
+            if (transform.position.z < end.position.z)
                 direction = MoveDirection.FORWARD;
         }
 
         protected virtual void Move() {
             var directions = new Dictionary<Vector3, Node>(current.directions);
             end = CalculateMoveDirection(directions);
-            current.ChangeType(NodeType.BLOCKED_FOR_ENEMY);
             if (end != null) {
+                current.RestoreType();
                 end.ChangeType(NodeType.BLOCKED_FOR_ENEMY);
-                StartCoroutine(MoveTo(end.position));
+                current = end;
+                StartCoroutine(MoveTo(end.position + new Vector3(0, transform.position.y, 0)));
             }
         }
 
         protected IEnumerator MoveTo(Vector3 position) {
-            float distance = (moveDummy.position - position).sqrMagnitude;
+            float distance = (transform.position - position).sqrMagnitude;
             while (distance > float.Epsilon) {
                 transform.position = Vector3.MoveTowards(enemyRigidbody.position, position, moveSpeed * Time.deltaTime);
                 moveState = MoveState.WALK;
-                distance = (moveDummy.position - position).sqrMagnitude;
+                distance = (transform.position - position).sqrMagnitude;
                 yield return null;
             }
             moveState = MoveState.STAND;
-            current.RestoreType();
-            current = end;
         }
     }
 }

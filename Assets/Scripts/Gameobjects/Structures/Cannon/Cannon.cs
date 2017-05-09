@@ -1,4 +1,6 @@
-﻿public class Cannon : AbstractCannon {
+﻿using Assets.Scripts.Gameobjects.Structures.Cannon;
+
+public class Cannon : AbstractCannon {
     private const int count = 2;
 
     protected override void SetUpCannon() {

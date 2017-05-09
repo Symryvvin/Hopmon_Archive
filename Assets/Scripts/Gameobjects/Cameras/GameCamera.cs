@@ -10,8 +10,8 @@ namespace Assets.Scripts.Gameobjects.Cameras {
             RIGHT
         }
 
-        private const float distance = 6f;
-        private const float height = 8.4f;
+        private float distance = 6f;
+        private float height = 8.4f;
         public Move moving = Move.STOP;
         private float rotY;
         private float angleMin;
@@ -95,6 +95,15 @@ namespace Assets.Scripts.Gameobjects.Cameras {
 
             blockDisable = ChangeCullingMask(KeyCode.Alpha1, "BlockLayer", blockDisable);
             nodeDisable = ChangeCullingMask(KeyCode.Alpha2, "NodeLayer", nodeDisable);
+
+            if (Input.GetKeyDown(KeyCode.F)) {
+                height = 2f;
+                transform.position = targerPos;
+                transform.rotation = target.rotation;
+            }
+            if (Input.GetKeyDown(KeyCode.R)) {
+                height = 8.4f;
+            }
         }
 
         private bool ChangeCullingMask(KeyCode code, string layerName, bool disable) {

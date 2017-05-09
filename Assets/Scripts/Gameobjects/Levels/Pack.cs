@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Gameobjects.Games;
+using Assets.Scripts.Managers.EventMessages;
 
 namespace Assets.Scripts.Gameobjects.Levels {
     public class Pack {
@@ -42,7 +43,7 @@ namespace Assets.Scripts.Gameobjects.Levels {
                 }
                 if (entry.Value != level) continue;
                 if (entry.Value == levels.Last().Value) {
-                    EventManager.TriggerEvent(GameEvents.COMPLETE_LAST_LEVEL);
+                    EventMessenger.TriggerEvent(GameEvents.COMPLETE_LAST_LEVEL);
                     return levels.Last().Value;
                 }
                 getNextLevel = true;

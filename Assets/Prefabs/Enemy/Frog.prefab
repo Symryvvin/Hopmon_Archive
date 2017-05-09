@@ -11,39 +11,6 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1674863930129144}
   m_IsPrefabParent: 1
---- !u!1 &1420692042858908
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4396691538412664}
-  - component: {fileID: 33361075039400426}
-  - component: {fileID: 23503294149250864}
-  - component: {fileID: 114490288365971336}
-  m_Layer: 0
-  m_Name: Mesh
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1547354830311796
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4154487542281784}
-  m_Layer: 0
-  m_Name: MoveDummy
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1674863930129144
 GameObject:
   m_ObjectHideFlags: 0
@@ -52,11 +19,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4039540460047194}
+  - component: {fileID: 33546487708271436}
+  - component: {fileID: 23518988503029108}
   - component: {fileID: 54227502539132146}
-  - component: {fileID: 65434701381740162}
+  - component: {fileID: 136139471703991004}
   - component: {fileID: 114964009870712108}
   - component: {fileID: 114008711468792498}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Frog
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -72,44 +41,16 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4396691538412664}
-  - {fileID: 4154487542281784}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4154487542281784
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1547354830311796}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4039540460047194}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4396691538412664
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1420692042858908}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4039540460047194}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23503294149250864
+--- !u!23 &23518988503029108
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1420692042858908}
+  m_GameObject: {fileID: 1674863930129144}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -117,10 +58,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 1f71603d7cf352f4788572d031b8cb2d, type: 2}
-  - {fileID: 2100000, guid: 87c5e8e2e31edf349bed3abf059ceb7c, type: 2}
-  - {fileID: 2100000, guid: e42d15811ac40d148b971cf146fe5a36, type: 2}
-  - {fileID: 2100000, guid: 43abc6777481f1e48a263bdc77b33b5d, type: 2}
+  - {fileID: 2100000, guid: 43a4faa8c7a193b46b27ef5bcefda33e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -138,12 +76,12 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &33361075039400426
+--- !u!33 &33546487708271436
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1420692042858908}
+  m_GameObject: {fileID: 1674863930129144}
   m_Mesh: {fileID: 4300000, guid: 0f8f005f412d5004886615caae9d0597, type: 3}
 --- !u!54 &54227502539132146
 Rigidbody:
@@ -152,7 +90,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1674863930129144}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
@@ -160,18 +98,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65434701381740162
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1674863930129144}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114008711468792498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -184,20 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitPoint: 2
-  hit: {fileID: 8300000, guid: 94e375b603451dc4b9f473c0a1bf05c0, type: 3}
---- !u!114 &114490288365971336
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1420692042858908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0de44d6c1242bc545801ffd8a7683e4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hitPoint: 2
-  hit: {fileID: 8300000, guid: 94e375b603451dc4b9f473c0a1bf05c0, type: 3}
+  armored: 1
 --- !u!114 &114964009870712108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -209,8 +122,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed468b48b40ed4d46aa4b5a8cc7a5128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDummy: {fileID: 4154487542281784}
   moveState: 0
   direction: 0
-  schema: 
-  moveSpeed: 2.5
+  moveSpeed: 1.8
+--- !u!136 &136139471703991004
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1674863930129144}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1.2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.65, z: 0}

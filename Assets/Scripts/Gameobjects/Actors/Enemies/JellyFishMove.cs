@@ -3,12 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Actors.Enemies {
     public class JellyFishMove : EnemyMove {
-        public Animator animator;
-
-        protected new void Start() {
-            base.Start();
-            animator = transform.FindChild("Mesh").GetComponent<Animator>();
-        }
+        [SerializeField] private Animator animator;
 
         protected override void Update() {
             switch (moveState) {
