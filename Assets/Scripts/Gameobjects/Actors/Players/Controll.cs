@@ -11,7 +11,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         private GameCamera gameCamera;
         private Transform playerTransform;
         private Rigidbody playerRigidbody;
-        private float moveSpeed = 2.5f;
+        private float moveSpeed = 2.7f;
         [SerializeField] private MoveState moveState;
         private bool boost;
         private Animator animator;
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
             gameCamera.Init();
             moveState = MoveState.STAND;
             playerTransform = transform;
-            EventMessenger<int>.StartListener(GameEvents.CHANGE_SPEED, Speed);
+            EventMessenger<int>.StartListener(GameEvents.CHANGE_SPEED, ChangeSpeed);
         }
 
         public void Reset() {
@@ -111,14 +111,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
             animator.SetBool("Idle", true);
         }
 
-        private void Speed(int cristals) {
-
-
-                moveSpeed = 5.5f;
-            animator.speed = moveSpeed / 2.5f;
-        }
-
-        public void ChangeSpeed(int cristalCount) {
+        private void ChangeSpeed(int cristalCount) {
             if (cristalCount > 0) {
                 moveSpeed = 30.0f / (cristalCount + 12.0f);
             }

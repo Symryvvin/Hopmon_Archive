@@ -208,7 +208,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveState: 0
   direction: 0
-  moveSpeed: 2.1
+  moveSpeed: 1.9
   rotateSpeed: 130
 --- !u!135 &135112976413883980
 SphereCollider:
