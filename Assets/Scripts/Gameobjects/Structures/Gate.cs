@@ -39,6 +39,9 @@ namespace Assets.Scripts.Gameobjects.Structures {
 
         public void Dead() {
             current.RestoreType();
+            rigidbody.freezeRotation = false;
+            RigidbodyConstraints cs = RigidbodyConstraints.None;
+            rigidbody.constraints = cs;
             rigidbody.AddForce(0, 1000, 0, ForceMode.Force);
             rigidbody.AddTorque(transform.right * 1000, ForceMode.Impulse);
             rigidbody.useGravity = true;

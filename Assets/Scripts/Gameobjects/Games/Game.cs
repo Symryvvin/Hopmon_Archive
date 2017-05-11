@@ -3,7 +3,6 @@ using Assets.Scripts.Gameobjects.Actors.Players;
 using Assets.Scripts.Gameobjects.Levels;
 using Assets.Scripts.Managers;
 using Assets.Scripts.Managers.EventMessages;
-using Assets.Scripts.Rules;
 using UnityEngine;
 
 namespace Assets.Scripts.Gameobjects.Games {
@@ -14,32 +13,21 @@ namespace Assets.Scripts.Gameobjects.Games {
         public HUD hud;
         private LevelStats stats;
 
-        void Start() {
+        protected void Start() {
             status = GameStatus.INITIALIZE;
             hud.StartListeners();
             EventMessenger.StartListener(GameEvents.START_GAME, StartGame);
             EventMessenger.StartListener(GameEvents.DEFEATE, Defeat);
             EventMessenger.StartListener(GameEvents.VICTORY, Victory);
             EventMessenger.StartListener(GameEvents.UPDATE_CRISTAL_COUNT, UpdateCristalCount);
-            CollisionHandler handler = CollisionHandler.instance;
-            handler.StartRules();
+            status = GameStatus.READY;
         }
 
         private void StartGame() {
-            status = GameStatus.STARTING;
             level.Build();
             InitStatsAndHUD();
             InitPlayer();
             status = GameStatus.STARTED;
-            foreach (var e in EventManager.instance.events) {
-                try {
-                    print(e.Key + " actions:\n" + e.Value.ListEvents());
-                }
-                catch (NullReferenceException err) {
-                    Debug.Log(err + " " + e.Key);
-                }
-
-            }
         }
 
         private void InitPlayer() {

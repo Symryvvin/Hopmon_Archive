@@ -2,6 +2,7 @@
 using Assets.Scripts.Gameobjects.Games;
 using Assets.Scripts.Gameobjects.Levels;
 using Assets.Scripts.Managers.EventMessages;
+using Assets.Scripts.Rules;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,14 +14,21 @@ public class GameManager : SingletonManager<GameManager>, IManager {
     public static Level level;
 
     private Game game;
+    private CollisionHandler handler;
 
     protected override void Init() {
-        //TODO получает данные из профиля и устанавливает номер уровня и пак который был последним
+        //Грузим тестовый уровень для отладки
+        level = LevelManager.GetLevelByNumber(0);
+        StartCoroutine(WaitForLoadGameScene());
+        handler = CollisionHandler.instance;
+        handler.StartRules();
     }
 
     public void StartGame() {
         SceneManager.LoadScene("Game");
         StartCoroutine(WaitForLoadGameScene());
+        handler = CollisionHandler.instance;
+        handler.StartRules();
     }
 
     private IEnumerator WaitForLoadGameScene() {
@@ -29,17 +37,20 @@ public class GameManager : SingletonManager<GameManager>, IManager {
                 game = GameObject.Find("Game").GetComponent<Game>();
                 game.level = level;
                 Debug.Log(game.status);
-                EventMessenger.TriggerEvent(GameEvents.START_GAME);
-                Debug.Log(game.status);
-                break;
+                if (game.status == GameStatus.READY) {
+                    EventMessenger.TriggerEvent(GameEvents.START_GAME);
+                    Debug.Log(game.status);
+                    break;
+                }
             }
             yield return null;
         }
     }
 
-    void Update() {
+    protected void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             SceneManager.LoadScene("Main");
+            handler.StopRules();
         }
     }
 }

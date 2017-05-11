@@ -4,6 +4,6 @@
         STARTED,
         PAUSED,
         STOPPED,
-        STARTING
+        READY
     }
 }

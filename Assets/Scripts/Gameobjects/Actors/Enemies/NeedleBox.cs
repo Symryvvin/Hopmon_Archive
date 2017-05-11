@@ -13,12 +13,12 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         private Vector3 down;
         private Transform box;
 
-        void Awake() {
+        protected void Awake() {
             box = transform;
             audioSource = GetComponent<AudioSource>();
         }
 
-        void Start() {
+        protected void Start() {
             float x = box.position.x;
             float z = box.position.z;
             up = new Vector3(x, 1.6f, z);
@@ -31,13 +31,12 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
         }
 
 
-        IEnumerator Drop() {
+        private IEnumerator Drop() {
             bool drop = false;
             while (box.position != down) {
                 RaycastHit info;
                 Debug.DrawRay(box.position, -box.up * 1.0F, Color.red);
                 if (Physics.Raycast(box.position, -box.up, out info, 1.0F)) {
-                    print(info.collider.gameObject.name);
                     if (info.collider.gameObject.CompareTag("Player")) {
                         yield return new WaitForSeconds(2f);
                         drop = true;
@@ -54,7 +53,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Enemies {
             }
         }
 
-        IEnumerator UpDown() {
+        private IEnumerator UpDown() {
             while (true) {
                 yield return new WaitForSeconds(2f);
                 while (isGoal(down)) {
