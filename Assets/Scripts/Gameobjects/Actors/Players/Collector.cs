@@ -11,7 +11,7 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
         private readonly List<Transform> cristals = new List<Transform>();
 
         protected void Start() {
-            playerBody = transform.FindChild("body").transform;
+            playerBody = transform.Find("body").transform;
         }
 
         public void Reset() {

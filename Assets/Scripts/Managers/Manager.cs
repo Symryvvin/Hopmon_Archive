@@ -21,12 +21,12 @@ public class Manager : MonoBehaviour {
             };
         }
         else {
-            managers = new List<IManager> {
+            managers = new List<IManager> { 
+                LevelManager.instance,
                 EventManager.instance,
                 GameManager.instance,
                 AudioManager.instance,
-                UIManager.instance,
-                LevelManager.instance
+                UIManager.instance  
             };
         }
         StartCoroutine(StartUpManagers());

@@ -50,17 +50,17 @@ namespace Assets.Scripts.Gameobjects.Actors.Players {
             if (gameCamera.moving == GameCamera.Move.STOP && !boost) {
                 float horizontal = (int) Input.GetAxisRaw("Horizontal");
                 float vertical = (int) Input.GetAxisRaw("Vertical");
-                switch (gameCamera.point) {
-                case CameraPoint.NORTH:
+                switch (gameCamera.look) {
+                case CameraLook.NORTH:
                     Move(vertical, horizontal);
                     break;
-                case CameraPoint.WEST:
+                case CameraLook.WEST:
                     Move(-horizontal, vertical);
                     break;
-                case CameraPoint.SOUTH:
+                case CameraLook.SOUTH:
                     Move(-vertical, -horizontal);
                     break;
-                case CameraPoint.EAST:
+                case CameraLook.EAST:
                     Move(horizontal, -vertical);
                     break;
                 }

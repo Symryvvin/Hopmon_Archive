@@ -24,7 +24,7 @@ namespace Assets.Scripts.Gameobjects.Cameras {
         private Camera camera;
         private Quaternion startRotation;
 
-        public CameraPoint point;
+        public CameraLook look;
         public bool blockDisable;
         public bool nodeDisable;
 
@@ -54,16 +54,16 @@ namespace Assets.Scripts.Gameobjects.Cameras {
             targerPos = target.transform.position;
             switch (Mathf.RoundToInt(transform.eulerAngles.y)) {
             case 0:
-                point = CameraPoint.NORTH;
+                look = CameraLook.NORTH;
                 break;
             case 90:
-                point = CameraPoint.WEST;
+                look = CameraLook.WEST;
                 break;
             case 180:
-                point = CameraPoint.SOUTH;
+                look = CameraLook.SOUTH;
                 break;
             case 270:
-                point = CameraPoint.EAST;
+                look = CameraLook.EAST;
                 break;
             }
         }
@@ -71,17 +71,17 @@ namespace Assets.Scripts.Gameobjects.Cameras {
         protected void LateUpdate() {
             if (target != null) {
                 targerPos = target.transform.position;
-                switch (point) {
-                case CameraPoint.NORTH:
+                switch (look) {
+                case CameraLook.NORTH:
                     transform.position = new Vector3(targerPos.x, targerPos.y + height, targerPos.z - distance);
                     break;
-                case CameraPoint.WEST:
+                case CameraLook.WEST:
                     transform.position = new Vector3(targerPos.x - distance, targerPos.y + height, targerPos.z);
                     break;
-                case CameraPoint.SOUTH:
+                case CameraLook.SOUTH:
                     transform.position = new Vector3(targerPos.x, targerPos.y + height, targerPos.z + distance);
                     break;
-                case CameraPoint.EAST:
+                case CameraLook.EAST:
                     transform.position = new Vector3(targerPos.x + distance, targerPos.y + height, targerPos.z);
                     break;
                 }
@@ -90,11 +90,11 @@ namespace Assets.Scripts.Gameobjects.Cameras {
 
             if (LeftRotate()) {
                 moving = Move.LEFT;
-                point = CameraPoint.UNSTABLE;
+                look = CameraLook.UNSTABLE;
             }
             if (RightRotate()) {
                 moving = Move.RIGHT;
-                point = CameraPoint.UNSTABLE;
+                look = CameraLook.UNSTABLE;
             }
 
             switch (moving) {

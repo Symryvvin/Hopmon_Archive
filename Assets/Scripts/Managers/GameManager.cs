@@ -21,7 +21,6 @@ public class GameManager : SingletonManager<GameManager>, IManager {
         level = LevelManager.GetLevelByNumber(0);
         StartCoroutine(WaitForLoadGameScene());
         handler = CollisionHandler.instance;
-        handler.StartRules();
     }
 
     public void StartGame() {

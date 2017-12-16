@@ -10,7 +10,7 @@ public class Geyser : MonoBehaviour {
 
     void Awake() {
         audioSource = GetComponent<AudioSource>();
-        steam = transform.FindChild("Steam").gameObject;
+        steam = transform.Find("Steam").gameObject;
         steam.SetActive(false);
         duration = audioSource.clip.length;
     }
