@@ -22,4 +22,7 @@ obj/
 *.user
 *.unityproj
 *.booproj
-Assets/Plugins
+
+# Rider plugin
+Assets/Plugins/Editor/JetBrains/*
+Assets/Plugins/Editor/JetBrains.meta
